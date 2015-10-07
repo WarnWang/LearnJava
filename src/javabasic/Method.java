@@ -117,10 +117,26 @@ public class Method {
 		printHistogramVertical();
 	}
 	
+	public static void reverseArray(int[] intArray) {
+		for (int i = 0; i < intArray.length; i++) {
+			if (i > intArray.length / 2) {
+				break;
+			}
+			int temp = intArray[intArray.length - i - 1];
+			intArray[intArray.length -i - 1] = intArray[i];
+			intArray[i] = temp;
+		}
+	}
+	
 	public static void main(String[] args) throws FileNotFoundException {
-		Method test = new Method();
+//		Method test = new Method();
 //		test.gradesStatistics();
-		test.gradesHistogram();
+//		test.gradesHistogram();
+		int[] test = {12, 56, 34, 79, 26};
+		reverseArray(test);
+		for (int i = 0; i < test.length; i++) {
+			System.out.println(test[i]);
+		}
 	}
 
 }
