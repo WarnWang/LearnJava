@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
+import org.json.JSONArray;
+
 public class Method {
 	public static int[] grades;
 	
@@ -132,11 +134,15 @@ public class Method {
 //		Method test = new Method();
 //		test.gradesStatistics();
 //		test.gradesHistogram();
-		int[] test = {12, 56, 34, 79, 26};
-		reverseArray(test);
-		for (int i = 0; i < test.length; i++) {
-			System.out.println(test[i]);
-		}
+//		int[] test = {12, 56, 34, 79, 26};
+//		reverseArray(test);
+//		for (int i = 0; i < test.length; i++) {
+//			System.out.println(test[i]);
+//		}
+		JSONArray test = new JSONArray();
+		test.put( "[test, aaa]");
+		test.put( "[test, aaa]");
+		System.out.println(test.toString());
 	}
 
 }
