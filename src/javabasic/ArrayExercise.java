@@ -64,6 +64,7 @@ public class ArrayExercise {
 			System.out.printf("%04d ", temp);
 		}
 		
+		f.close();
 		in.close();
 	}
 

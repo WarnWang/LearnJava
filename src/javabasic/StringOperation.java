@@ -1,7 +1,6 @@
 package javabasic;
 
 import java.util.Scanner;
-import java.util.function.BinaryOperator;
 
 public class StringOperation {
 	public void ReserveString() {
