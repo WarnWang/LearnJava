@@ -1,5 +1,6 @@
+package wapapplication;
 
-public class game {
+public class GameWithList {
 	private static int rows, cols;
 	private static int[] allElements;
 	private static int[] dAllElements;
@@ -15,58 +16,51 @@ public class game {
 	public static int findMaxDeepth(int point) {
 		int path = -1;
 		int rowOfPoint = point / rows;
-		if (allElements[point] == -1) {
-			path = -1;
-		} else {
-			int[] deepFromPoint = new int[cols];
-			if (point < cols) {
-				deepFromPoint[0] = allElements[point];
-			} else if (dAllElements[point - cols] == -1){
-				deepFromPoint[0] = -1;
-			} else{
-				deepFromPoint[0] = allElements[point] + 
-						dAllElements[point - cols];
-			}
+		if (allElements[point] != -1) {
 			
 			// find the deep from two direction
 			for (int step = -1; step <= 1; step += 2){
+				int[] deepFromPoint = new int[cols];
+				for (int i = 0; i < deepFromPoint.length; i++) {
+					deepFromPoint[i] = -1;
+				}
+				if (point < cols) {
+					deepFromPoint[0] = allElements[point];
+				} else if (dAllElements[point - cols] == -1){
+					deepFromPoint[0] = -1;
+				} else{
+					deepFromPoint[0] = allElements[point] + 
+							dAllElements[point - cols];
+				}
 				
 				for (int i = step; Math.abs(i) < cols; i += step){
 					int startPoint = point + i;
 					int trueStartPoint = startPoint;
 					int startPath = 0;
+
 					if (startPoint < rowOfPoint * cols) {
 						trueStartPoint = rowOfPoint * cols;
-						if (startPoint > 0 && dAllElements[startPoint] < 0) {
-							deepFromPoint[Math.abs(i) - 1] = -1;
-							continue;
-						}
-						startPath = 0;
+						if (allElements[startPoint + cols] == -1) break;
 					} else if (startPoint >= ((rowOfPoint +1 ) *cols)) {
-						trueStartPoint = (rowOfPoint +1 ) * cols - 1;
-						if (startPoint >= 2 * cols 
-								&& dAllElements[startPoint - 2 * cols] < 0 
-								|| startPoint > (rows * cols - 1)) {
-							deepFromPoint[Math.abs(i) - 1] = -1;
-							continue;
-						}
-						trueStartPoint = (rowOfPoint +1) * cols -1;
-					} else {
-						if (startPoint >= cols) {
-							startPath = dAllElements[startPoint - cols];
-						} else {
-							startPath = 0;
-						}
+						trueStartPoint = (rowOfPoint + 1) * cols - 1;
+						if (allElements[startPoint - cols] == -1) break;
+					} else if (startPoint >= cols) {
+						startPath = dAllElements[startPoint - cols];
+						if (allElements[startPoint] == -1) break;					
 					}
 					
-					for (int k = trueStartPoint; k != point; k -= step){
+					for (int k = trueStartPoint; k != point && startPath != -1;
+							k -= step){
 						if (allElements[k] == -1) {
 							startPath = -1;
 							break;
 						}
 						startPath += allElements[k];
 					}
-					deepFromPoint[Math.abs(i) - 1] = startPath;
+					if (startPath != -1) {
+						startPath += allElements[point];
+					}
+					deepFromPoint[Math.abs(i)] = startPath;
 				}
 				path = Math.max(max(deepFromPoint), path);
 			}
@@ -76,11 +70,7 @@ public class game {
 	
 	public static int calculateLineDeepth() {
 		int maxPath = -1;
-//		for (int j = 0; j < rows; j++){
-//			for (int i = 0; i < cols; i++){
-//				dAllElements[i] = findMaxDeepth(j * cols + i);
-//			}
-//		}
+
 		for (int j = 0; j < allElements.length; j++){
 			dAllElements[j] = findMaxDeepth(j);
 		}
@@ -101,11 +91,6 @@ public class game {
 			for (int j = 0; j < cols; j++) allElements[i * cols + j] = 
 					Integer.parseInt(args[j * rows + i + 2]);
 		}
-		
-//		for (int i : allElements) {
-//			System.out.print(i + " ");
-//		}
-//		System.out.println();
 		
 		System.out.println(calculateLineDeepth());
 	}
