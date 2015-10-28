@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+import javax.management.relation.RoleStatus;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
+
 public class Main {
 	private static int rows, cols;
 	private static int[] allElements;
@@ -100,14 +103,93 @@ public class Main {
 		return path;
 	}
 	
-	public static int findMaxPathDp(int start_point) {
+	public static int findMaxDeepth(int point) {
+		int path = -1;
+		int rowOfPoint = point / rows;
+		if (allElements[point] == -1) {
+			path = -1;
+		} else {
+			
+			// find the deep from two direction
+			for (int step = -1; step <= 1; step += 2){
+				int[] deepFromPoint = new int[cols];
+				if (point < cols) {
+					deepFromPoint[0] = allElements[point];
+				} else if (deepFromPoint[point - cols] == -1){
+					deepFromPoint[0] = -1;
+				} else{
+					deepFromPoint[0] = allElements[point] + 
+							deepFromPoint[point - cols];
+				}
+				
+				for (int i = step; Math.abs(i) < cols; i += step){
+					int startPoint = point + i;
+					int trueStartPoint = startPoint;
+					int startPath = 0;
+					if (startPoint < rowOfPoint * cols) {
+						trueStartPoint = rowOfPoint * cols;
+						if (startPoint > 0 && dAllElements[startPoint] < 0) {
+							deepFromPoint[Math.abs(i) - 1] = -1;
+							continue;
+						}
+						startPath = 0;
+					} else if (startPoint >= ((rowOfPoint +1 ) *cols)) {
+						trueStartPoint = (rowOfPoint +1 ) * cols - 1;
+						if (startPoint >= 2 * cols 
+								&& dAllElements[startPoint - 2 * cols] < 0 
+								|| startPoint > (rows * cols - 1)) {
+							deepFromPoint[Math.abs(i) - 1] = -1;
+							continue;
+						}
+						trueStartPoint = (rowOfPoint +1) * cols -1;
+					} else {
+						if (startPoint >= cols) {
+							startPath = dAllElements[startPoint - cols];
+						} else {
+							startPath = 0;
+						}
+					}
+					
+					for (int k = trueStartPoint; k != point; k -= step){
+						if (allElements[k] == -1) {
+							startPath = -1;
+							break;
+						}
+						startPath += allElements[k];
+					}
+					deepFromPoint[Math.abs(i) - 1] = startPath;
+				}
+				path = Math.max(max(deepFromPoint), path);
+			}
+		}
+		return path;
+	}
+	
+	public static int calculateLineDeepth() {
+		int maxPath = -1;
+		for (int j = 0; j < rows; j++){
+			for (int i = 0; i < cols; i++){
+				dAllElements[i] = findMaxDeepth(j * cols + i);
+			}
+		}
+		
+		for (int i = 0; i < cols; i++)
+			maxPath = Math.max(maxPath, dAllElements[rows * cols - i - 1]);
+		
+		return maxPath;
+	}
+	
+	public static int findMaxPathDp() {
 		int maxPath = -1;
 		
 		// find the distance before start point.
-		for (int i = start_point - 1; i >= 0; i--) 
-			dAllElements[i] = calculateThePathFromStart(i);
-		for (int i = start_point + 1; i < allElements.length; i++) 
-			dAllElements[i] = calculateThePathFromStart(i);
+//		for (int i = start_point - 1; i >= 0; i--) 
+//			dAllElements[i] = calculateThePathFromStart(i);
+//		for (int i = start_point + 1; i < allElements.length; i++) 
+//			dAllElements[i] = calculateThePathFromStart(i);
+		for (int i = 0; i < rows; i++) {
+			calculateThePathFromStart(i);
+		}
 		
 		for (int i = 0; i < cols; i++)
 			maxPath = Math.max(maxPath, dAllElements[rows * cols - i - 1]);
@@ -121,13 +203,18 @@ public class Main {
 		for (int i = 0; i < cols; i ++){
 			dAllElements = new int[rows * cols];
 			
+			
 			// if start_point is 0, then the start point has nothing to do with
 			// our answer.
 			if (allElements[i] < 0) {
 				continue;
 			}
-			dAllElements[i] = allElements[i];
-			int tempPath = findMaxPathDp(i);
+			
+			for (int j = 0; j < dAllElements.length; j++) {
+				dAllElements[j] = -1;
+			}
+			
+			int tempPath = findMaxPathDp();
 			maxPath = Math.max(tempPath, maxPath);
 		}
 		return maxPath;
@@ -148,6 +235,6 @@ public class Main {
 		}
 		System.out.println();
 		
-		System.out.println(findMaximumPath());
+		System.out.println(calculateLineDeepth());
 	}
 }
