@@ -13,8 +13,6 @@ package wapapplication;
 
 import java.util.HashMap;
 
-import com.sun.jndi.toolkit.ctx.StringHeadTail;
-
 public class GameWithHashMap {
 
 	/**
