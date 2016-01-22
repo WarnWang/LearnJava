@@ -7,7 +7,7 @@ public class MissInteger {
     public static void main(String[] args) {
         // put your codes here
         MissInteger test = new MissInteger();
-        System.out.print(test.solution(new int[]{1, 2, 3, 4, -1, 6, 7, 9, 11, 5}));
+        System.out.print(test.solution(new int[]{1}));
     }
 
     public int solution(int[] A) {
@@ -15,7 +15,7 @@ public class MissInteger {
         int[] temp = new int[result];
 
         for (int i : A) {
-            if (i > 0 && i < result) {
+            if (i > 0 && i <= result) {
                 temp[i - 1] += 1;
             }
         }
@@ -25,6 +25,6 @@ public class MissInteger {
                 return i + 1;
             }
         }
-        return result;
+        return result + 1;
     }
 }
