@@ -44,6 +44,9 @@ public class Nesting {
                 break;
             }
         }
+        if (leftNum != 0){
+            result = 0;
+        }
         return result;
     }
 }
