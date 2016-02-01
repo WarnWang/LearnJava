@@ -1,7 +1,5 @@
 package Codility;
 
-import java.util.ArrayList;
-
 /**
  * Created by warn on 1/2/2016.
  * A prime is a positive integer X that has exactly two distinct divisors: 1 and X. The first few prime integers are 2, 3, 5, 7, 11 and 13.
