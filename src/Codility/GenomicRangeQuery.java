@@ -22,10 +22,6 @@ public class GenomicRangeQuery {
         nucleotidesType.put('G', 2);
         nucleotidesType.put('T', 3);
         int[][] stringCount = new int[S.length()][4];
-//        for (int[] i: stringCount) {
-//            for (int j: i) System.out.print(Integer.toString(j) + ' ');
-//            System.out.print('\n');
-//        }
         for (int i = 0; i < S.length(); i++) {
             char temp = S.charAt(i);
             int[] count = new int[4];
@@ -34,8 +30,6 @@ public class GenomicRangeQuery {
             }
             count[nucleotidesType.get(temp)]++;
             stringCount[i] = count.clone();
-//            for (int j: count) System.out.print(Integer.toString(j) + ' ');
-//            System.out.print('\n');
         }
 
         for (int i = 0; i < P.length; i++) {
@@ -51,11 +45,6 @@ public class GenomicRangeQuery {
             }
         }
 
-//        for (int i: result) System.out.println(i);
-//        for (int[] i: stringCount) {
-//            for (int j: i) System.out.print(Integer.toString(j) + ' ');
-//            System.out.print('\n');
-//        }
         return result;
     }
 }
