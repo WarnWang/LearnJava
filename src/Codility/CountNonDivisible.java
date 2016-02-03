@@ -58,7 +58,7 @@ public class CountNonDivisible {
     public static void main(String[] args) {
         // put your codes here
         CountNonDivisible test = new CountNonDivisible();
-        test.solution3(new int[]{3, 1, 2, 3, 6});
+        test.solution2(new int[]{3, 1, 2, 3, 6});
         System.out.print(1);
     }
 
