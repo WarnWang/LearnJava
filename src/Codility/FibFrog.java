@@ -70,6 +70,7 @@ public class FibFrog {
         // put your codes here
         FibFrog test = new FibFrog();
         System.out.println(test.solution2(new int[]{0, 1, 0, 1, 0}));
+        System.out.println(test.solution2(new int[]{0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0}));
         System.out.println(test.solution(new int[]{0}));
         System.out.println(test.solution(new int[]{0, 0, 0}));
         System.out.println(test.solution2(new int[]{0, 0, 0}));
@@ -132,10 +133,10 @@ public class FibFrog {
         while (position.size() > 0) {
             int[] currentPosition = position.poll();
             for (int i : frogJumpLen) {
-                if (i + currentPosition[0] == A.length) return ++currentPosition[1];
+                if (i + currentPosition[0] == A.length) return (currentPosition[1] + 1);
                 else if (i + currentPosition[0] > A.length || A[i + currentPosition[0]] == 0) continue;
                 else {
-                    position.add(new int[]{currentPosition[0] + i, ++currentPosition[1]});
+                    position.add(new int[]{currentPosition[0] + i, (currentPosition[1] + 1)});
                     A[i + currentPosition[0]] = 0;
                 }
             }
