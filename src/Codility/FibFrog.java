@@ -79,7 +79,10 @@ public class FibFrog {
         ArrayList<Integer> possibleNextMove = new ArrayList<>();
         for (int i : frogJump) {
             if (i - 1 == n) return ++count;
-            else if (A[i - 1] == 1) possibleNextMove.add(i - 1);
+            else if (A[i - 1] == 1) {
+                possibleNextMove.add(i - 1);
+                A[i - 1]++;
+            }
         }
         while (possibleNextMove.size() > 0) {
             count++;
