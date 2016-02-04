@@ -1,6 +1,8 @@
 package Codility;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by warn on 4/2/2016.
@@ -67,7 +69,11 @@ public class FibFrog {
     public static void main(String[] args) {
         // put your codes here
         FibFrog test = new FibFrog();
-        System.out.println(test.solution(new int[]{0, 1, 0, 1, 0}));
+        System.out.println(test.solution2(new int[]{0, 1, 0, 1, 0}));
+        System.out.println(test.solution(new int[]{0}));
+        System.out.println(test.solution(new int[]{0, 0, 0}));
+        System.out.println(test.solution2(new int[]{0, 0, 0}));
+        System.out.println(test.solution2(new int[]{0, 0}));
     }
 
     public int solution(int[] A) {
@@ -75,7 +81,7 @@ public class FibFrog {
         int n = A.length;
         if (n <= 2) return 1;
         int count = 0;
-        ArrayList<Integer> frogJump = getFibonacci(n);
+        Integer[] frogJump = getFibonacci(n);
         ArrayList<Integer> possibleNextMove = new ArrayList<>();
         for (int i : frogJump) {
             if (i - 1 == n) return ++count;
@@ -92,7 +98,10 @@ public class FibFrog {
                 for (int j : frogJump) {
                     int pos = i + j;
                     if (pos == n) return ++count;
-                    else if (pos < n && A[pos] == 1) nextLevel.add(pos);
+                    else if (pos < n && A[pos] == 1) {
+                        nextLevel.add(pos);
+                        A[pos]++;
+                    }
                 }
             }
             possibleNextMove = new ArrayList<>(nextLevel);
@@ -100,9 +109,9 @@ public class FibFrog {
         return -1;
     }
 
-    public ArrayList<Integer> getFibonacci(int n) {
+    public Integer[] getFibonacci(int n) {
         ArrayList<Integer> result = new ArrayList<>();
-        int f1 = 1;
+        int f1 = 0;
         int f2 = 1;
         while (f2 <= n + 1) {
             result.add(f2);
@@ -110,6 +119,27 @@ public class FibFrog {
             f1 = f2;
             f2 += temp;
         }
-        return result;
+        Integer[] arrayResult = new Integer[result.size()];
+        arrayResult = result.toArray(arrayResult);
+        return arrayResult;
+    }
+
+    public int solution2(int[] A) {
+        if (A.length <= 2) return 1;
+        Queue<int[]> position = new LinkedList<>();
+        position.add(new int[]{-1, 0});
+        Integer[] frogJumpLen = getFibonacci(A.length + 1);
+        while (position.size() > 0) {
+            int[] currentPosition = position.poll();
+            for (int i : frogJumpLen) {
+                if (i + currentPosition[0] == A.length) return ++currentPosition[1];
+                else if (i + currentPosition[0] > A.length || A[i + currentPosition[0]] == 0) continue;
+                else {
+                    position.add(new int[]{currentPosition[0] + i, ++currentPosition[1]});
+                    A[i + currentPosition[0]] = 0;
+                }
+            }
+        }
+        return -1;
     }
 }
