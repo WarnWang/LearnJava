@@ -82,7 +82,7 @@ public class Ladder {
         for (int i = 0; i < A.length; i++) {
 //            setFibonacci(A[i]);
 //            System.out.println("objects" + Fibonacci);
-            result[i] = (int) (Fibonacci.get(A[i]) % (long) Math.pow(2, B[i]));
+            result[i] = Fibonacci.get(A[i]) % (int) Math.pow(2, B[i]);
 //            result[i] = (int) (getFibonacci(A[i] + 1) % (int) Math.pow(2, B[i]));
         }
         return result;
