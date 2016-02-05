@@ -3,6 +3,7 @@ package Codility;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by warn on 5/2/2016.You have to climb up a ladder. The ladder has exactly N rungs, numbered from 1 to N. With each step, you can ascend by one or two rungs. More precisely:
@@ -58,19 +59,31 @@ import java.util.List;
  * Elements of input arrays can be modified.
  */
 public class Ladder {
-    List<Integer> Fibonacci = new ArrayList<>(Arrays.asList(1, 1));
+    List<Integer> Fibonacci = new ArrayList<>(Arrays.asList(1, 2));
 
     public static void main(String[] args) {
         // put your codes here
+        Ladder test = new Ladder();
+        int L = 200;
+        int[] A = new int[L];
+        int[] B = new int[L];
+        Random randInt = new Random();
+        for (int i = 0; i < L; i++) {
+            A[i] = randInt.nextInt(L - 1) + 1;
+            B[i] = randInt.nextInt(29) + 1;
+        }
+        System.out.println(Arrays.toString(test.solution(A, B)));
     }
 
     public int[] solution(int[] A, int[] B) {
         // write your code in Java SE 8
         int[] result = new int[A.length];
+        setFibonacci(A.length);
         for (int i = 0; i < A.length; i++) {
-            setFibonacci(A[i]);
-            System.out.println("objects" + Fibonacci);
-            result[i] = Fibonacci.get(A[i]) % (int) Math.pow(2, B[i]);
+//            setFibonacci(A[i]);
+//            System.out.println("objects" + Fibonacci);
+            result[i] = (int) (Fibonacci.get(A[i]) % (long) Math.pow(2, B[i]));
+//            result[i] = (int) (getFibonacci(A[i] + 1) % (int) Math.pow(2, B[i]));
         }
         return result;
     }
@@ -79,12 +92,19 @@ public class Ladder {
         int arraySize = Fibonacci.size();
         int f1 = Fibonacci.get(arraySize - 2);
         int f2 = Fibonacci.get(arraySize - 1);
+        int module = (int) Math.pow(2, 30);
         while (arraySize <= n + 1) {
             int temp = f1;
             f1 = f2;
-            f2 += temp;
+            f2 = (temp + f2) % module;
             arraySize++;
             Fibonacci.add(f2);
         }
+    }
+
+    public long getFibonacci(int n) {
+        double goldenNumber = (1 + Math.sqrt(5)) / 2;
+        long Fibonacci = (long) ((Math.pow(goldenNumber, n) + Math.pow(goldenNumber, -n)) / Math.sqrt(5));
+        return Fibonacci;
     }
 }
