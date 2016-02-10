@@ -1,5 +1,9 @@
 package LeetCode;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
 /**
  * Created by warn on 8/2/2016.
  */
@@ -42,5 +46,38 @@ public class TreeNode {
             root.right = temp;
         }
         return root;
+    }
+
+    public List<String> binaryTreePaths(TreeNode root) {
+        Stack<TreeNode> nodes = new Stack<>();
+        Stack<TreeNode> path = new Stack<>();
+        List<String> result = new ArrayList<>();
+        if (root == null) return result;
+        nodes.add(root);
+        while (!nodes.isEmpty()) {
+            TreeNode frontier = nodes.pop();
+            path.push(frontier);
+            if (frontier.right != null) {
+                nodes.push(frontier.right);
+            }
+            if (frontier.left != null) {
+                nodes.push(frontier.left);
+            }
+            if (frontier.left == null && frontier.right == null) {
+                String[] pathValue = new String[path.size()];
+                for (int i = 0; i < pathValue.length; i++) pathValue[i] = Integer.toString(path.get(i).val);
+                result.add(String.join("->", pathValue));
+                TreeNode tempNode = path.pop();
+                while (path.size() >= 1) {
+                    TreeNode currentNode = path.pop();
+                    if (currentNode.left == tempNode && currentNode.right != null) {
+                        path.push(currentNode);
+                        break;
+                    }
+                    tempNode = currentNode;
+                }
+            }
+        }
+        return result;
     }
 }
