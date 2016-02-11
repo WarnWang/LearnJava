@@ -1,6 +1,8 @@
 package LeetCode;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by warn on 8/2/2016.
@@ -139,5 +141,47 @@ public class LeetCodeEasyPuzzle {
         }
         if (element == 1) result.append(element);
         return result.reverse().toString();
+    }
+
+    public int romanToInt(String s) {
+        int result = 0;
+        int n = s.length();
+        if (n == 0) return result;
+
+        int lastNumber = 0;
+        for (int j = 0; j < n; j++) {
+            char i = s.charAt(j);
+            int currentNumber;
+            switch (i) {
+                case 'M':
+                    currentNumber = 1000;
+                    break;
+                case 'I':
+                    currentNumber = 1;
+                    break;
+                case 'V':
+                    currentNumber = 5;
+                    break;
+                case 'X':
+                    currentNumber = 10;
+                    break;
+                case 'L':
+                    currentNumber = 50;
+                    break;
+                case 'C':
+                    currentNumber = 100;
+                    break;
+                case 'D':
+                    currentNumber = 500;
+                    break;
+                default:
+                    currentNumber = 0;
+            }
+            if (currentNumber <= lastNumber) result += lastNumber;
+            else result -= lastNumber;
+            lastNumber = currentNumber;
+        }
+        result += lastNumber;
+        return result;
     }
 }
