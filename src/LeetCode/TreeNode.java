@@ -1,6 +1,7 @@
 package LeetCode;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Stack;
 
@@ -18,6 +19,8 @@ public class TreeNode {
 
     public static void main(String[] args) {
         // put your codes here
+        TreeNode test = new TreeNode(1);
+        System.out.print(test.isValidSerialization("#1##"));
     }
 
     public int maxDepth(TreeNode root) {
@@ -79,5 +82,30 @@ public class TreeNode {
             }
         }
         return result;
+    }
+
+    public boolean isValidSerialization(String preorder) {
+        Stack<String> treeNodes = new Stack<>();
+        String[] strings = preorder.split(",");
+        for (String temp : strings) {
+            while (temp.equals("#")) {
+                try {
+                    String lastCharacter = treeNodes.pop();
+                    if (!lastCharacter.equals(temp)) {
+                        treeNodes.push(lastCharacter);
+                        break;
+                    } else {
+                        if (treeNodes.size() > 0) {
+                            lastCharacter = treeNodes.pop();
+                            if (lastCharacter.equals(temp)) return false;
+                        } else return false;
+                    }
+                } catch (EmptyStackException e) {
+                    break;
+                }
+            }
+            treeNodes.push(temp);
+        }
+        return treeNodes.size() == 1 && treeNodes.pop().equals("#");
     }
 }
