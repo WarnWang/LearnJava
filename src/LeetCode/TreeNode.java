@@ -20,7 +20,8 @@ public class TreeNode {
     public static void main(String[] args) {
         // put your codes here
         TreeNode test = new TreeNode(1);
-        System.out.print(test.isValidSerialization("#1##"));
+//        System.out.print(test.isValidSerialization("#1##"));
+        System.out.print(test.fractionToDecimal(Integer.MIN_VALUE, -1));
     }
 
     public int maxDepth(TreeNode root) {
@@ -107,5 +108,56 @@ public class TreeNode {
             treeNodes.push(temp);
         }
         return treeNodes.size() == 1 && treeNodes.pop().equals("#");
+    }
+
+
+    public String fractionToDecimal(int numerator, int denominator) {
+        String result;
+
+        if (numerator % denominator == 0) result = Long.toString((long) numerator / (long) denominator);
+        else {
+            ArrayList<Long> fractionList = new ArrayList<>();
+            ArrayList<Long> moduleList = new ArrayList<>();
+            int integerPart = Math.abs(numerator / denominator);
+            long module = numerator % denominator;
+            long fraction = Math.abs(module * 10 / denominator);
+            fractionList.add(fraction);
+            moduleList.add(module);
+            boolean isRepeatingDecimal;
+            while (true) {
+                module = (module * 10) % denominator;
+                fraction = Math.abs(module * 10 / denominator);
+                if (module == 0) {
+                    isRepeatingDecimal = false;
+                    break;
+                } else if (moduleList.contains(module)) {
+                    isRepeatingDecimal = true;
+                    break;
+                } else {
+                    moduleList.add(module);
+                }
+                fractionList.add(fraction);
+            }
+            StringBuilder tempResult = new StringBuilder();
+            if (denominator < 0 && numerator > 0 || numerator < 0 && denominator > 0) tempResult.append('-');
+            tempResult.append(integerPart);
+            tempResult.append('.');
+            if (isRepeatingDecimal) {
+                int repeatingStartIndex = moduleList.indexOf(module);
+                int fractionLength = fractionList.size();
+                for (int i = 0; i < fractionLength; i++) {
+                    if (i != repeatingStartIndex) tempResult.append(fractionList.get(i));
+                    else {
+                        tempResult.append('(');
+                        tempResult.append(fractionList.get(i));
+                    }
+                }
+                tempResult.append(')');
+            } else {
+                fractionList.forEach(tempResult::append);
+            }
+            result = tempResult.toString();
+        }
+        return result;
     }
 }
