@@ -1,9 +1,6 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.EmptyStackException;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by warn on 8/2/2016.
@@ -21,7 +18,7 @@ public class TreeNode {
         // put your codes here
         TreeNode test = new TreeNode(1);
 //        System.out.print(test.isValidSerialization("#1##"));
-        System.out.print(test.fractionToDecimal(Integer.MIN_VALUE, -1));
+        System.out.print(test.fractionToDecimal(-5, 6));
     }
 
     public int maxDepth(TreeNode root) {
@@ -116,48 +113,77 @@ public class TreeNode {
 
         if (numerator % denominator == 0) result = Long.toString((long) numerator / (long) denominator);
         else {
-            ArrayList<Long> fractionList = new ArrayList<>();
+            StringBuilder fractionList = new StringBuilder();
             ArrayList<Long> moduleList = new ArrayList<>();
             int integerPart = Math.abs(numerator / denominator);
             long module = numerator % denominator;
             long fraction = Math.abs(module * 10 / denominator);
-            fractionList.add(fraction);
             moduleList.add(module);
-            boolean isRepeatingDecimal;
-            while (true) {
+            while (module != 0) {
+                fractionList.append(fraction);
                 module = (module * 10) % denominator;
                 fraction = Math.abs(module * 10 / denominator);
-                if (module == 0) {
-                    isRepeatingDecimal = false;
+                if (moduleList.contains(module)) {
+                    int index = moduleList.indexOf(module);
+                    fractionList.append(")");
+                    fractionList.insert(index, "(");
                     break;
-                } else if (moduleList.contains(module)) {
-                    isRepeatingDecimal = true;
-                    break;
-                } else {
-                    moduleList.add(module);
                 }
-                fractionList.add(fraction);
+                moduleList.add(module);
             }
-            StringBuilder tempResult = new StringBuilder();
-            if (denominator < 0 && numerator > 0 || numerator < 0 && denominator > 0) tempResult.append('-');
-            tempResult.append(integerPart);
-            tempResult.append('.');
-            if (isRepeatingDecimal) {
-                int repeatingStartIndex = moduleList.indexOf(module);
-                int fractionLength = fractionList.size();
-                for (int i = 0; i < fractionLength; i++) {
-                    if (i != repeatingStartIndex) tempResult.append(fractionList.get(i));
-                    else {
-                        tempResult.append('(');
-                        tempResult.append(fractionList.get(i));
-                    }
-                }
-                tempResult.append(')');
-            } else {
-                fractionList.forEach(tempResult::append);
-            }
-            result = tempResult.toString();
+            if (denominator < 0 ^ numerator < 0) result = "-" + Integer.toString(integerPart) + "." + fractionList;
+            else result = Integer.toString(integerPart) + "." + fractionList;
         }
         return result;
+    }
+
+    public String fractionToDecimal2(int numerator, int denominator) {
+
+        if (numerator == 0)
+            return "0";
+        if (denominator == 0)
+            return "";
+
+        StringBuilder result = new StringBuilder();
+
+        // is result is negative
+        if ((numerator < 0) ^ (denominator < 0)) {
+            result.append("-");
+        }
+
+        // convert int to long
+        long num = numerator, den = denominator;
+        num = Math.abs(num);
+        den = Math.abs(den);
+
+        // quotient
+        long res = num / den;
+        result.append(String.valueOf(res));
+
+        // if remainder is 0, return result
+        long remainder = (num % den) * 10;
+        if (remainder == 0)
+            return result.toString();
+
+        // right-hand side of decimal point
+        HashMap<Long, Integer> map = new HashMap<>();
+        result.append(".");
+        while (remainder != 0) {
+            // if digits repeat
+            if (map.containsKey(remainder)) {
+                int beg = map.get(remainder);
+                String part1 = result.substring(0, beg);
+                String part2 = result.substring(beg, result.length());
+                return part1 + "(" + part2 + ")";
+            }
+
+            // continue
+            map.put(remainder, result.length());
+            res = remainder / den;
+            result.append(String.valueOf(res));
+            remainder = (remainder % den) * 10;
+        }
+
+        return result.toString();
     }
 }
