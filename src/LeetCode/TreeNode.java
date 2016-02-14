@@ -136,7 +136,7 @@ public class TreeNode {
 //            ArrayList<Long> moduleList = new ArrayList<>();
             HashMap<Long, Integer> remainderMap = new HashMap<>();
             long remainder = module * 10;
-            long fraction = remainder / denominator;
+            long fraction = remainder / den;
             startTime = System.currentTimeMillis();
             while (remainder != 0) {
                 if (remainderMap.containsKey(remainder)) {
