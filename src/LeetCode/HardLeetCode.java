@@ -28,29 +28,25 @@ public class HardLeetCode {
 
 
     public int expandValue(char[][] matrix, int x, int y) {
-        int offsetX = 0, offsetY = 0;
+        int offsetX = 0;
         int area;
         for (int i = x + 1; i < matrix.length; i++) {
             if (matrix[i][y] == '0') break;
             offsetX++;
         }
 
+        area = offsetX + 1;
         for (int i = y + 1; i < matrix[0].length; i++) {
             if (matrix[x][i] == '0') break;
-            offsetY++;
-        }
-
-        area = offsetX + 1;
-        for (int i = 1; i <= offsetY; i++) {
             int areaCount = 1;
             for (int j = 1; j <= offsetX; j++) {
-                if (matrix[x + j][i + y] == '0') {
+                if (matrix[x + j][i] == '0') {
                     offsetX = j - 1;
                     break;
                 }
                 areaCount++;
             }
-            int tempArea = areaCount * (i + 1);
+            int tempArea = areaCount * (i - y + 1);
             if (tempArea > area) area = tempArea;
         }
         return area;
