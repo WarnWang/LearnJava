@@ -13,10 +13,11 @@ public class LeetMedium {
         // put your codes here
         LeetMedium test = new LeetMedium();
 //        int[][] courseInfo = {{1, 0}, {0, 3}, {0, 2}, {3, 2}};
-        int[][] courseInfo = {{1, 0}};
+//        int[][] courseInfo = {{1, 0}};
 //        int[][] courseInfo = {{1, 0}, {0, 1}};
 //        int[][] courseInfo = {{0, 1}, {3, 1}, {1, 2}, {3, 2}, {0, 2}};
-        System.out.println(test.canFinishBFS(4, courseInfo));
+//        System.out.println(test.canFinishBFS(4, courseInfo));
+        System.out.println(test.findMin(new int[]{10, 20, 40, 60, 0, 1, 4, 6}));
     }
 
     private void getAllPrerequisiteCourse(Integer key) {
@@ -145,5 +146,13 @@ public class LeetMedium {
         visit[i] = 1;
 
         return true;
+    }
+
+
+    public int findMin(int[] nums) {
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (nums[i] > nums[i + 1]) return nums[i + 1];
+        }
+        return nums[0];
     }
 }

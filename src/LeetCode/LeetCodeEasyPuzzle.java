@@ -1,8 +1,7 @@
 package LeetCode;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Stack;
 
 /**
  * Created by warn on 8/2/2016.
@@ -183,5 +182,32 @@ public class LeetCodeEasyPuzzle {
         }
         result += lastNumber;
         return result;
+    }
+
+    /**
+     * Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+     * <p>
+     * The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+     *
+     * @param s given string s
+     * @return whether this string is valid or not.
+     */
+    public boolean isValid(String s) {
+        Stack<Character> parentheses = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            char temp = s.charAt(i);
+            switch (temp) {
+                case '{':
+                case '[':
+                case '(':
+                    parentheses.push(temp);
+                    break;
+                default:
+                    if (parentheses.size() == 0) return false;
+                    char temp2 = parentheses.pop();
+                    if (temp2 - temp >= 2) return false;
+            }
+        }
+        return parentheses.size() == 0;
     }
 }
