@@ -17,7 +17,8 @@ public class LeetMedium {
 //        int[][] courseInfo = {{1, 0}, {0, 1}};
 //        int[][] courseInfo = {{0, 1}, {3, 1}, {1, 2}, {3, 2}, {0, 2}};
 //        System.out.println(test.canFinishBFS(4, courseInfo));
-        System.out.println(test.findMin(new int[]{10, 20, 40, 60, 0, 1, 4, 6}));
+//        System.out.println(test.findMin(new int[]{10, 20, 40, 60, 0, 1, 4, 6}));
+        System.out.println(test.minPatches2(new int[]{1, 2, 9}, 11));
     }
 
     private void getAllPrerequisiteCourse(Integer key) {
@@ -154,5 +155,55 @@ public class LeetMedium {
             if (nums[i] > nums[i + 1]) return nums[i + 1];
         }
         return nums[0];
+    }
+
+    public Set<Integer> getNSum(Set<Integer> nums, int n) {
+        Set<Integer> result = new HashSet<>();
+        if (n == 1) {
+            result.addAll(nums);
+        } else {
+            for (int i : nums) {
+                Set<Integer> temp = new HashSet<>();
+                temp.addAll(nums);
+                temp.remove(i);
+                Set<Integer> tempResult = getNSum(temp, n - 1);
+                temp.clear();
+                tempResult.forEach(num -> temp.add(num + i));
+                result.addAll(temp);
+            }
+        }
+        return result;
+    }
+
+    public int minPatches(int[] nums, int n) {
+        if (n <= 0) return 0;
+        int result = 0;
+        Set<Integer> currentSum = new HashSet<>();
+
+        for (int i = 1; i < nums.length; i++) {
+            Set<Integer> temp = new HashSet<>();
+            for (int num : nums) temp.add(num);
+            currentSum.addAll(getNSum(temp, i));
+        }
+
+        for (int i = 1; i < n; i++) {
+            if (currentSum.contains(i)) continue;
+
+        }
+        return result;
+    }
+
+    public int minPatches2(int[] nums, int n) {
+        int count = 0, i = 0;
+        for (long covered = 0; covered < n; ) {
+            if ((i < nums.length && nums[i] > covered + 1) || i >= nums.length) {
+                // at this moment, we need (covered+1), patch it.
+                covered += covered + 1;
+                ++count;
+            } else {
+                covered += nums[i++];
+            }
+        }
+        return count;
     }
 }
