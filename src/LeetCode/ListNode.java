@@ -16,7 +16,33 @@ public class ListNode {
 
     public static void main(String[] args) {
         // put your codes here
+        ListNode a = new ListNode(2);
+        ListNode b = new ListNode(1);
+        ListNode tempa = a;
+        ListNode tempb = b;
+        for (int i = 0; i < 3; i++) {
+            ListNode temp = new ListNode(a.val + 2);
+            a.next = temp;
+            a = temp;
+            temp = new ListNode(b.val + 2);
+            b.next = temp;
+            b = temp;
+        }
+
+        System.out.println(a.getIntersectionNode(tempa, tempb));
     }
+
+    public ListNode getIntersectionNode2(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) return null;
+        ListNode a = headA;
+        ListNode b = headB;
+        while (a != b) {
+            a = a == null ? headB : a.next;
+            b = b == null ? headA : b.next;
+        }
+        return b;
+    }
+
 
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         ListNode tempA = null;
