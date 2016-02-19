@@ -18,7 +18,8 @@ public class LeetMedium {
 //        int[][] courseInfo = {{0, 1}, {3, 1}, {1, 2}, {3, 2}, {0, 2}};
 //        System.out.println(test.canFinishBFS(4, courseInfo));
 //        System.out.println(test.findMin(new int[]{10, 20, 40, 60, 0, 1, 4, 6}));
-        System.out.println(test.minPatches2(new int[]{1, 2, 9}, 11));
+//        System.out.println(test.minPatches2(new int[]{1, 2, 9}, 11));
+        System.out.println(test.missingNumber2(new int[]{1, 0}));
     }
 
     private void getAllPrerequisiteCourse(Integer key) {
@@ -205,5 +206,29 @@ public class LeetMedium {
             }
         }
         return count;
+    }
+
+    public int missingNumber(int[] nums, int startIndex, int endIndex) {
+        if (nums[startIndex] > startIndex) return startIndex;
+        if (nums[endIndex] == endIndex) return endIndex + 1;
+        int missing;
+        int midIndex = (startIndex + endIndex) / 2;
+        if (nums[midIndex] > midIndex) {
+            missing = missingNumber(nums, startIndex, midIndex);
+        } else {
+            missing = missingNumber(nums, midIndex + 1, endIndex);
+        }
+        return missing;
+    }
+
+    public int missingNumber(int[] nums) {
+        Arrays.sort(nums);
+        return missingNumber(nums, 0, nums.length - 1);
+    }
+
+    public int missingNumber2(int[] nums) {
+        int sumArray = 0;
+        for (int num : nums) sumArray += num;
+        return nums.length * (nums.length + 1) / 2 - sumArray;
     }
 }
