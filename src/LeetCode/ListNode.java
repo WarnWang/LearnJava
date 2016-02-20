@@ -17,19 +17,21 @@ public class ListNode {
     public static void main(String[] args) {
         // put your codes here
         ListNode a = new ListNode(2);
-        ListNode b = new ListNode(1);
-        ListNode tempa = a;
-        ListNode tempb = b;
-        for (int i = 0; i < 3; i++) {
+        ListNode b = new ListNode(0);
+        ListNode tempA = a;
+        ListNode tempB = b;
+        b.next = a;
+//        b = b.next;
+        for (int i = 0; i < 2; i++) {
             ListNode temp = new ListNode(a.val + 2);
             a.next = temp;
             a = temp;
-            temp = new ListNode(b.val + 2);
-            b.next = temp;
-            b = temp;
+//            temp = new ListNode(b.val + 2);
+//            b.next = temp;
+//            b = temp;
         }
 
-        System.out.println(a.getIntersectionNode(tempa, tempb));
+        System.out.println(a.getIntersectionNode3(tempA, tempB).val);
     }
 
     public ListNode getIntersectionNode2(ListNode headA, ListNode headB) {
@@ -71,5 +73,25 @@ public class ListNode {
         } while (tempA != null && tempB != null && tempA.val == tempB.val);
 
         return temp;
+    }
+
+    public ListNode getIntersectionNode3(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) return null;
+        ListNode tempA = headA;
+        ListNode tempB = headB;
+
+        while (tempA != null || tempB != null) {
+            if (tempA == null) headB = headB.next;
+            else tempA = tempA.next;
+            if (tempB == null) headA = headA.next;
+            else tempB = tempB.next;
+        }
+
+        while (headA != headB && headA != null && headB != null) {
+            headA = headA.next;
+            headB = headB.next;
+        }
+
+        return headA;
     }
 }
