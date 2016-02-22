@@ -231,4 +231,21 @@ public class LeetMedium {
         for (int num : nums) sumArray += num;
         return nums.length * (nums.length + 1) / 2 - sumArray;
     }
+
+    public int searchInsert(int[] nums, int target) {
+        return searchInsert(nums, target, 0, nums.length);
+    }
+
+    public int searchInsert(int[] nums, int target, int startIndex, int endIndex) {
+        if (nums[endIndex - 1] < target) return endIndex;
+        else if (nums[startIndex] >= target) return startIndex;
+        else if (nums[endIndex - 1] == target) return endIndex - 1;
+        else if (endIndex - startIndex <= 1) {
+            return startIndex;
+        }
+        int midIndex = (startIndex + endIndex) / 2;
+        if (nums[midIndex] == target) return midIndex;
+        else if (nums[midIndex] < target) return searchInsert(nums, target, midIndex + 1, endIndex);
+        else return searchInsert(nums, target, startIndex, midIndex);
+    }
 }
