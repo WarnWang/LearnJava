@@ -1,7 +1,9 @@
 package LeetCode;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Stack;
+import java.util.regex.Matcher;
 
 /**
  * Created by warn on 8/2/2016.
@@ -13,8 +15,10 @@ public class LeetCodeEasyPuzzle {
 //        test.myAtoi("-2147483649");
 //        test.rotate1(new int[]{1, 2, 3}, 1);
 //        test.rotate2(new int[]{1, 2, 3}, 2);
-        test.addBinary("11", "1");
+//        test.addBinary("11", "1");
+        System.out.println(test.isPowerOfThree(243));
     }
+
 
     /**
      * convert a string to an integer
@@ -209,5 +213,13 @@ public class LeetCodeEasyPuzzle {
             }
         }
         return parentheses.size() == 0;
+    }
+
+    public boolean isPowerOfThree(int n) {
+        if (n <= 0 || (n % 3 != 0 && n != 1)) return false;
+        boolean result = false;
+        int m = (int) Math.round(Math.log(n) / Math.log(3));
+        if (n <= Math.pow(3, 19) && n == (int) Math.pow(3, m)) result = true;
+        return result;
     }
 }
