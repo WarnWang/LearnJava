@@ -236,11 +236,8 @@ public class LeetCodeEasyPuzzle {
             }
         }
 
-        for (int i = 0; i < 10; i++) {
-            if (secretArray[i] != 0 && guessArray[i] != 0) {
-                cows += Integer.min(guessArray[i], secretArray[i]);
-            }
-        }
+        for (int i = 0; i < 10; i++)
+            if (guessArray[i] != 0 && secretArray[i] != 0) cows += Integer.min(guessArray[i], secretArray[i]);
         return bulls + "A" + cows + "B";
     }
 }
