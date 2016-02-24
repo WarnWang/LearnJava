@@ -1,9 +1,6 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 import java.util.regex.Matcher;
 
 /**
@@ -226,7 +223,7 @@ public class LeetCodeEasyPuzzle {
 
     public String getHint(String secret, String guess) {
         int bulls = 0, cows = 0;
-        ArrayList<Character> secretList = new ArrayList<>();
+        Map<Character, Integer> secretMap = new HashMap<>();
         ArrayList<Character> guessList = new ArrayList<>();
 
         for (int i = 0; i < secret.length(); i++) {
@@ -236,16 +233,24 @@ public class LeetCodeEasyPuzzle {
                 char guessDigit = guess.charAt(i);
                 if (guessDigit == secretDigit) bulls++;
                 else {
-                    secretList.add(secretDigit);
-                    guessList.add(guessDigit);
+                    if (secretMap.containsKey(secretDigit)) secretMap.put(secretDigit, secretMap.get(secretDigit) + 1);
+                    else secretMap.put(secretDigit, 1);
+                    if (secretMap.containsKey(guessDigit)) {
+                        cows++;
+                        if (secretMap.get(guessDigit) == 1) secretMap.remove(guessDigit);
+                        else secretMap.put(guessDigit, secretMap.get(guessDigit) - 1);
+                    } else {
+                        guessList.add(guessDigit);
+                    }
                 }
             }
         }
 
         for (char temp : guessList) {
-            if (secretList.contains(temp)) {
+            if (secretMap.containsKey(temp)) {
                 cows++;
-                secretList.remove(secretList.indexOf(temp));
+                if (secretMap.get(temp) == 1) secretMap.remove(temp);
+                else secretMap.put(temp, secretMap.get(temp) - 1);
             }
         }
         return bulls + "A" + cows + "B";
