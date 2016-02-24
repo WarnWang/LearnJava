@@ -1,7 +1,7 @@
 package LeetCode;
 
-import java.util.*;
-import java.util.regex.Matcher;
+import java.util.Arrays;
+import java.util.Stack;
 
 /**
  * Created by warn on 8/2/2016.
@@ -223,34 +223,22 @@ public class LeetCodeEasyPuzzle {
 
     public String getHint(String secret, String guess) {
         int bulls = 0, cows = 0;
-        Map<Character, Integer> secretMap = new HashMap<>();
-        ArrayList<Character> guessList = new ArrayList<>();
+        int[] secretArray = new int[10];
+        int[] guessArray = new int[10];
 
-        for (int i = 0; i < secret.length(); i++) {
+        for (int i = 0, n = secret.length(); i < n; i++) {
             char secretDigit = secret.charAt(i);
-            if (i > guess.length() - 1) cows++;
+            char guessDigit = guess.charAt(i);
+            if (guessDigit == secretDigit) bulls++;
             else {
-                char guessDigit = guess.charAt(i);
-                if (guessDigit == secretDigit) bulls++;
-                else {
-                    if (secretMap.containsKey(secretDigit)) secretMap.put(secretDigit, secretMap.get(secretDigit) + 1);
-                    else secretMap.put(secretDigit, 1);
-                    if (secretMap.containsKey(guessDigit)) {
-                        cows++;
-                        if (secretMap.get(guessDigit) == 1) secretMap.remove(guessDigit);
-                        else secretMap.put(guessDigit, secretMap.get(guessDigit) - 1);
-                    } else {
-                        guessList.add(guessDigit);
-                    }
-                }
+                secretArray[secretDigit - '0']++;
+                guessArray[guessDigit - '0']++;
             }
         }
 
-        for (char temp : guessList) {
-            if (secretMap.containsKey(temp)) {
-                cows++;
-                if (secretMap.get(temp) == 1) secretMap.remove(temp);
-                else secretMap.put(temp, secretMap.get(temp) - 1);
+        for (int i = 0; i < 10; i++) {
+            if (secretArray[i] != 0 && guessArray[i] != 0) {
+                cows += Integer.min(guessArray[i], secretArray[i]);
             }
         }
         return bulls + "A" + cows + "B";
