@@ -1,5 +1,6 @@
 package LeetCode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Stack;
@@ -221,5 +222,32 @@ public class LeetCodeEasyPuzzle {
         int m = (int) Math.round(Math.log(n) / Math.log(3));
         if (n <= Math.pow(3, 19) && n == (int) Math.pow(3, m)) result = true;
         return result;
+    }
+
+    public String getHint(String secret, String guess) {
+        int bulls = 0, cows = 0;
+        ArrayList<Character> secretList = new ArrayList<>();
+        ArrayList<Character> guessList = new ArrayList<>();
+
+        for (int i = 0; i < secret.length(); i++) {
+            char secretDigit = secret.charAt(i);
+            if (i > guess.length() - 1) cows++;
+            else {
+                char guessDigit = guess.charAt(i);
+                if (guessDigit == secretDigit) bulls++;
+                else {
+                    secretList.add(secretDigit);
+                    guessList.add(guessDigit);
+                }
+            }
+        }
+
+        for (char temp : guessList) {
+            if (secretList.contains(temp)) {
+                cows++;
+                secretList.remove(secretList.indexOf(temp));
+            }
+        }
+        return bulls + "A" + cows + "B";
     }
 }
