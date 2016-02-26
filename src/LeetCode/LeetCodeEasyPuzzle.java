@@ -7,6 +7,7 @@ import java.util.Stack;
 
 /**
  * Created by warn on 8/2/2016.
+ * used to save leetcode sample problem
  */
 public class LeetCodeEasyPuzzle {
 
@@ -35,7 +36,7 @@ public class LeetCodeEasyPuzzle {
      * If no valid conversion could be performed, a zero value is returned. If the correct value is out of the range of
      * representable values, INT_MAX (2147483647) or INT_MIN (-2147483648) is returned.
      *
-     * @param str
+     * @param str an expression
      * @return the integer of the str.
      */
     public int myAtoi(String str) {
@@ -71,8 +72,8 @@ public class LeetCodeEasyPuzzle {
      * Note:
      * Try to come up as many solutions as you can, there are at least 3 different ways to solve this problem.
      *
-     * @param nums
-     * @param k
+     * @param nums the num set
+     * @param k rotate times
      */
     public void rotate1(int[] nums, int k) {
         int[] temp = nums.clone();
@@ -128,7 +129,7 @@ public class LeetCodeEasyPuzzle {
     public String addBinary(String a, String b) {
         int nA = a.length();
         int nB = b.length();
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int ai, bi;
         int element = 0;
         while (nA > 0 || nB > 0) {
