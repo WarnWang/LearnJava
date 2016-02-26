@@ -1,6 +1,8 @@
 package LeetCode;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -267,5 +269,23 @@ public class LeetCodeEasyPuzzle {
                 i-2
 
     */
+    }
+
+    public boolean isHappy(int n) {
+        if (n == 0) return false;
+        if (n == 1) return true;
+        Set<Integer> exploredDigit = new HashSet<>();
+        while (n != 1) {
+            int sum = 0;
+            if (exploredDigit.contains(n) || n == 4) return false;
+            exploredDigit.add(n);
+            while (n > 0) {
+                int temp = n % 10;
+                sum += temp * temp;
+                n /= 10;
+            }
+            n = sum;
+        }
+        return true;
     }
 }
