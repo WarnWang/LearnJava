@@ -248,4 +248,27 @@ public class LeetMedium {
         else if (nums[midIndex] < target) return searchInsert(nums, target, midIndex + 1, endIndex);
         else return searchInsert(nums, target, startIndex, midIndex);
     }
+
+
+    public int countDigitOne(int n) {
+        int count = 0;
+        int max = Integer.min(n, 9);
+        for (int i = 1; i <= max; i++) {
+            int temp = i;
+            while (temp > 0) {
+                if (temp % 10 == 1) count++;
+                temp /= 10;
+            }
+        }
+        if (10 > n) return count;
+        int div = 10;
+        while (n / div >= 10) {
+            count = div + 10 * count;
+            div *= 10;
+        }
+        count *= n / div;
+        count += Integer.min(div, n - div + 1);
+        count += countDigitOne(n - n / div * div);
+        return count;
+    }
 }
