@@ -2,6 +2,7 @@ package LeetCode;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by warn on 28/2/2016.
@@ -31,8 +32,7 @@ public class SudokuSolver {
     public void solveSudoku(char[][] board) {
         initState(board);
         int unchanged = 0;
-        for (Iterator<Integer> iterator = possibleValue.keySet().iterator(); iterator.hasNext(); ) {
-            int index = iterator.next();
+        for (Integer index : possibleValue.keySet()) {
             if (!checkRule(board, index)) checkPoint.add(index);
         }
         while (!checkPoint.isEmpty()) {
@@ -108,15 +108,13 @@ public class SudokuSolver {
     }
 
     private void initState(char[][] board) {
-        int sum = (2 << 8) - 1;
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
+        AtomicInteger sum = new AtomicInteger((2 << 8) - 1);
+        for (int i = 0; i < board.length; i++)
+            for (int j = 0; j < board[i].length; j++)
                 if (board[i][j] == '.') {
                     int index = i * 10 + j;
-                    possibleValue.put(index, sum);
+                    possibleValue.put(index, sum.get());
                 }
-            }
-        }
     }
 
     private boolean checkRule(char[][] board, int index) {
@@ -131,6 +129,10 @@ public class SudokuSolver {
                 if ((potential & n) != 0) potential -= n;
             }
         }
+        if (potential <= 0) {
+            possibleValue.put(index, potential);
+            return false;
+        }
 
         for (int i = 0; i < 9; i++) {
             char temp = board[i][y];
@@ -138,6 +140,10 @@ public class SudokuSolver {
                 int n = 1 << (temp - '1');
                 if ((potential & n) != 0) potential -= n;
             }
+        }
+        if (potential <= 0) {
+            possibleValue.put(index, potential);
+            return false;
         }
 
         int ceilX = x / 3 * 3;
@@ -150,7 +156,7 @@ public class SudokuSolver {
             }
         }
         possibleValue.put(index, potential);
-        if (potential == 0) return false;
+        if (potential <= 0) return false;
         int i = 0;
         while (potential != 0) {
             if ((potential & 1) == 1) return false;
