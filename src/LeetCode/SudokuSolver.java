@@ -39,15 +39,13 @@ public class SudokuSolver {
             boolean changeValue = checkRule(board, checkIndex);
             changeValue |= inferIndexValue(board, checkIndex);
             if (changeValue) {
-//                System.out.println(true);
-//                for (char[] k : board) System.out.println(Arrays.toString(k));
                 checkPoint.addAll(possibleValue.keySet().stream().collect(Collectors.toList()));
                 unchanged = 0;
             } else unchanged++;
-            if (isSolved() || unchanged > possibleValue.size() * 2) break;
+            if (possibleValue.isEmpty() || unchanged > possibleValue.size() * 2) break;
             if (!isValid(board)) return;
         }
-        if (isSolved() || depth > 1) return;
+        if (possibleValue.isEmpty() || depth > 1) return;
         int guessIndex = findMinimalPossibleValue();
         Set<Integer> guessValue = getPossibleValueOfIndex(guessIndex);
         possibleValue.remove(guessIndex);
@@ -65,9 +63,7 @@ public class SudokuSolver {
             depth++;
             solveSudoku(board);
             depth--;
-            System.out.println(true);
-            for (char[] k : board) System.out.println(Arrays.toString(k));
-            if (isSolved()) return;
+            if (possibleValue.isEmpty()) return;
             possibleValue.clear();
             possibleValue.putAll(tempPossibleValue);
             for (int j = 0; j < 9; j++) {
@@ -138,10 +134,6 @@ public class SudokuSolver {
             board[index / 10][index % 10] = (char) (i + '1');
             return true;
         }
-    }
-
-    public boolean isSolved() {
-        return possibleValue.isEmpty();
     }
 
     private boolean checkRule(char[][] board, int index) {
@@ -248,7 +240,6 @@ public class SudokuSolver {
             board[x][y] = (char) ((int) tempSet.toArray()[0] + '0');
             return true;
         }
-
         return false;
     }
 }
