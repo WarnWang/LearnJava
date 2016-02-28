@@ -29,6 +29,11 @@ public class SudokuSolver {
         for (char[] i : board) System.out.println(Arrays.toString(i));
     }
 
+    /**
+     * Original solver by myself, will cost 56ms to solve the problem
+     *
+     * @param board
+     */
     public void solveSudoku(char[][] board) {
         initState(board);
         int unchanged = 0;
@@ -215,5 +220,52 @@ public class SudokuSolver {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Fast version of Soduku solver only about 24ms
+     *
+     * @param board board of the Sudoku board
+     */
+    public void solveSudokuBackTracking(char[][] board) {
+        Stack<Integer> empty = new Stack<>();
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] == '.') empty.push(i * 10 + j);
+            }
+        }
+        solve(board, empty);
+    }
+
+    private boolean solve(char[][] board, Stack<Integer> empty) {
+        if (empty.isEmpty()) return true;
+        int firstValue = empty.peek();
+        int col = firstValue / 10, row = firstValue % 10;
+        for (int i = 0; i < 9; i++) {
+            char temp = (char) (i + '1');
+            if (isSafe(board, firstValue, temp)) {
+                board[col][row] = temp;
+                empty.pop();
+                if (solve(board, empty)) return true;
+                empty.push(firstValue);
+                board[col][row] = '.';
+            }
+        }
+        return false;
+    }
+
+    private boolean isSafe(char[][] board, int index, char temp) {
+        int col = index / 10, row = index % 10;
+        for (int i = 0; i < 9; i++) {
+            if (board[i][row] == temp) return false;
+            if (board[col][i] == temp) return false;
+        }
+
+        int ceilX = col / 3 * 3, ceilY = row / 3 * 3;
+        for (int i = 0; i < 9; i++) {
+            if (board[ceilX + i % 3][ceilY + i / 3] == temp) return false;
+        }
+
+        return true;
     }
 }
