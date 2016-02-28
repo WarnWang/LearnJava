@@ -31,6 +31,10 @@ public class SudokuSolver {
     public void solveSudoku(char[][] board) {
         initState(board);
         int unchanged = 0;
+        for (Iterator<Integer> iterator = possibleValue.keySet().iterator(); iterator.hasNext(); ) {
+            int index = iterator.next();
+            if (!checkRule(board, index)) checkPoint.add(index);
+        }
         while (!checkPoint.isEmpty()) {
             int checkIndex = checkPoint.remove();
             if (!possibleValue.containsKey(checkIndex)) continue;
@@ -54,9 +58,7 @@ public class SudokuSolver {
             tempPossibleValue.putAll(possibleValue);
             checkPoint.clear();
             char[][] tempBoard = new char[9][9];
-            for (int j = 0; j < 9; j++) {
-                System.arraycopy(board[j], 0, tempBoard[j], 0, 9);
-            }
+            for (int j = 0; j < 9; j++) System.arraycopy(board[j], 0, tempBoard[j], 0, 9);
             int x = guessIndex / 10;
             int y = guessIndex % 10;
             board[x][y] = (char) (i + '0');
@@ -66,9 +68,7 @@ public class SudokuSolver {
             if (possibleValue.isEmpty()) return;
             possibleValue.clear();
             possibleValue.putAll(tempPossibleValue);
-            for (int j = 0; j < 9; j++) {
-                System.arraycopy(tempBoard[j], 0, board[j], 0, 9);
-            }
+            for (int j = 0; j < 9; j++) System.arraycopy(tempBoard[j], 0, board[j], 0, 9);
         }
     }
 
@@ -114,26 +114,8 @@ public class SudokuSolver {
                 if (board[i][j] == '.') {
                     int index = i * 10 + j;
                     possibleValue.put(index, sum);
-                    checkPoint.add(index);
                 }
             }
-        }
-    }
-
-    public boolean isSingleValue(int index, char[][] board) {
-        if (!possibleValue.containsKey(index)) return true;
-        else {
-            int value = possibleValue.get(index);
-            if (value == 0) return false;
-            int i = 0;
-            while (value != 1) {
-                if ((value & 1) == 1) return false;
-                value >>= 1;
-                i++;
-            }
-            possibleValue.remove(index);
-            board[index / 10][index % 10] = (char) (i + '1');
-            return true;
         }
     }
 
@@ -168,7 +150,16 @@ public class SudokuSolver {
             }
         }
         possibleValue.put(index, potential);
-        return isSingleValue(index, board);
+        if (potential == 0) return false;
+        int i = 0;
+        while (potential != 0) {
+            if ((potential & 1) == 1) return false;
+            potential >>= 1;
+            i++;
+        }
+        possibleValue.remove(index);
+        board[index / 10][index % 10] = (char) (i + '0');
+        return true;
     }
 
     private boolean inferIndexValue(char[][] board, int index) {
@@ -182,7 +173,7 @@ public class SudokuSolver {
             int tempIndex = x * 10 + i;
             if (tempIndex == index || !possibleValue.containsKey(tempIndex)) continue;
             tempSet.removeAll(getPossibleValueOfIndex(tempIndex));
-            if (tempSet.size() == 0) break;
+            if (tempSet.isEmpty()) break;
         }
         if (tempSet.size() == 1) {
             possibleValue.remove(index);
@@ -195,7 +186,7 @@ public class SudokuSolver {
             int tempIndex = i * 10 + y;
             if (tempIndex == index || !possibleValue.containsKey(tempIndex)) continue;
             tempSet.removeAll(getPossibleValueOfIndex(tempIndex));
-            if (tempSet.size() == 0) break;
+            if (tempSet.isEmpty()) break;
         }
         if (tempSet.size() == 1) {
             possibleValue.remove(index);
@@ -210,7 +201,7 @@ public class SudokuSolver {
             int tempIndex = (ceilX + i % 3) * 10 + ceilY + i / 3;
             if (tempIndex == index || !possibleValue.containsKey(tempIndex)) continue;
             tempSet.removeAll(getPossibleValueOfIndex(tempIndex));
-            if (tempSet.size() == 0) break;
+            if (tempSet.isEmpty()) break;
         }
         if (tempSet.size() == 1) {
             possibleValue.remove(index);
