@@ -2,7 +2,6 @@ package LeetCode;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.stream.Collectors;
 
 /**
  * Created by warn on 28/2/2016.
@@ -31,7 +30,6 @@ public class SudokuSolver {
 
     public void solveSudoku(char[][] board) {
         initState(board);
-        checkPoint.addAll(possibleValue.keySet().stream().collect(Collectors.toList()));
         int unchanged = 0;
         while (!checkPoint.isEmpty()) {
             int checkIndex = checkPoint.remove();
@@ -39,11 +37,13 @@ public class SudokuSolver {
             boolean changeValue = checkRule(board, checkIndex);
             changeValue |= inferIndexValue(board, checkIndex);
             if (changeValue) {
-                checkPoint.addAll(possibleValue.keySet().stream().collect(Collectors.toList()));
+                checkPoint.addAll(possibleValue.keySet());
                 unchanged = 0;
-            } else unchanged++;
+            } else {
+                if (possibleValue.get(checkIndex) <= 0) return;
+                unchanged++;
+            }
             if (possibleValue.isEmpty() || unchanged > possibleValue.size() * 2) break;
-            if (!isValid(board)) return;
         }
         if (possibleValue.isEmpty() || depth > 1) return;
         int guessIndex = findMinimalPossibleValue();
@@ -124,6 +124,7 @@ public class SudokuSolver {
         if (!possibleValue.containsKey(index)) return true;
         else {
             int value = possibleValue.get(index);
+            if (value == 0) return false;
             int i = 0;
             while (value != 1) {
                 if ((value & 1) == 1) return false;
@@ -166,32 +167,8 @@ public class SudokuSolver {
                 if ((potential & n) != 0) potential -= n;
             }
         }
-        if (potential == 0) return false;
         possibleValue.put(index, potential);
         return isSingleValue(index, board);
-    }
-
-    public boolean isValid(char[][] board) {
-        int[] temp;
-        for (int i = 0; i < board.length; i++) {
-            temp = new int[9];
-            for (int j = 0; j < board.length; j++) {
-                if (board[i][j] != '.' && ++temp[board[i][j] - '1'] > 1) return false;
-            }
-
-            temp = new int[9];
-            for (char[] aBoard : board) {
-                if (aBoard[i] != '.' && ++temp[aBoard[i] - '1'] > 1) return false;
-            }
-
-            temp = new int[9];
-            int tempX = i / 3 * 3, tempY = i % 3 * 3;
-            for (int j = 0; j < board.length; j++) {
-                if (board[tempX + j % 3][tempY + j / 3] != '.' && ++temp[board[tempX + j % 3][tempY + j / 3] - '1'] > 1)
-                    return false;
-            }
-        }
-        return true;
     }
 
     private boolean inferIndexValue(char[][] board, int index) {
