@@ -208,7 +208,45 @@ public class TreeNode {
             result.append(String.valueOf(res));
             remainder = (remainder % den) * 10;
         }
-
         return result.toString();
+    }
+
+
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) return true;
+        else {
+            Stack<TreeNode> carrier = new Stack<>();
+            Map<TreeNode, Integer> treeNodeBooleanMap = new HashMap<>();
+            carrier.push(root);
+            treeNodeBooleanMap.put(null, 0);
+            while (!carrier.isEmpty()) {
+                TreeNode frontier = carrier.peek();
+                if (frontier != null) {
+                    boolean explored = false;
+                    if (!treeNodeBooleanMap.containsKey(frontier.right)) {
+                        carrier.push(frontier.right);
+                        explored = true;
+                    }
+                    if (!treeNodeBooleanMap.containsKey(frontier.left)) {
+                        carrier.push(frontier.left);
+                        explored = true;
+                    }
+
+                    if (!explored) {
+                        carrier.pop();
+                        int leftHeight = treeNodeBooleanMap.get(frontier.left);
+                        int rightHeight = treeNodeBooleanMap.get(frontier.right);
+                        if (Math.abs(leftHeight - rightHeight) > 1) return false;
+                        else treeNodeBooleanMap.put(frontier, Integer.max(leftHeight, rightHeight) + 1);
+                    }
+                } else carrier.pop();
+            }
+            return true;
+        }
+    }
+
+    public int getHeight(TreeNode root) {
+        if (root == null) return 0;
+        else return Integer.max(getHeight(root.left), getHeight(root.right)) + 1;
     }
 }
