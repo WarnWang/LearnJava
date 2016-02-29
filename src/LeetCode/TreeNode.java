@@ -247,6 +247,11 @@ public class TreeNode {
 
     public int getHeight(TreeNode root) {
         if (root == null) return 0;
-        else return Integer.max(getHeight(root.left), getHeight(root.right)) + 1;
+        else {
+            int leftHeight = getHeight(root.left);
+            int rightHeight = getHeight(root.right);
+            if (Math.abs(leftHeight - rightHeight) > 1 || leftHeight < 0 || rightHeight < 0) return -1;
+            else return Integer.max(leftHeight, rightHeight) + 1;
+        }
     }
 }
