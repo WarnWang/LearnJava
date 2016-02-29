@@ -1,6 +1,7 @@
 package LeetCode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -189,5 +190,60 @@ public class HardLeetCode {
             area = Math.max(tempArea, area);
         }
         return area;
+    }
+
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        if (maxWidth <= 1) return Arrays.asList(words);
+        List<String> result = new ArrayList<>();
+        for (int i = 0, tempLength = maxWidth, temp = 0; i < words.length; i++) {
+            if (tempLength > (words[i].length()) && i < words.length - 1) {
+                tempLength -= words[i].length();
+                tempLength--;
+            } else if (tempLength == words[i].length()) {
+                if (temp < i) result.add(concatenateString(words, temp, i, i - temp, 0));
+                else result.add(words[i]);
+                temp = i + 1;
+                tempLength = maxWidth;
+            } else if (tempLength < words[i].length()) {
+                tempLength += i - temp;
+                if (i - temp == 1) result.add(concatenateString(words, temp, temp, 0, tempLength));
+                else result.add(concatenateString(words, temp, i - 1, tempLength, 0));
+                if (i == words.length - 1) {
+                    result.add(concatenateString(words, i, i, 0, maxWidth - words[i].length()));
+                } else {
+                    if (words[i].length() == maxWidth) {
+                        result.add(words[i]);
+                        temp = i + 1;
+                        tempLength = maxWidth;
+                    } else {
+                        temp = i;
+                        tempLength = maxWidth - words[i].length() - 1;
+                    }
+                }
+            } else {
+                if (temp == i) result.add(concatenateString(words, i, i, 0, maxWidth - words[i].length()));
+                else result.add(concatenateString(words, temp, i, i - temp, tempLength - words[i].length()));
+            }
+        }
+        return result;
+    }
+
+    private String concatenateString(String[] words, int startIndex, int endIndex, int spaceLength, int padLength) {
+        int n = (endIndex == startIndex) ? 1 : endIndex - startIndex;
+        StringBuilder result = new StringBuilder();
+        int leftAdd = spaceLength % n;
+        int everySpace = spaceLength / n;
+        for (int i = startIndex; i < endIndex; i++) {
+            result.append(words[i]);
+            for (int j = 0; j < everySpace; j++) {
+                result.append(' ');
+            }
+            if (i < leftAdd + startIndex) result.append(' ');
+        }
+        result.append(words[endIndex]);
+        for (int i = 0; i < padLength; i++) {
+            result.append(' ');
+        }
+        return result.toString();
     }
 }
