@@ -10,12 +10,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SudokuSolver {
     Map<Integer, Integer> possibleValue = new HashMap<>();
     Queue<Integer> checkPoint = new ConcurrentLinkedDeque<>();
-    int depth = 0;
 
     public static void main(String[] args) {
         SudokuSolver test = new SudokuSolver();
-        String[] tempBoard = new String[]{"..9748...", "7........", ".2.1.9...", "..7...24.", ".64.1.59.", ".98...3..",
-                "...8.3.2.", "........6", "...2759.."};
+//        String[] tempBoard = new String[]{"..9748...", "7........", ".2.1.9...", "..7...24.", ".64.1.59.", ".98...3..",
+//                "...8.3.2.", "........6", "...2759.."};
+//        String[] tempBoard = new String[]{"31...2.4.", "...8.....", "8.....3.2", "....1.59.", ".3.2.8.6.", ".91.5....",
+//                "1.2.....4", ".....7...", ".7.6...51"};
+//        String[] tempBoard = new String[]{".......6.", "3.6.7.2..", ".5......9", "......4..",
+//                ".4.....8.", "..2......", "4......2.", "..9.5.3.4", ".7......."};
+        String[] tempBoard = new String[]{"1..67..8.", ".3......6", "..5...3..", "...7....2",
+                ".....1.95", ".6..2.8..", ".4.3..6..", "7.6..2...", "..1.4...."};
         char[][] board = new char[9][9];
         for (int i = 0; i < tempBoard.length; i++) {
             int k = 0;
@@ -25,6 +30,7 @@ public class SudokuSolver {
             }
         }
         test.solveSudoku(board);
+//        test.solveSudokuBackTracking(board);
         System.out.println(false);
         for (char[] i : board) System.out.println(Arrays.toString(i));
     }
@@ -54,7 +60,7 @@ public class SudokuSolver {
             }
             if (possibleValue.isEmpty() || unchanged > possibleValue.size() * 2) break;
         }
-        if (possibleValue.isEmpty() || depth > 1) return;
+        if (possibleValue.isEmpty()) return;
         int guessIndex = findMinimalPossibleValue();
         Set<Integer> guessValue = getPossibleValueOfIndex(guessIndex);
         possibleValue.remove(guessIndex);
@@ -67,9 +73,7 @@ public class SudokuSolver {
             int x = guessIndex / 10;
             int y = guessIndex % 10;
             board[x][y] = (char) (i + '0');
-            depth++;
             solveSudoku(board);
-            depth--;
             if (possibleValue.isEmpty()) return;
             possibleValue.clear();
             possibleValue.putAll(tempPossibleValue);
