@@ -135,10 +135,17 @@ public class ListNode {
         if (lists == null || lists.length == 0) return null;
         else if (lists.length == 1) return lists[0];
 
-        ListNode root = lists[0];
-        for (int i = 1; i < lists.length; i++) {
-            root = merge2Lists(root, lists[i]);
+        int n = lists.length;
+
+        while (n != 1) {
+            ListNode[] newLists = new ListNode[((n & 1) == 1) ? (n / 2 + 1) : (n / 2)];
+            for (int i = 0; i < newLists.length; i++) {
+                if (i != n - i - 1) newLists[i] = merge2Lists(lists[i], lists[n - i - 1]);
+                else newLists[i] = lists[i];
+            }
+            lists = newLists;
+            n = lists.length;
         }
-        return root;
+        return lists[0];
     }
 }
