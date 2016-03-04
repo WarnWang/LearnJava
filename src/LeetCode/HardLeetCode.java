@@ -11,6 +11,7 @@ public class HardLeetCode {
         HardLeetCode test = new HardLeetCode();
 //        System.out.println(test.candy(new int[]{1}));
 //        System.out.println(test.maximalRectangle(new String[] {"000", "000", "000"}));
+        test.countSmallerBST(new int[]{5, 2, 6, 1});
     }
 
     public int candy(int[] ratings) {
@@ -261,13 +262,89 @@ public class HardLeetCode {
         return Arrays.asList(countSmall);
     }
 
+    public List<Integer> countSmallerBST(int[] nums) {
+        if (nums.length == 0) return Arrays.asList(new Integer[]{});
+        int n = nums.length;
+        BinarySearchTree numsTree = new BinarySearchTree(nums[n - 1]);
+        Integer[] countSmall = new Integer[n];
+        countSmall[n - 1] = 0;
+        for (int i = n - 2; i >= 0; i--) {
+            countSmall[i] = numsTree.put(nums[i]);
+        }
+        return Arrays.asList(countSmall);
+    }
+
     public int findIndex(List<Integer> list, int low, int high, int target) {
         if (list.get(low) >= target) return low;
-        if (list.get(high) == target) return high;
         if (list.get(high) < target) return high + 1;
         int mid = (high + low) / 2;
-        if (list.get(mid) == target) return mid;
-        else if (list.get(mid) < target) return findIndex(list, mid + 1, high, target);
+        if (list.get(mid) < target) return findIndex(list, mid + 1, high, target);
         else return findIndex(list, low, mid - 1, target);
+    }
+
+    class BinarySearchTree {
+        Node root;
+
+        BinarySearchTree(int val) {
+            root = new Node(val);
+        }
+
+        public int put(int val) {
+            Node tempNode = root;
+            if (tempNode == null) {
+                root = new Node(val);
+                return 0;
+            }
+            while (true) {
+                if (val > tempNode.val) {
+                    if (tempNode.rightNode != null) tempNode = tempNode.rightNode;
+                    else {
+                        tempNode.rightNode = new Node(val);
+                        return rank(tempNode.rightNode);
+                    }
+                } else if (tempNode.val == val) {
+                    tempNode.count++;
+                    return rank(tempNode);
+                } else {
+                    if (tempNode.leftNode != null) tempNode = tempNode.leftNode;
+                    else {
+                        tempNode.leftNode = new Node(val);
+                        return rank(tempNode.leftNode);
+                    }
+                }
+            }
+        }
+
+        public int rank(Node node) {
+            return rank(root, node);
+        }
+
+        public int countSubNodes(Node root) {
+            if (root == null) return 0;
+            else return root.count + countSubNodes(root.leftNode) + countSubNodes(root.rightNode);
+        }
+
+        public int rank(Node rootNode, Node targetNode) {
+            if (rootNode == null) return 0;
+            if (targetNode.val > rootNode.val)
+                return rootNode.count + countSubNodes(rootNode.leftNode) + rank(rootNode.rightNode,
+                        targetNode);
+            else if (targetNode.val == rootNode.val) return countSubNodes(rootNode.leftNode);
+            else {
+                return rank(rootNode.leftNode, targetNode);
+            }
+        }
+
+        class Node {
+            int val;
+            int count;
+            Node leftNode;
+            Node rightNode;
+
+            Node(int val) {
+                this.val = val;
+                count = 1;
+            }
+        }
     }
 }
