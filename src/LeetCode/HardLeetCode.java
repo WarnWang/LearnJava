@@ -269,7 +269,8 @@ public class HardLeetCode {
         Integer[] countSmall = new Integer[n];
         countSmall[n - 1] = 0;
         for (int i = n - 2; i >= 0; i--) {
-            countSmall[i] = numsTree.put(nums[i]);
+            numsTree.put(nums[i]);
+            countSmall[i] = numsTree.rank(nums[i]);
         }
         return Arrays.asList(countSmall);
     }
@@ -289,61 +290,56 @@ public class HardLeetCode {
             root = new Node(val);
         }
 
-        public int put(int val) {
-            Node tempNode = root;
-            if (tempNode == null) {
+        public Node put(Node root, int val) {
+            if (root == null) {
                 root = new Node(val);
-                return 0;
+            } else if (root.val == val) {
+                root.count++;
+            } else if (root.val > val) {
+                root.leftNode = put(root.leftNode, val);
+            } else {
+                root.rightNode = put(root.rightNode, val);
             }
-            while (true) {
-                if (val > tempNode.val) {
-                    if (tempNode.rightNode != null) tempNode = tempNode.rightNode;
-                    else {
-                        tempNode.rightNode = new Node(val);
-                        return rank(tempNode.rightNode);
-                    }
-                } else if (tempNode.val == val) {
-                    tempNode.count++;
-                    return rank(tempNode);
-                } else {
-                    if (tempNode.leftNode != null) tempNode = tempNode.leftNode;
-                    else {
-                        tempNode.leftNode = new Node(val);
-                        return rank(tempNode.leftNode);
-                    }
-                }
-            }
+            root.size = root.count + countSubNodes(root.leftNode) + countSubNodes(root.rightNode);
+            return root;
         }
 
-        public int rank(Node node) {
-            return rank(root, node);
+        public Node put(int val) {
+            root = put(root, val);
+            return root;
+        }
+
+        public int rank(int val) {
+            return rank(root, val);
         }
 
         public int countSubNodes(Node root) {
             if (root == null) return 0;
-            else return root.count + countSubNodes(root.leftNode) + countSubNodes(root.rightNode);
+            else return root.size;
         }
 
-        public int rank(Node rootNode, Node targetNode) {
+        public int rank(Node rootNode, int val) {
             if (rootNode == null) return 0;
-            if (targetNode.val > rootNode.val)
+            if (val > rootNode.val)
                 return rootNode.count + countSubNodes(rootNode.leftNode) + rank(rootNode.rightNode,
-                        targetNode);
-            else if (targetNode.val == rootNode.val) return countSubNodes(rootNode.leftNode);
+                        val);
+            else if (val == rootNode.val) return countSubNodes(rootNode.leftNode);
             else {
-                return rank(rootNode.leftNode, targetNode);
+                return rank(rootNode.leftNode, val);
             }
         }
 
         class Node {
             int val;
             int count;
+            int size;
             Node leftNode;
             Node rightNode;
 
             Node(int val) {
                 this.val = val;
                 count = 1;
+                size = 1;
             }
         }
     }
