@@ -133,19 +133,23 @@ public class ListNode {
 
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length == 0) return null;
-        else if (lists.length == 1) return lists[0];
 
         int n = lists.length;
-
         while (n != 1) {
-            ListNode[] newLists = new ListNode[((n & 1) == 1) ? (n / 2 + 1) : (n / 2)];
-            for (int i = 0; i < newLists.length; i++) {
-                if (i != n - i - 1) newLists[i] = merge2Lists(lists[i], lists[n - i - 1]);
-                else newLists[i] = lists[i];
+            int tempN = ((n & 1) == 1) ? (n / 2 + 1) : (n / 2);
+            for (int i = 0; i < tempN; i++) {
+                if (i != n - i - 1) lists[i] = merge2Lists(lists[i], lists[n - i - 1]);
             }
-            lists = newLists;
-            n = lists.length;
+            n = tempN;
         }
         return lists[0];
+    }
+
+    public ListNode mergeKListsRecursive(ListNode[] lists, int low, int high) {
+        if (low == high) return lists[low];
+        else if (high - low == 1) return merge2Lists(lists[low], lists[high]);
+
+        int mid = (low + high) / 2;
+        return merge2Lists(mergeKListsRecursive(lists, low, mid), mergeKListsRecursive(lists, mid + 1, high));
     }
 }
