@@ -1,9 +1,6 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by warn on 14/2/2016.
@@ -245,5 +242,32 @@ public class HardLeetCode {
             result.append(' ');
         }
         return result.toString();
+    }
+
+    public List<Integer> countSmaller(int[] nums) {
+        if (nums.length == 0) return Arrays.asList(new Integer[]{});
+        int n = nums.length;
+        List<Integer> sortedList = new LinkedList<>();
+        Integer[] countSmall = new Integer[n];
+        for (int i = n - 1; i >= 0; i--) {
+            int index = 0;
+            if (sortedList.size() == index) sortedList.add(nums[i]);
+            else {
+                index = findIndex(sortedList, 0, sortedList.size() - 1, nums[i]);
+                sortedList.add(index, nums[i]);
+            }
+            countSmall[i] = index;
+        }
+        return Arrays.asList(countSmall);
+    }
+
+    public int findIndex(List<Integer> list, int low, int high, int target) {
+        if (list.get(low) >= target) return low;
+        if (list.get(high) == target) return high;
+        if (list.get(high) < target) return high + 1;
+        int mid = (high + low) / 2;
+        if (list.get(mid) == target) return mid;
+        else if (list.get(mid) < target) return findIndex(list, mid + 1, high, target);
+        else return findIndex(list, low, mid - 1, target);
     }
 }
