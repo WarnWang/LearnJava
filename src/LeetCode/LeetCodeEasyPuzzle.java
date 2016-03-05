@@ -1,8 +1,6 @@
 package LeetCode;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -285,5 +283,25 @@ public class LeetCodeEasyPuzzle {
             else if (sum < 10) return false;
             else n = sum;
         }
+    }
+
+    public int majorityElement(int[] nums) {
+        int majority;
+        if (nums.length < 1) return 0;
+        else if (nums.length == 1) return nums[0];
+        else {
+            int[] numsCount = new int[2];
+            for (int i : nums) {
+                if (numsCount[1] < 1) {
+                    numsCount[0] = i;
+                    numsCount[1] = 1;
+                } else {
+                    if (i == numsCount[0]) numsCount[1]++;
+                    else numsCount[1]--;
+                }
+            }
+            majority = numsCount[0];
+        }
+        return majority;
     }
 }
