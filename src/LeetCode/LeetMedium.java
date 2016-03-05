@@ -321,35 +321,28 @@ public class LeetMedium {
         int[] majorityNum2 = new int[2];
         int minMajority = nums.length / 3;
         for (int i : nums) {
-            if ((majorityNum1[1] == 0 || i == majorityNum1[0]) && (majorityNum2[1] == 0 ||
-                    (majorityNum2[1] > 0 && i != majorityNum2[0]))) {
+            if (i == majorityNum1[0]) majorityNum1[1]++;
+            else if (i == majorityNum2[0]) majorityNum2[1]++;
+            else if (majorityNum1[1] == 0) {
                 majorityNum1[0] = i;
-                majorityNum1[1]++;
-            } else if (majorityNum2[1] == 0 || i == majorityNum2[0]) {
+                majorityNum1[1] = 1;
+            } else if (majorityNum2[1] == 0) {
                 majorityNum2[0] = i;
-                majorityNum2[1]++;
+                majorityNum2[1] = 1;
             } else {
-                majorityNum2[1]--;
                 majorityNum1[1]--;
+                majorityNum2[1]--;
             }
         }
         List<Integer> majority = new ArrayList<>();
-        if (majorityNum1[1] > 0) {
-            int count = 0;
-            for (int i : nums) {
-                if (i == majorityNum1[0]) count++;
-            }
-            if (count > minMajority)
-                majority.add(majorityNum1[0]);
+        int count1 = 0;
+        int count2 = 0;
+        for (int num : nums) {
+            if (num == majorityNum1[0]) count1++;
+            else if (num == majorityNum2[0]) count2++;
         }
-        if (majorityNum2[1] > 0) {
-            int count = 0;
-            for (int i : nums) {
-                if (i == majorityNum2[0]) count++;
-            }
-            if (count > minMajority)
-                majority.add(majorityNum2[0]);
-        }
+        if (count1 > minMajority) majority.add(majorityNum1[0]);
+        if (count2 > minMajority) majority.add(majorityNum2[0]);
         return majority;
     }
 }
