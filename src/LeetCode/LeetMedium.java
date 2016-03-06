@@ -345,4 +345,59 @@ public class LeetMedium {
         if (count2 > minMajority) majority.add(majorityNum2[0]);
         return majority;
     }
+
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> orderList = new ArrayList<>();
+        int m = matrix.length;
+        if (m == 0) return orderList;
+        int n = matrix[0].length;
+        int[] direction = new int[]{0, 1};
+        int tempX = 0;
+        int tempY = 0;
+        int[] bound = {1, m - 1, 0, n - 1};
+        while (bound[0] <= bound[1] || bound[2] <= bound[3]) {
+            System.out.println(Arrays.toString(bound));
+            orderList.add(matrix[tempX][tempY]);
+            if (getDirection(direction, bound, tempX, tempY)) {
+                if (getDirection(direction, bound, tempX, tempY)) break;
+            }
+            tempX += direction[0];
+            tempY += direction[1];
+        }
+        return orderList;
+    }
+
+    public boolean getDirection(int[] direction, int[] bound, int positionX, int positionY) {
+        boolean changed = false;
+        if (Arrays.equals(direction, new int[]{0, 1})) {
+            if (positionY == bound[3]) {
+                bound[3]--;
+                direction[0] = 1;
+                direction[1] = 0;
+                changed = true;
+            }
+        } else if (Arrays.equals(direction, new int[]{1, 0})) {
+            if (positionX == bound[1]) {
+                bound[1]--;
+                direction[0] = 0;
+                direction[1] = -1;
+                changed = true;
+            }
+        } else if (Arrays.equals(direction, new int[]{0, -1})) {
+            if (positionY == bound[2]) {
+                bound[2]++;
+                direction[0] = -1;
+                direction[1] = 0;
+                changed = true;
+            }
+        } else {
+            if (positionX == bound[0]) {
+                bound[0]++;
+                direction[0] = 0;
+                direction[1] = 1;
+                changed = true;
+            }
+        }
+        return changed;
+    }
 }
