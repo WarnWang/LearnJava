@@ -354,48 +354,58 @@ public class LeetMedium {
         int[] direction = new int[]{0, 1};
         int tempX = 0;
         int tempY = 0;
-        int[] bound = {1, m - 1, 0, n - 1};
-        while (bound[0] <= bound[1] || bound[2] <= bound[3]) {
-            System.out.println(Arrays.toString(bound));
-            orderList.add(matrix[tempX][tempY]);
-            if (getDirection(direction, bound, tempX, tempY)) {
-                if (getDirection(direction, bound, tempX, tempY)) break;
+        int[] bound = {1, m - 1, 0, n - 1, n};
+        orderList.add(matrix[0][0]);
+        do {
+            if (direction[0] == 0) {
+                for (tempY += direction[1]; tempY != bound[4]; tempY += direction[1]) {
+                    orderList.add(matrix[tempX][tempY]);
+                }
+                tempY -= direction[1];
+            } else {
+                for (tempX += direction[0]; tempX != bound[4]; tempX += direction[0]) {
+                    orderList.add(matrix[tempX][tempY]);
+                }
+                tempX -= direction[0];
             }
-            tempX += direction[0];
-            tempY += direction[1];
-        }
+            System.out.println(Arrays.toString(bound));
+        } while (getDirection(direction, bound, tempX, tempY));
         return orderList;
     }
 
     public boolean getDirection(int[] direction, int[] bound, int positionX, int positionY) {
         boolean changed = false;
-        if (Arrays.equals(direction, new int[]{0, 1})) {
-            if (positionY == bound[3]) {
-                bound[3]--;
+        if (direction[0] == 0 && direction[1] > 0) {
+            if (positionY == bound[3] && positionX != bound[1]) {
                 direction[0] = 1;
                 direction[1] = 0;
+                bound[3]--;
                 changed = true;
+                bound[4] = bound[1] + 1;
             }
-        } else if (Arrays.equals(direction, new int[]{1, 0})) {
-            if (positionX == bound[1]) {
+        } else if (direction[1] == 0 && direction[0] > 0) {
+            if (positionX == bound[1] && positionY != bound[2]) {
                 bound[1]--;
                 direction[0] = 0;
                 direction[1] = -1;
                 changed = true;
+                bound[4] = bound[2] - 1;
             }
-        } else if (Arrays.equals(direction, new int[]{0, -1})) {
-            if (positionY == bound[2]) {
+        } else if (direction[0] == 0 && direction[1] < 0) {
+            if (positionY == bound[2] && positionX != bound[0]) {
                 bound[2]++;
                 direction[0] = -1;
                 direction[1] = 0;
                 changed = true;
+                bound[4] = bound[0] - 1;
             }
         } else {
-            if (positionX == bound[0]) {
+            if (positionX == bound[0] && positionY != bound[3]) {
                 bound[0]++;
                 direction[0] = 0;
                 direction[1] = 1;
                 changed = true;
+                bound[4] = bound[3] + 1;
             }
         }
         return changed;
