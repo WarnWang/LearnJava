@@ -410,4 +410,32 @@ public class LeetMedium {
         }
         return changed;
     }
+
+    public int maxProduct(int[] nums) {
+        int n = nums.length;
+        int max = nums[0];
+        int lastPositive, lastNegative;
+        if (max > 0) {
+            lastNegative = 0;
+            lastPositive = max;
+        } else {
+            lastNegative = max;
+            lastPositive = 0;
+        }
+
+        for (int i = 1; i < n; i++) {
+            int temp = nums[i];
+            if (temp > 0) {
+                lastNegative *= temp;
+                lastPositive = Integer.max(lastPositive, 1) * temp;
+            } else {
+                int tempPositive = lastNegative * temp;
+                lastNegative = Integer.max(lastPositive, 1) * temp;
+                lastPositive = tempPositive;
+            }
+
+            max = Integer.max(lastPositive, max);
+        }
+        return max;
+    }
 }
