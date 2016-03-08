@@ -319,4 +319,37 @@ public class LeetCodeEasyPuzzle {
         }
         return Integer.max(sums[n - 1], sums[n - 2]);
     }
+
+    public void moveZeroes(int[] nums) {
+        int n = nums.length;
+        int[] tempNums = new int[n];
+        int index = 0;
+        for (int num : nums) {
+            if (num != 0) tempNums[index++] = num;
+        }
+        System.arraycopy(tempNums, 0, nums, 0, n);
+    }
+
+    public int removeElement(int[] nums, int val) {
+        int n = nums.length;
+        int[] tempNums = new int[n];
+        int index = n - 1;
+        for (int num : nums) if (num != val) tempNums[index++] = num;
+        System.arraycopy(tempNums, 0, nums, 0, index);
+        return index;
+    }
+
+    public ListNode removeElements(ListNode head, int val) {
+        while (head != null && head.val == val) head = head.next;
+        if (head == null) return null;
+        ListNode a = head;
+        for (ListNode b = head.next; b != null; b = b.next) {
+            if (b.val != val) {
+                a.next = b;
+                a = a.next;
+            }
+        }
+        a.next = null;
+        return head;
+    }
 }
