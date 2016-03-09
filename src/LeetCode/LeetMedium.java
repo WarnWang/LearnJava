@@ -488,4 +488,26 @@ public class LeetMedium {
         }
         return (int) result;
     }
+
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length;
+        if (m == 0) return 0;
+        int n = obstacleGrid[0].length;
+        if (n == 0) return 0;
+        int[][] path = new int[m][n];
+        for (int i = m - 1; i >= 0; i--) {
+            if (i == m - 1 || path[i + 1][n - 1] != 0) path[i][n - 1] = 1 - obstacleGrid[i][n - 1];
+            else path[i][n - 1] = 0;
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            if (i == n - 1 || path[m - 1][i + 1] != 0) path[m - 1][i] = 1 - obstacleGrid[m - 1][i];
+            else path[m - 1][i] = 0;
+        }
+        for (int i = m - 2; i >= 0; i--)
+            for (int j = n - 2; j >= 0; j--) {
+                if (obstacleGrid[i][j] == 1) path[i][j] = 0;
+                else path[i][j] = path[i + 1][j] + path[i][j + 1];
+            }
+        return path[0][0];
+    }
 }
