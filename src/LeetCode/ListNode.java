@@ -152,4 +152,13 @@ public class ListNode {
         int mid = (low + high) / 2;
         return merge2Lists(mergeKListsRecursive(lists, low, mid), mergeKListsRecursive(lists, mid + 1, high));
     }
+
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) return head;
+        head.next.next = swapPairs(head.next.next);
+        ListNode tempNode = head.next;
+        head.next = tempNode.next;
+        tempNode.next = head;
+        return tempNode;
+    }
 }
