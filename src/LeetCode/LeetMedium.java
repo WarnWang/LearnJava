@@ -510,4 +510,33 @@ public class LeetMedium {
             }
         return path[0][0];
     }
+
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> permutedNum = new ArrayList<>();
+        if (nums == null || nums.length == 0) return permutedNum;
+        if (nums.length == 1) {
+            List<Integer> permuteTemp = new ArrayList<>();
+            permuteTemp.add(nums[0]);
+            permutedNum.add(permuteTemp);
+            return permutedNum;
+        }
+        int n = nums.length;
+        int num = nums[n - 1];
+        int[] tempNums = new int[n - 1];
+        for (int i = 0; i < n - 1; i++) {
+            tempNums[i] = nums[i];
+        }
+        List<List<Integer>> tempPermutedNum = permute(tempNums);
+        for (List<Integer> i : tempPermutedNum) {
+            for (int j = 0; j < i.size(); j++) {
+                List<Integer> newPermute = new ArrayList<>();
+                newPermute.addAll(i);
+                newPermute.add(j, num);
+                permutedNum.add(newPermute);
+            }
+            i.add(num);
+            permutedNum.add(i);
+        }
+        return permutedNum;
+    }
 }
