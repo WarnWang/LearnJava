@@ -539,4 +539,46 @@ public class LeetMedium {
         }
         return permutedNum;
     }
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> permutedNum = new ArrayList<>();
+        if (nums == null || nums.length == 0) return permutedNum;
+        if (nums.length == 1) {
+            List<Integer> permuteTemp = new ArrayList<>();
+            permuteTemp.add(nums[0]);
+            permutedNum.add(permuteTemp);
+            return permutedNum;
+        }
+        int n = nums.length;
+        int num = nums[n - 1];
+        int[] tempNums = new int[n - 1];
+        for (int i = 0; i < n - 1; i++) {
+            tempNums[i] = nums[i];
+        }
+        List<List<Integer>> tempPermutedNum = permuteUnique(tempNums);
+        Set<Integer> containsList = new HashSet<>();
+        int hashCode;
+        for (List<Integer> i : tempPermutedNum) {
+            int nI = i.size();
+            for (int j = 0; j < nI; j++) {
+                List<Integer> newPermute = new ArrayList<>();
+                for (int k = 0; k < nI; k++) {
+                    if (k == j) newPermute.add(num);
+                    newPermute.add(i.get(k));
+                }
+                hashCode = newPermute.hashCode();
+                if (!containsList.contains(hashCode)) {
+                    permutedNum.add(newPermute);
+                    containsList.add(hashCode);
+                }
+            }
+            i.add(num);
+            hashCode = i.hashCode();
+            if (!containsList.contains(hashCode)) {
+                permutedNum.add(i);
+                containsList.add(hashCode);
+            }
+        }
+        return permutedNum;
+    }
 }
