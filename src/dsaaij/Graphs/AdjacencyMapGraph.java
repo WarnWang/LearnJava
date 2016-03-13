@@ -110,12 +110,11 @@ public class AdjacencyMapGraph<V, E> implements Graph<V, E> {
     @Override
     public void removeEdge(Edge<E> e) throws IllegalArgumentException {
         InnerEdge<E> edge = validate(e);
-        Vertex<V>[] endpoints = edge.getEndpoints();
-        Map<Vertex<V>, Edge<E>> temp;
-        InnerVertex<V> u = validate(endpoints[0]), v = validate(endpoints[1]);
-        u.getOutgoing().remove(v);
-        v.getIncoming().remove(u);
+        InnerVertex<V>[] endpoints = (InnerVertex<V>[]) edge.getEndpoints();
+        endpoints[0].getOutgoing().remove(endpoints[1]);
+        endpoints[1].getIncoming().remove(endpoints[0]);
         edges.remove(edge.getPosition());
+        edge.setPosition(null);
     }
 
     @SuppressWarnings({"unchecked"})
