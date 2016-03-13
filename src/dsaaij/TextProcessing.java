@@ -86,4 +86,48 @@ public class TextProcessing {
         }
         return -1;
     }
+
+    public static int[][] matrixCHain(int[] d) {
+        int n = d.length - 1;
+        int[][] N = new int[n][n];
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n - i; j++) {
+                int k = i + j;
+                N[j][k] = Integer.MAX_VALUE;
+                for (int l = j; l < k; l++) {
+                    N[j][k] = Integer.min(N[j][k], N[j][l] + N[l + 1][j] + d[j] * d[l + 1] + d[k + 1]);
+                }
+            }
+        }
+        return N;
+    }
+
+    public static int[][] LCS(char[] X, char[] Y) {
+        int n = X.length;
+        int m = Y.length;
+        int[][] L = new int[n + 1][m + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (X[i] == Y[j]) L[i + 1][j + 1] = L[i][j] + 1;
+                else L[i + 1][j + 1] = Integer.max(L[i][j + 1], L[i + 1][j]);
+            }
+        }
+        return L;
+    }
+
+    public static char[] reconstructLCS(char[] X, char[] Y, int[][] L) {
+        int i = X.length;
+        int j = Y.length;
+        int k = L[i][j];
+        char[] solution = new char[k];
+        while (k > 0) {
+            if (X[i - 1] == Y[j - 1]) {
+                solution[--k] = X[i - 1];
+                i--;
+                j--;
+            } else if (L[i - 1][j] > L[i][j - 1]) i--;
+            else j--;
+        }
+        return solution;
+    }
 }
