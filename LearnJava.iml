@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jsoup-1.8.3" level="project" />
     <orderEntry type="library" name="postgresql-9.4.1207" level="project" />
+    <orderEntry type="library" name="sourcecode" level="project" />
   </component>
 </module>
