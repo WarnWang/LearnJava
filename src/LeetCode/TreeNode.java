@@ -260,4 +260,17 @@ public class TreeNode {
         else if (root.val < Integer.min(p.val, q.val)) return lowestCommonAncestor(root.right, p, q);
         else return root;
     }
+
+    public int rob(TreeNode root) {
+        if (root == null) return 0;
+        return Integer.max(rob(root, true), rob(root, false));
+    }
+
+    public int rob(TreeNode root, boolean hasParent) {
+        if (root == null) return 0;
+        if (hasParent) return rob(root.left, false) + rob(root.right, false) + root.val;
+        else {
+            return rob(root.left) + rob(root.right);
+        }
+    }
 }
