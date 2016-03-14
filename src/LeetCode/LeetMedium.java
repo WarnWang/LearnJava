@@ -581,4 +581,28 @@ public class LeetMedium {
         }
         return permutedNum;
     }
+
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int n = nums.length;
+        if (n == 1) return nums[0];
+        if (n == 2) return Math.max(nums[0], nums[1]);
+        int[] sums = new int[n];
+        sums[0] = nums[0];
+        sums[1] = nums[1];
+        int maxRobbery = Integer.max(nums[1], nums[0]);
+        for (int i = 2; i < n - 1; i++) {
+            if (i == 2) sums[i] = sums[0] + nums[i];
+            else sums[i] = Math.max(sums[i - 2], sums[i - 3]) + nums[i];
+            maxRobbery = Integer.max(maxRobbery, sums[i]);
+        }
+
+        sums[0] = 0;
+        for (int i = 2; i < n; i++) {
+            if (i == 2) sums[i] = nums[i];
+            else sums[i] = Math.max(sums[i - 2], sums[i - 3]) + nums[i];
+            maxRobbery = Integer.max(maxRobbery, sums[i]);
+        }
+        return maxRobbery;
+    }
 }
