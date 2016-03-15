@@ -36,16 +36,13 @@ public class BFS {
         while (!nodeQueue.isEmpty()) {
             TreeNode node = nodeQueue.remove();
             int level = levelQueue.remove();
-            List<Integer> levelList;
             if (zigzagList.size() == level) {
-                levelList = new LinkedList<>();
-                levelList.add(node.val);
-                zigzagList.add(levelList);
+                zigzagList.add(new LinkedList<>());
+                zigzagList.get(level).add(node.val);
                 reversed = !reversed;
             } else {
-                levelList = zigzagList.get(level);
-                if (reversed) levelList.add(0, node.val);
-                else levelList.add(node.val);
+                if (reversed) zigzagList.get(level).add(0, node.val);
+                else zigzagList.get(level).add(node.val);
             }
 
             if (node.left != null) {
