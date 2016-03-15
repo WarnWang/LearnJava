@@ -11,6 +11,7 @@ public class DFS {
      * Given two binary trees, write a function to check if they are equal or not.
      * Two binary trees are considered equal if they are structurally identical and the nodes have the same value.
      * Tag: Tree, DFS
+     * Difficulty: easy
      *
      * @param p tree A
      * @param q tree B
@@ -37,7 +38,7 @@ public class DFS {
     }
 
     public boolean isSameTreeRecursively(TreeNode p, TreeNode q) {
-        return p == null && q == null || !(p == null || q == null || p.val != q.val) && true &&
-                isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+        return p == null && q == null || !(p == null || q == null || p.val != q.val) &&
+                isSameTreeRecursively(p.left, q.left) && isSameTreeRecursively(p.right, q.right);
     }
 }
