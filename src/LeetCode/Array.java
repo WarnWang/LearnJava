@@ -26,35 +26,16 @@ public class Array {
             int index = Arrays.binarySearch(tempNums, i + 1, n, tempTarget);
             if (index >= 0) {
                 int[] indexResult = new int[2];
-                if (tempTarget != tempNums[i]) {
-                    for (int j = 0; j < n; j++) {
-                        if (nums[j] == tempTarget) indexResult[1] = j;
-                        if (nums[j] == tempNums[i]) indexResult[0] = j;
-                    }
-                } else {
-                    int tempI = 0;
-                    for (int j = 0; j < n; j++) {
-                        if (nums[j] == tempTarget) {
-                            indexResult[tempI++] = j;
-                            if (tempI == 2) break;
-                        }
+                int tempI = 0;
+                for (int j = 0; j < n; j++) {
+                    if (nums[j] == tempTarget || nums[j] == tempNums[i]) {
+                        indexResult[tempI++] = j;
+                        if (tempI == 2) break;
                     }
                 }
-                Arrays.sort(indexResult);
                 return indexResult;
             }
         }
         return null;
-    }
-
-    public int findTarget(int[] nums, int startIndex, int endIndex, int target) {
-        int mid = (startIndex + endIndex) / 2;
-        if (startIndex >= endIndex || target < nums[startIndex] || target > nums[endIndex]) return -1;
-        if (nums[startIndex] == target) return startIndex;
-        if (nums[endIndex - 1] == target) return endIndex - 1;
-        if (nums[mid] == target) return mid;
-        if (nums[mid] > target) return findTarget(nums, startIndex, mid, target);
-        else return findTarget(nums, mid + 1, endIndex, target);
-
     }
 }
