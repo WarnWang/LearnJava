@@ -95,8 +95,9 @@ public class Array {
         int leastDiff = Integer.MAX_VALUE;
         Arrays.sort(nums);
         for (int i = 0; i < n - 2; i++) {
-            for (int j = i + 1; j < n - 1; j++) {
-                int k = findClosest(nums, target - nums[i] - nums[j], j + 1, n);
+            int j = i + 1;
+            int k = n - 1;
+            while (j < k) {
                 int newSum = nums[i] + nums[j] + nums[k];
                 if (newSum == target) return target;
                 else {
@@ -105,36 +106,11 @@ public class Array {
                         leastDiff = diff;
                         closestSum = newSum;
                     }
+                    if (newSum > target) k--;
+                    else j++;
                 }
             }
         }
         return closestSum;
-    }
-
-    public int findClosest(int[] nums, int target, int startIndex, int endIndex) {
-        if (nums[startIndex] >= target) return startIndex;
-        if (nums[endIndex - 1] <= target) return endIndex - 1;
-        if (endIndex - startIndex <= 1) {
-            if (endIndex < nums.length) {
-                return (Math.abs(target - nums[startIndex]) < Math.abs(target - nums[endIndex])) ?
-                        startIndex : endIndex;
-            } else return startIndex;
-        }
-        int midIndex = (startIndex + endIndex) / 2;
-        if (nums[midIndex] == target) return midIndex;
-        else if (nums[midIndex] > target) {
-            if (midIndex > 1 && nums[midIndex - 1] < target) {
-                return (Math.abs(nums[midIndex] - target) < Math.abs(nums[midIndex - 1] - target)) ? midIndex :
-                        (midIndex - 1);
-            }
-            return findClosest(nums, target, startIndex, midIndex);
-        } else {
-            if (midIndex < nums.length - 1) {
-                if (nums[midIndex + 1] > target) {
-                    return (Math.abs(nums[midIndex] - target) < Math.abs(nums[midIndex + 1] - target)) ? midIndex :
-                            (midIndex + 1);
-                } else return findClosest(nums, target, midIndex + 1, endIndex);
-            } else return midIndex;
-        }
     }
 }
