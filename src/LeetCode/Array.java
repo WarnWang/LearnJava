@@ -66,14 +66,23 @@ public class Array {
         maxIndex = Integer.min(n - 2, maxIndex);
         for (int i = 0; i < maxIndex; i++) {
             if (i > 0 && tempNums[i] == tempNums[i - 1]) continue;
-            for (int j = i + 1; j < n - 1; j++) {
-                if (j != i + 1 && tempNums[j] == tempNums[j - 1]) continue;
-                int sum_2 = -(tempNums[i] + tempNums[j]);
-                if (sum_2 < 0) break;
-                int index = Arrays.binarySearch(tempNums, j + 1, n, sum_2);
-                if (index > 0) {
-                    answerList.add(Arrays.asList(tempNums[i], tempNums[j], sum_2));
+            int j = i + 1;
+            int k = n - 1;
+            while (j < k) {
+                if (j > i + 1 && tempNums[j] == tempNums[j - 1]) {
+                    j++;
+                    continue;
+                } else if (k < n - 1 && tempNums[k] == tempNums[k + 1]) {
+                    k--;
+                    continue;
                 }
+                int sum = tempNums[i] + tempNums[j] + tempNums[k];
+                if (sum == 0) {
+                    answerList.add(Arrays.asList(tempNums[i], tempNums[j], tempNums[k]));
+                    j++;
+                    k--;
+                } else if (sum > 0) k--;
+                else j++;
             }
         }
         return answerList;
