@@ -78,4 +78,63 @@ public class Array {
         }
         return answerList;
     }
+
+    /**
+     * Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target.
+     * Return the sum of the three integers. You may assume that each input would have exactly one solution.
+     *
+     * @param nums   Given an array S of n integers
+     * @param target a given number
+     * @return the closest sum to the given number
+     */
+    public int threeSumClosest(int[] nums, int target) {
+        if (nums == null) return 0;
+        int n = nums.length;
+        if (n < 3) return 0;
+        int closestSum = Integer.MAX_VALUE;
+        int leastDiff = Integer.MAX_VALUE;
+        Arrays.sort(nums);
+        for (int i = 0; i < n - 2; i++) {
+            for (int j = i + 1; j < n - 1; j++) {
+                int k = findClosest(nums, target - nums[i] - nums[j], j + 1, n);
+                int newSum = nums[i] + nums[j] + nums[k];
+                if (newSum == target) return target;
+                else {
+                    int diff = Math.abs(newSum - target);
+                    if (diff < leastDiff) {
+                        leastDiff = diff;
+                        closestSum = newSum;
+                    }
+                }
+            }
+        }
+        return closestSum;
+    }
+
+    public int findClosest(int[] nums, int target, int startIndex, int endIndex) {
+        if (nums[startIndex] >= target) return startIndex;
+        if (nums[endIndex - 1] <= target) return endIndex - 1;
+        if (endIndex - startIndex <= 1) {
+            if (endIndex < nums.length) {
+                return (Math.abs(target - nums[startIndex]) < Math.abs(target - nums[endIndex])) ?
+                        startIndex : endIndex;
+            } else return startIndex;
+        }
+        int midIndex = (startIndex + endIndex) / 2;
+        if (nums[midIndex] == target) return midIndex;
+        else if (nums[midIndex] > target) {
+            if (midIndex > 1 && nums[midIndex - 1] < target) {
+                return (Math.abs(nums[midIndex] - target) < Math.abs(nums[midIndex - 1] - target)) ? midIndex :
+                        (midIndex - 1);
+            }
+            return findClosest(nums, target, startIndex, midIndex);
+        } else {
+            if (midIndex < nums.length - 1) {
+                if (nums[midIndex + 1] > target) {
+                    return (Math.abs(nums[midIndex] - target) < Math.abs(nums[midIndex + 1] - target)) ? midIndex :
+                            (midIndex + 1);
+                } else return findClosest(nums, target, midIndex + 1, endIndex);
+            } else return midIndex;
+        }
+    }
 }

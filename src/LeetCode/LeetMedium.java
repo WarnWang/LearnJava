@@ -8,10 +8,12 @@ import java.util.*;
 public class LeetMedium {
     Map<Integer, Set<Integer>> prerequisiteMap;
     Set<Integer> prerequisite;
+    // recursively
+    Map<Integer, Integer> pathInfo = new HashMap<>();
 
     public static void main(String[] args) {
         // put your codes here
-        LeetMedium test = new LeetMedium();
+//        LeetMedium test = new LeetMedium();
 //        int[][] courseInfo = {{1, 0}, {0, 3}, {0, 2}, {3, 2}};
 //        int[][] courseInfo = {{1, 0}};
 //        int[][] courseInfo = {{1, 0}, {0, 1}};
@@ -19,7 +21,14 @@ public class LeetMedium {
 //        System.out.println(test.canFinishBFS(4, courseInfo));
 //        System.out.println(test.findMin(new int[]{10, 20, 40, 60, 0, 1, 4, 6}));
 //        System.out.println(test.minPatches2(new int[]{1, 2, 9}, 11));
-        System.out.println(test.missingNumber2(new int[]{1, 0}));
+        Array test = new Array();
+        System.out.println(test.threeSumClosest(new int[]{87, 6, -100, -19, 10, -8, -58, 56, 14, -1, -42, -45, -17, 10,
+                20, -4, 13, -17, 0, 11, -44, 65, 74, -48, 30, -91, 13, -53, 76, -69, -19, -69, 16, 78, -56, 27, 41, 67,
+                -79, -2, 30, -13, -60, 39, 95, 64, -12, 45, -52, 45, -44, 73, 97, 100, -19, -16, -26, 58, -61, 53, 70,
+                1, -83, 11, -35, -7, 61, 30, 17, 98, 29, 52, 75, -73, -73, -23, -75, 91, 3, -57, 91, 50, 42, 74, -7,
+                62, 17, -91, 55, 94, -21, -36, 73, 19, -61, -82, 73, 1, -10, -40, 11, 54, -81, 20, 40, -29, 96, 89, 57,
+                10, -16, -34, -56, 69, 76, 49, 76, 82, 80, 58, -47, 12, 17, 77, -75, -24, 11, -45, 60, 65, 55, -89, 49,
+                -19, 4}, -275));
     }
 
     private void getAllPrerequisiteCourse(Integer key) {
@@ -30,7 +39,6 @@ public class LeetMedium {
             prerequisite.add(course);
             getAllPrerequisiteCourse(course);
         }
-        return;
     }
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
@@ -150,7 +158,6 @@ public class LeetMedium {
         return true;
     }
 
-
     public int findMin(int[] nums) {
         for (int i = 0; i < nums.length - 1; i++) {
             if (nums[i] > nums[i + 1]) return nums[i + 1];
@@ -248,7 +255,6 @@ public class LeetMedium {
         else if (nums[midIndex] < target) return searchInsert(nums, target, midIndex + 1, endIndex);
         else return searchInsert(nums, target, startIndex, midIndex);
     }
-
 
     public int countDigitOne(int n) {
         int count = 0;
@@ -438,9 +444,6 @@ public class LeetMedium {
         }
         return max;
     }
-
-    // recursively
-    Map<Integer, Integer> pathInfo = new HashMap<>();
 
     public int uniquePaths(int m, int n) {
         int key1 = m * 1000 + n;
