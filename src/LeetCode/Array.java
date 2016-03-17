@@ -1,6 +1,8 @@
 package LeetCode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by warn on 16/3/2016.
@@ -132,7 +134,6 @@ public class Array {
         if (nums == null) return answerList;
         int n = nums.length;
         if (n < 4) return answerList;
-        Set<List<Integer>> answerSet = new HashSet<>();
         Arrays.sort(nums);
         for (int i = 0; i < n - 3; ) {
             for (int j = i + 1; j < n - 2; ) {
@@ -141,31 +142,30 @@ public class Array {
                 while (p < q) {
                     int sum = nums[i] + nums[j] + nums[p] + nums[q];
                     if (sum == target) {
-                        answerSet.add(Arrays.asList(nums[i], nums[j], nums[p], nums[q]));
-//                        int k = j + 1;
-//                        while (k < n - 3){
-//                            if (nums[k] == nums[j]) k++;
-//                            else break;
-//                        }
-//                        j = k;
+                        answerList.add(Arrays.asList(nums[i], nums[j], nums[p], nums[q]));
+                        int k = j + 1;
+                        while (k < n && nums[k] == nums[p]) k++;
+                        p = k;
+                        k = q - 1;
+                        while (k > 0 && nums[k] == nums[q]) k--;
+                        q = k;
                     } else if (sum > target) q--;
                     else p++;
                 }
-//                int k = j + 1;
-//                while (k < n - 3){
-//                    if (nums[k] == nums[j]) k++;
-//                    else break;
-//                }
-//                j = k;
+                int k = j + 1;
+                while (k < n - 2) {
+                    if (nums[k] == nums[j]) k++;
+                    else break;
+                }
+                j = k;
             }
-//            int k = i + 1;
-//            while (k < n - 3){
-//                if (nums[k] == nums[i]) k++;
-//                else break;
-//            }
-//            i = k;
+            int k = i + 1;
+            while (k < n - 3) {
+                if (nums[k] == nums[i]) k++;
+                else break;
+            }
+            i = k;
         }
-        answerList.addAll(answerSet);
         return answerList;
     }
 }
