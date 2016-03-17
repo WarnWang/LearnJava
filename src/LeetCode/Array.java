@@ -23,19 +23,29 @@ public class Array {
         int[] tempNums = new int[n];
         System.arraycopy(nums, 0, tempNums, 0, n);
         Arrays.sort(tempNums);
-        for (int i = 0; i < n - 1; i++) {
-            int tempTarget = target - tempNums[i];
-            int index = Arrays.binarySearch(tempNums, i + 1, n, tempTarget);
-            if (index >= 0) {
+
+        int i = 0;
+        int j = n - 1;
+        while (j > i) {
+            int sum = tempNums[i] + tempNums[j];
+            if (sum > target) j--;
+            else if (sum < target) i++;
+            else {
                 int[] indexResult = new int[2];
-                int tempI = 0;
-                for (int j = 0; j < n; j++) {
-                    if (nums[j] == tempTarget || nums[j] == tempNums[i]) {
-                        indexResult[tempI++] = j;
-                        if (tempI == 2) break;
+                int index = 0;
+                boolean iFlag = false;
+                boolean jFlag = false;
+                for (int k = 0; k < n && index < 2; k++) {
+                    if (nums[k] == tempNums[i] && !iFlag) {
+                        indexResult[index++] = k;
+                        iFlag = true;
+                    } else if (nums[k] == tempNums[j] && !jFlag) {
+                        indexResult[index++] = k;
+                        jFlag = true;
                     }
                 }
-                return indexResult;
+                if (index == 2) return indexResult;
+                else break;
             }
         }
         return null;
@@ -125,6 +135,11 @@ public class Array {
      * Elements in a quadruplet (a,b,c,d) must be in non-descending order. (ie, a ≤ b ≤ c ≤ d)
      * The solution set must not contain duplicate quadruplets.
      *
+     * Design information:
+     * 1. If nums[i] > target / 4, which means the left sum of variables will have no chance to equal target
+     * 2. If nums[j] < target / 4, which means all the value between i and j will be less than target / 4, then break
+     * 3. if nums[p] > (target - nums[i] - nums[j]) / 2 and nums[q] < (target - nums[i] - nums[j]) / 2 break
+     *
      * @param nums   an array S of n integers
      * @param target the target value
      * @return all unique quadruplets in the array which gives the sum of target
@@ -135,36 +150,28 @@ public class Array {
         int n = nums.length;
         if (n < 4) return answerList;
         Arrays.sort(nums);
-        for (int i = 0; i < n - 3; ) {
-            for (int j = i + 1; j < n - 2; ) {
-                int p = j + 1;
-                int q = n - 1;
-                while (p < q) {
-                    int sum = nums[i] + nums[j] + nums[p] + nums[q];
+        int k;
+        int limit1 = target >> 2;
+        for (int i = 0; i < n - 3; i++) {
+            if (i != 0 && nums[i] == nums[i - 1]) continue;
+            if (nums[i] > limit1) break; // limit1
+            for (int j = n - 1; j > i + 2; j--) {
+                if (nums[j] < limit1) break; // limit2
+                if (j != n - 1 && nums[j] == nums[j + 1]) continue;
+                int p = i + 1;
+                int q = j - 1;
+                int sum2 = nums[i] + nums[j];
+                int limit2 = (target - sum2) >> 1;
+                while (p < q && nums[p] <= limit2 && nums[q] >= limit2) { // limit 3
+                    int sum = sum2 + nums[p] + nums[q];
                     if (sum == target) {
-                        answerList.add(Arrays.asList(nums[i], nums[j], nums[p], nums[q]));
-                        int k = j + 1;
-                        while (k < n && nums[k] == nums[p]) k++;
-                        p = k;
-                        k = q - 1;
-                        while (k > 0 && nums[k] == nums[q]) k--;
-                        q = k;
+                        answerList.add(Arrays.asList(nums[i], nums[p], nums[q], nums[j]));
+                        for (k = p++; p < q && nums[k] == nums[p]; p++) ;
+                        for (k = q--; q > p && nums[k] == nums[q]; q--) ;
                     } else if (sum > target) q--;
                     else p++;
                 }
-                int k = j + 1;
-                while (k < n - 2) {
-                    if (nums[k] == nums[j]) k++;
-                    else break;
-                }
-                j = k;
             }
-            int k = i + 1;
-            while (k < n - 3) {
-                if (nums[k] == nums[i]) k++;
-                else break;
-            }
-            i = k;
         }
         return answerList;
     }
