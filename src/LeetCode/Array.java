@@ -1,8 +1,6 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by warn on 16/3/2016.
@@ -115,5 +113,59 @@ public class Array {
             }
         }
         return closestSum;
+    }
+
+    /**
+     * Given an array S of n integers, are there elements a, b, c, and d in S such that a + b + c + d = target? Find
+     * all unique quadruplets in the array which gives the sum of target.
+     * <p>
+     * Note:
+     * Elements in a quadruplet (a,b,c,d) must be in non-descending order. (ie, a ≤ b ≤ c ≤ d)
+     * The solution set must not contain duplicate quadruplets.
+     *
+     * @param nums   an array S of n integers
+     * @param target the target value
+     * @return all unique quadruplets in the array which gives the sum of target
+     */
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> answerList = new ArrayList<>();
+        if (nums == null) return answerList;
+        int n = nums.length;
+        if (n < 4) return answerList;
+        Set<List<Integer>> answerSet = new HashSet<>();
+        Arrays.sort(nums);
+        for (int i = 0; i < n - 3; ) {
+            for (int j = i + 1; j < n - 2; ) {
+                int p = j + 1;
+                int q = n - 1;
+                while (p < q) {
+                    int sum = nums[i] + nums[j] + nums[p] + nums[q];
+                    if (sum == target) {
+                        answerSet.add(Arrays.asList(nums[i], nums[j], nums[p], nums[q]));
+//                        int k = j + 1;
+//                        while (k < n - 3){
+//                            if (nums[k] == nums[j]) k++;
+//                            else break;
+//                        }
+//                        j = k;
+                    } else if (sum > target) q--;
+                    else p++;
+                }
+//                int k = j + 1;
+//                while (k < n - 3){
+//                    if (nums[k] == nums[j]) k++;
+//                    else break;
+//                }
+//                j = k;
+            }
+//            int k = i + 1;
+//            while (k < n - 3){
+//                if (nums[k] == nums[i]) k++;
+//                else break;
+//            }
+//            i = k;
+        }
+        answerList.addAll(answerSet);
+        return answerList;
     }
 }
