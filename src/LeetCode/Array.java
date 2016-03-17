@@ -58,13 +58,7 @@ public class Array {
         System.arraycopy(nums, 0, tempNums, 0, n);
         Arrays.sort(tempNums);
         List<List<Integer>> answerList = new ArrayList<>();
-        int maxIndex = 0;
-        for (int i = 0; i < n; i++) {
-            if (tempNums[i] > 0) break;
-            else maxIndex++;
-        }
-        maxIndex = Integer.min(n - 2, maxIndex);
-        for (int i = 0; i < maxIndex; i++) {
+        for (int i = 0; i < n - 2; i++) {
             if (i > 0 && tempNums[i] == tempNums[i - 1]) continue;
             int j = i + 1;
             int k = n - 1;
