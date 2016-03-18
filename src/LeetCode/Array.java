@@ -254,4 +254,33 @@ public class Array {
         }
         return uniqueCombinations;
     }
+
+    public List<List<Integer>> combinationSumRec(int[] candidates, int target) {
+        if (candidates == null) return null;
+        List<List<Integer>> uniqueCombinations = new ArrayList<>();
+        Arrays.sort(candidates);
+        int n = candidates.length;
+        actionFunction(uniqueCombinations, candidates, new int[]{}, target, n);
+        return uniqueCombinations;
+    }
+
+    public void actionFunction(List<List<Integer>> uniqueCombinations, int[] candidates, int[] path,
+                               int target, int candidatesNum) {
+        int index = 0;
+        int n = path.length;
+        if (n > 0) index = path[n - 1];
+        for (; index < candidatesNum; index++) {
+            if (candidates[index] == target) {
+                List<Integer> pathList = new ArrayList<>(n + 1);
+                for (int aPath : path) pathList.add(candidates[aPath]);
+                pathList.add(candidates[index]);
+                uniqueCombinations.add(pathList);
+            } else if (candidates[index] < target) {
+                int[] newPath = new int[n + 1];
+                System.arraycopy(path, 0, newPath, 0, n);
+                newPath[n] = index;
+                actionFunction(uniqueCombinations, candidates, newPath, target - candidates[index], candidatesNum);
+            } else break;
+        }
+    }
 }
