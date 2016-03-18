@@ -3,6 +3,7 @@ package LeetCode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by warn on 16/3/2016.
@@ -162,7 +163,7 @@ public class Array {
      * Note:
      * Elements in a quadruplet (a,b,c,d) must be in non-descending order. (ie, a ≤ b ≤ c ≤ d)
      * The solution set must not contain duplicate quadruplets.
-     *
+     * <p>
      * Design information:
      * 1. If nums[i] > target / 4, which means the left sum of variables will have no chance to equal target
      * 2. If nums[j] < target / 4, which means all the value between i and j will be less than target / 4, then break
@@ -202,5 +203,55 @@ public class Array {
             }
         }
         return answerList;
+    }
+
+    /**
+     * Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the
+     * candidate numbers sums to T.
+     * <p>
+     * The same repeated number may be chosen from C unlimited number of times.
+     * <p>
+     * Notes:
+     * 1. All numbers (including target) will be positive integers.
+     * 2. Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+     * 3. The solution set must not contain duplicate combinations.
+     *
+     * @param candidates candidate numbers
+     * @param target     target number
+     * @return unique combinations
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        if (candidates == null) return null;
+        List<List<Integer>> uniqueCombinations = new ArrayList<>();
+        Stack<List<Integer>> stateToExplore = new Stack<>();
+        stateToExplore.add(new ArrayList<>());
+        Arrays.sort(candidates);
+        int n = candidates.length;
+        while (!stateToExplore.isEmpty()) {
+            List<Integer> frontier = stateToExplore.pop();
+            int frontSum = 0;
+            int lastIndex = 0;
+            for (int i : frontier) {
+                frontSum += candidates[i];
+                lastIndex = i;
+            }
+            for (int i = lastIndex; i < n; i++) {
+                if (candidates[i] == (target - frontSum)) {
+                    List<Integer> result = new ArrayList<>();
+                    for (Integer aFrontier : frontier) {
+                        int j = aFrontier;
+                        result.add(candidates[j]);
+                    }
+                    result.add(candidates[i]);
+                    uniqueCombinations.add(result);
+                } else if (candidates[i] < (target - frontSum)) {
+                    List<Integer> tempFrontier = new ArrayList<>();
+                    tempFrontier.addAll(frontier);
+                    tempFrontier.add(i);
+                    stateToExplore.add(tempFrontier);
+                } else break;
+            }
+        }
+        return uniqueCombinations;
     }
 }
