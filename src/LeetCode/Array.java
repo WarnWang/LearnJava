@@ -51,6 +51,34 @@ public class Array {
         return null;
     }
 
+    public int[] twoSumOn(int[] nums, int target) {
+        if (nums == null) return null;
+        int n = nums.length;
+        if (n < 2) return nums;
+
+        int max = nums[0], min = max;
+        for (int i : nums) {
+            min = Integer.min(i, min);
+            max = Integer.max(i, max);
+        }
+        int lowerBound = Integer.max(min, target - max);
+        int upperBound = Integer.min(max, target - min);
+        int flagArraySize = upperBound - lowerBound + 1;
+        int[] flagArray = new int[flagArraySize];
+        for (int i = 0; i < n; i++) {
+            if (nums[i] <= upperBound && nums[i] >= lowerBound) {
+                int nextExpectValue = target - nums[i] - lowerBound;
+                System.out.println(Arrays.toString(flagArray));
+                if (flagArray[nextExpectValue] == 0) {
+                    flagArray[nextExpectValue] = i + 1;
+                } else {
+                    return new int[]{i, flagArray[nextExpectValue] - 1};
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets
      * in the array which gives the sum of zero.
