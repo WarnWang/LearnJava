@@ -260,16 +260,16 @@ public class Array {
         List<List<Integer>> uniqueCombinations = new ArrayList<>();
         Arrays.sort(candidates);
         int n = candidates.length;
-        actionFunction(uniqueCombinations, candidates, new int[]{}, target, n);
+        actionFunction(uniqueCombinations, candidates, new int[]{}, target);
         return uniqueCombinations;
     }
 
     public void actionFunction(List<List<Integer>> uniqueCombinations, int[] candidates, int[] path,
-                               int target, int candidatesNum) {
+                               int target) {
         int index = 0;
         int n = path.length;
         if (n > 0) index = path[n - 1];
-        for (; index < candidatesNum; index++) {
+        for (; index < candidates.length; index++) {
             if (candidates[index] == target) {
                 List<Integer> pathList = new ArrayList<>(n + 1);
                 for (int aPath : path) pathList.add(candidates[aPath]);
@@ -279,7 +279,7 @@ public class Array {
                 int[] newPath = new int[n + 1];
                 System.arraycopy(path, 0, newPath, 0, n);
                 newPath[n] = index;
-                actionFunction(uniqueCombinations, candidates, newPath, target - candidates[index], candidatesNum);
+                actionFunction(uniqueCombinations, candidates, newPath, target - candidates[index]);
             } else break;
         }
     }
