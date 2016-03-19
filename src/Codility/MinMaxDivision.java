@@ -1,5 +1,7 @@
 package Codility;
 
+import java.util.Random;
+
 /**
  * Created by warn on 6/2/2016.
  * You are given integers K, M and a non-empty zero-indexed array A consisting of N integers. Every element of the
@@ -63,8 +65,17 @@ public class MinMaxDivision {
     public static void main(String[] args) {
         // put your codes here
         MinMaxDivision test = new MinMaxDivision();
-        System.out.println(test.solution(3, 5, new int[]{2, 1, 5, 1, 2, 2, 2, 2}));
-        System.out.println(test.solution2(3, 5, new int[]{2, 1, 5, 1, 2, 2, 2, 2}));
+//        System.out.println(test.solution(3, 5, new int[]{2, 1, 5, 1, 2, 2, 2, 2}));
+//        System.out.println(test.solution2(3, 5, new int[]{2, 1, 5, 1, 2, 2, 2, 2}));
+        System.out.println(test.solution2(2, 5, new int[]{5, 3}));
+        int[] a = new int[100];
+        Random random = new Random();
+        for (int i = 0; i < 100; i++) {
+            a[i] = random.nextInt(10);
+//            i += random.nextInt(10);
+        }
+        System.out.println(test.solution2(9, 10, a));
+        System.out.println(test.solution(9, 10, a));
     }
 
     public int solution(int K, int M, int[] A) {
@@ -108,15 +119,18 @@ public class MinMaxDivision {
      * https://codesays.com/2014/solution-to-min-max-division-by-codility/
      */
     public int solution2(int K, int M, int[] A) {
-        if (K >= A.length) return M;
-        int lowerBound = M;
+        int lowerBound = Integer.MIN_VALUE;
         int upperBound = 0;
-        for (int a : A) upperBound += a;
+        for (int a : A) {
+            upperBound += a;
+            lowerBound = Integer.max(lowerBound, a);
+        }
         if (K == 1) return upperBound;
+        if (K >= A.length) return lowerBound;
         int minMaxDivision = upperBound;
         while (lowerBound <= upperBound) {
             int midMaxBound = (upperBound + lowerBound) / 2;
-            if (getBlocks(A, midMaxBound) < K) {
+            if (getBlocks(A, midMaxBound) <= K) {
                 upperBound = midMaxBound - 1;
                 minMaxDivision = midMaxBound;
             } else lowerBound = midMaxBound + 1;
@@ -125,7 +139,7 @@ public class MinMaxDivision {
     }
 
     public int getBlocks(int[] A, int maxBound) {
-        int blockingNumber = 0;
+        int blockingNumber = 1;
         int tempSum = 0;
         for (int aA : A) {
             if (tempSum + aA <= maxBound) tempSum += aA;
