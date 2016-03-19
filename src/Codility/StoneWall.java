@@ -5,15 +5,20 @@ import java.util.Stack;
 /**
  * Created by warn on 24/1/2016.
  * <p>
- * You are going to build a stone wall. The wall should be straight and N meters long, and its thickness should be constant; however, it should have different heights in different places. The height of the wall is specified by a zero-indexed array H of N positive integers. H[I] is the height of the wall from I to I+1 meters to the right of its left end. In particular, H[0] is the height of the wall's left end and H[N−1] is the height of the wall's right end.
+ * You are going to build a stone wall. The wall should be straight and N meters long, and its thickness should be
+ * constant; however, it should have different heights in different places. The height of the wall is specified by a
+ * zero-indexed array H of N positive integers. H[I] is the height of the wall from I to I+1 meters to the right of its
+ * left end. In particular, H[0] is the height of the wall's left end and H[N−1] is the height of the wall's right end.
  * <p>
- * The wall should be built of cuboid stone blocks (that is, all sides of such blocks are rectangular). Your task is to compute the minimum number of blocks needed to build the wall.
+ * The wall should be built of cuboid stone blocks (that is, all sides of such blocks are rectangular). Your task is
+ * to compute the minimum number of blocks needed to build the wall.
  * <p>
  * Write a function:
  * <p>
  * class Solution { public int solution(int[] H); }
  * <p>
- * that, given a zero-indexed array H of N positive integers specifying the height of the wall, returns the minimum number of blocks needed to build it.
+ * that, given a zero-indexed array H of N positive integers specifying the height of the wall, returns the minimum
+ * number of blocks needed to build it.
  * <p>
  * For example, given array H containing N = 9 integers:
  * <p>
@@ -31,7 +36,8 @@ import java.util.Stack;
  * Complexity:
  * <p>
  * expected worst-case time complexity is O(N);
- * expected worst-case space complexity is O(N), beyond input storage (not counting the storage required for input arguments).
+ * expected worst-case space complexity is O(N), beyond input storage (not counting the storage required for input
+ * arguments).
  * Elements of input arrays can be modified.
  */
 public class StoneWall {
