@@ -13,27 +13,37 @@ public class HashTable {
      * @return the longest palindromic substring
      */
     public String longestPalindrome(String s) {
+        if (s == null) return null;
+        int n = s.length();
+        if (n == 0) return s;
         int startIndex = 0;
         int endIndex = 1;
-        int n = s.length();
-        for (int i = 0; i < n; i++) {
-            int minLength = i + endIndex - startIndex;
-            for (int j = n; j > minLength; j--) {
-                if (isPalindromic(s, i, j)) {
-                    startIndex = i;
-                    endIndex = j;
-                    break;
-                }
+        for (int i = 1; i < n - 1; i++) {
+            int lastLength = endIndex - startIndex;
+            if ((i << 1) + 1 < lastLength || ((n - i) << 1) - 1 < lastLength) break;
+            int begin = i - 1, end = i + 1;
+            while (begin >= 0 && end < n && s.charAt(begin) == s.charAt(end)) {
+                begin--;
+                end++;
+            }
+            begin++;
+            if (end - begin > endIndex - startIndex) {
+                startIndex = begin;
+                endIndex = end;
+            }
+        }
+        for (int i = 0; i < n - ((endIndex - startIndex + 1) >> 1); i++) {
+            int begin = i, end = i + 1;
+            while (begin >= 0 && end < n && s.charAt(begin) == s.charAt(end)) {
+                begin--;
+                end++;
+            }
+            begin++;
+            if (end - begin > endIndex - startIndex) {
+                startIndex = begin;
+                endIndex = end;
             }
         }
         return s.substring(startIndex, endIndex);
-    }
-
-    public boolean isPalindromic(String s, int startIndex, int endIndex) {
-        endIndex--;
-        for (; startIndex < endIndex; startIndex++, endIndex--) {
-            if (s.charAt(startIndex) != s.charAt(endIndex)) return false;
-        }
-        return true;
     }
 }
