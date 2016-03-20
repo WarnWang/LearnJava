@@ -20,7 +20,7 @@ public class HashTable {
         int endIndex = 1;
         for (int i = 1; i < n - 1; i++) {
             int lastLength = endIndex - startIndex;
-            if ((i << 1) + 1 < lastLength || ((n - i) << 1) - 1 < lastLength) break;
+            if (((n - i) << 1) - 1 < lastLength) break;
             int begin = i - 1, end = i + 1;
             while (begin >= 0 && end < n && s.charAt(begin) == s.charAt(end)) {
                 begin--;
@@ -32,7 +32,7 @@ public class HashTable {
                 endIndex = end;
             }
         }
-        for (int i = 0; i < n - ((endIndex - startIndex + 1) >> 1); i++) {
+        for (int i = (endIndex - startIndex) >> 1; i < n - ((endIndex - startIndex + 1) >> 1); i++) {
             int begin = i, end = i + 1;
             while (begin >= 0 && end < n && s.charAt(begin) == s.charAt(end)) {
                 begin--;
