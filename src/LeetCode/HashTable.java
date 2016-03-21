@@ -18,13 +18,19 @@ public class HashTable {
         if (n == 0) return s;
         int startIndex = 0;
         int endIndex = 1;
+        int[] lengthOfEachPoint = new int[n];
         for (int i = 1; i < n - 1; i++) {
             int lastLength = endIndex - startIndex;
             if (((n - i) << 1) - 1 < lastLength) break;
-            int begin = i - 1, end = i + 1;
+            int begin = i - 1 - lengthOfEachPoint[i], end = i + 1 + lengthOfEachPoint[i];
             while (begin >= 0 && end < n && s.charAt(begin) == s.charAt(end)) {
+                lengthOfEachPoint[i]++;
                 begin--;
                 end++;
+            }
+            int bound = lengthOfEachPoint[i] - 1;
+            for (int j = 1; bound > 0; j++, bound--) {
+                lengthOfEachPoint[j + i] = Integer.min(bound, lengthOfEachPoint[i - j]);
             }
             begin++;
             if (end - begin > endIndex - startIndex) {
@@ -32,11 +38,18 @@ public class HashTable {
                 endIndex = end;
             }
         }
-        for (int i = (endIndex - startIndex) >> 1; i < n - ((endIndex - startIndex + 1) >> 1); i++) {
-            int begin = i, end = i + 1;
+        lengthOfEachPoint = new int[n + 1];
+        for (int i = ((endIndex - startIndex + 1) >> 1); i < n - ((endIndex - startIndex + 1) >> 1); i++) {
+            int begin = i - lengthOfEachPoint[i + 1], end = i + 1 + lengthOfEachPoint[i + 1];
             while (begin >= 0 && end < n && s.charAt(begin) == s.charAt(end)) {
+//                if (i == 23) System.out.println(begin + " " + lengthOfEachPoint[i + 1]);
+                lengthOfEachPoint[i + 1]++;
                 begin--;
                 end++;
+            }
+//            System.out.println(i + " " + (lengthOfEachPoint[i + 1] - 1));
+            for (int j = 1, bound = lengthOfEachPoint[i + 1] - 1; bound > 0; bound--, j++) {
+                lengthOfEachPoint[i + j + 1] = Integer.min(bound, lengthOfEachPoint[i - j + 1]);
             }
             begin++;
             if (end - begin > endIndex - startIndex) {
