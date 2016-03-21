@@ -39,15 +39,13 @@ public class HashTable {
             }
         }
         lengthOfEachPoint = new int[n + 1];
-        for (int i = ((endIndex - startIndex + 1) >> 1); i < n - ((endIndex - startIndex + 1) >> 1); i++) {
+        for (int i = ((endIndex - startIndex) >> 1); i < n - ((endIndex - startIndex + 1) >> 1); i++) {
             int begin = i - lengthOfEachPoint[i + 1], end = i + 1 + lengthOfEachPoint[i + 1];
             while (begin >= 0 && end < n && s.charAt(begin) == s.charAt(end)) {
-//                if (i == 23) System.out.println(begin + " " + lengthOfEachPoint[i + 1]);
                 lengthOfEachPoint[i + 1]++;
                 begin--;
                 end++;
             }
-//            System.out.println(i + " " + (lengthOfEachPoint[i + 1] - 1));
             for (int j = 1, bound = lengthOfEachPoint[i + 1] - 1; bound > 0; bound--, j++) {
                 lengthOfEachPoint[i + j + 1] = Integer.min(bound, lengthOfEachPoint[i - j + 1]);
             }
@@ -91,7 +89,44 @@ public class HashTable {
         return s.substring(maxStartIndex, maxEndIndex);
     }
 
+    public String longestPalindromeManacher(String s) {
+        if (s == null || s.length() < 2) return s;
+        int n = s.length();
+        int palindromeLength[] = new int[2 * n + 1];
+        int maxLength = 1;
+        int maxLengthStartIndex = 0;
+        int currentBound = 0;
+        int currentIndex = 0;
+        char[] chars = s.toCharArray();
+        for (int i = 1, nI = palindromeLength.length; i < nI - maxLength; i++) {
+            int index = (i >> 1);
+            if (currentBound < 1) {
+                palindromeLength[i] = (i & 1);
+            } else {
+                palindromeLength[i] = Integer.min(currentBound, palindromeLength[currentIndex]);
+            }
+            for (int j = (i & 1) + (palindromeLength[i] >> 1),
+                 upperBound = Integer.min(n - index - 1, index - ((i + 1) & 1)); j <= upperBound; j++) {
+                int lowerIndex = index - j - ((i + 1) & 1);
+                if (chars[lowerIndex] == chars[index + j]) palindromeLength[i] += 2;
+                else break;
+            }
+            if (palindromeLength[i] > maxLength) {
+                maxLength = palindromeLength[i];
+                maxLengthStartIndex = (i - palindromeLength[i]) >> 1;
+            }
+            if (currentBound < palindromeLength[i]) {
+                currentBound = palindromeLength[i];
+                currentIndex = i;
+            }
+            currentBound--;
+            currentIndex--;
+        }
+        return s.substring(maxLengthStartIndex, maxLengthStartIndex + maxLength);
+    }
+
     // https://leetcode.com/discuss/91467/my-7ms-java-solution-beats-99-55%25
+    // description can be find in http://articles.leetcode.com/longest-palindromic-substring-part-ii
     // TODO: understand this algorithm, Only 7ms needed
     public String longestPalindromeOnline(String src) {
         if (src.length() <= 1) {

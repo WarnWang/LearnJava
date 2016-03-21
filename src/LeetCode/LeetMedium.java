@@ -23,8 +23,10 @@ public class LeetMedium {
 //        System.out.println(test.minPatches2(new int[]{1, 2, 9}, 11));
 //        Array test = new Array();
 //        System.out.println(test.fourSum(new int[]{-2, 0, 0, 3, 3, -1}, 5));
-        DynamicProgramming test = new DynamicProgramming();
-        System.out.println(test.hammingWeight(Integer.MIN_VALUE));
+//        DynamicProgramming test = new DynamicProgramming();
+//        System.out.println(test.hammingWeight(Integer.MIN_VALUE));
+        HashTable test = new HashTable();
+        System.out.println(test.longestPalindromeManacher("babab"));
     }
 
     private void getAllPrerequisiteCourse(Integer key) {
