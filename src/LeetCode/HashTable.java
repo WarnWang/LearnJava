@@ -47,6 +47,37 @@ public class HashTable {
         return s.substring(startIndex, endIndex);
     }
 
+    // will TLE no better than my algorithm, not good
+    public String longestPalindromeDynamicProgramming(String s) {
+        if (s == null || s.length() <= 1) return s;
+        int n = s.length();
+        int[][] lengthMap = new int[n][n];
+        int maxLength = 1;
+        int maxStartIndex = 0;
+        int maxEndIndex = 1;
+        for (int length = 0; length < n; length++) {
+            for (int startIndex = 0; startIndex < n - length; startIndex++) {
+                int endIndex = startIndex + length;
+                char startChar = s.charAt(startIndex);
+                char endChar = s.charAt(endIndex);
+                if (startChar == endChar) {
+                    if (length > 1 && lengthMap[startIndex + 1][endIndex - 1] != length - 1) continue;
+                    if (endIndex == startIndex) lengthMap[startIndex][endIndex] = 1;
+                    else if (endIndex - 1 == startIndex) lengthMap[startIndex][endIndex] = 2;
+                    else {
+                        lengthMap[startIndex][endIndex] = lengthMap[startIndex + 1][endIndex - 1] + 2;
+                        if (length + 1 > maxLength) {
+                            maxLength = length;
+                            maxStartIndex = startIndex;
+                            maxEndIndex = endIndex;
+                        }
+                    }
+                }
+            }
+        }
+        return s.substring(maxStartIndex, maxEndIndex);
+    }
+
     // https://leetcode.com/discuss/91467/my-7ms-java-solution-beats-99-55%25
     // TODO: understand this algorithm, Only 7ms needed
     public String longestPalindromeOnline(String src) {
