@@ -1,9 +1,13 @@
 package LeetCode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by warn on 14/2/2016.
+ * file to store some difficult leetcode puzzles
  */
 public class HardLeetCode {
     public static void main(String[] args) {
@@ -248,7 +252,7 @@ public class HardLeetCode {
     public List<Integer> countSmaller(int[] nums) {
         if (nums.length == 0) return Arrays.asList(new Integer[]{});
         int n = nums.length;
-        List<Integer> sortedList = new LinkedList<>();
+        List<Integer> sortedList = new java.util.LinkedList<>();
         Integer[] countSmall = new Integer[n];
         for (int i = n - 1; i >= 0; i--) {
             int index = 0;

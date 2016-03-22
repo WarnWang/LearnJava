@@ -352,4 +352,29 @@ public class LeetCodeEasyPuzzle {
         a.next = null;
         return head;
     }
+
+    /**
+     * Determine whether an integer is a palindrome. Do this without extra space.
+     *
+     * @param x an integer
+     * @return whether x is palindrome or not
+     */
+    public boolean isPalindrome(int x) {
+        int n = 0, tempX = x;
+        while (tempX > 0) {
+            n = n * 10 + tempX % 10;
+            tempX /= 10;
+        }
+        return n == x;
+    }
+
+    public boolean isPalindromeOnline(int x) {
+        if (x < 0 || (x != 0 && x % 10 == 0)) return false;
+        int res = 0;
+        while (x > res) {
+            res = res * 10 + x % 10;
+            x /= 10;
+        }
+        return x == res || x == res / 10;
+    }
 }

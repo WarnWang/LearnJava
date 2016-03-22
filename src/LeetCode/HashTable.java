@@ -127,7 +127,6 @@ public class HashTable {
 
     // https://leetcode.com/discuss/91467/my-7ms-java-solution-beats-99-55%25
     // description can be find in http://articles.leetcode.com/longest-palindromic-substring-part-ii
-    // TODO: understand this algorithm, Only 7ms needed
     public String longestPalindromeOnline(String src) {
         if (src.length() <= 1) {
             return src;
