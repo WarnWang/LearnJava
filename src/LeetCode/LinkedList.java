@@ -65,4 +65,30 @@ public class LinkedList {
         }
         return head;
     }
+
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if (head == null) return null;
+        ListNode subTail, subTailNext, subTailHead;
+        ListNode pointer = null;
+        if (m == 1) {
+            subTailHead = head;
+        } else {
+            pointer = head;
+            for (int i = 2; i < m; i++) {
+                pointer = pointer.next;
+            }
+            subTailHead = pointer.next;
+        }
+        subTail = subTailHead;
+        subTailNext = subTailHead.next;
+        for (; m < n && subTailNext != null; m++) {
+            subTail.next = subTailNext.next;
+            subTailNext.next = subTailHead;
+            subTailHead = subTailNext;
+            subTailNext = subTail.next;
+        }
+        if (pointer == null) head = subTailHead;
+        else pointer.next = subTailHead;
+        return head;
+    }
 }
