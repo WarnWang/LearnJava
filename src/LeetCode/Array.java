@@ -291,7 +291,6 @@ public class Array {
      * @return the longest increasing subsequence
      */
     public int lengthOfLIS(int[] nums) {
-//        List<Integer> lisInfo = new ArrayList<>();
         if (nums == null || nums.length == 0) return 0;
         int[] LisInfo = new int[nums.length];
         int maxLength = 1;
@@ -306,9 +305,34 @@ public class Array {
                     break;
                 }
             }
-//            System.out.println(Arrays.toString(LisInfo));
             LisInfo[lisLength] = nums[i1];
         }
         return maxLength;
+    }
+
+    /**
+     * Given an unsorted array return whether an increasing subsequence of length 3 exists or not in the array.
+     *
+     * @param nums an unsorted array
+     * @return whether an increasing subsequence of length 3 exists
+     */
+    public boolean increasingTriplet(int[] nums) {
+        if (nums == null || nums.length < 3) return false;
+        int[] formerTwo = new int[2];
+        formerTwo[0] = nums[0];
+        int i = 1;
+        for (; i < nums.length; i++) {
+            if (nums[i] > formerTwo[0]) {
+                formerTwo[1] = nums[i];
+                break;
+            } else formerTwo[0] = nums[i];
+        }
+        if (i == nums.length) return false;
+        for (int j = i + 1; j < nums.length; j++) {
+            if (nums[j] > formerTwo[1]) return true;
+            else if (nums[j] > formerTwo[0]) formerTwo[1] = nums[j];
+            else formerTwo[0] = nums[j];
+        }
+        return false;
     }
 }
