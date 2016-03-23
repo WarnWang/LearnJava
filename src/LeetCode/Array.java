@@ -291,21 +291,24 @@ public class Array {
      * @return the longest increasing subsequence
      */
     public int lengthOfLIS(int[] nums) {
-        List<Integer> lisInfo = new ArrayList<>();
+//        List<Integer> lisInfo = new ArrayList<>();
         if (nums == null || nums.length == 0) return 0;
-        lisInfo.add(nums[0]);
+        int[] LisInfo = new int[nums.length];
+        int maxLength = 1;
+        LisInfo[0] = nums[0];
+
         for (int i1 = 1; i1 < nums.length; i1++) {
-            int num = nums[i1];
-            int maxSize = 0;
-            for (int i = lisInfo.size() - 1; i >= 0; i--) {
-                if (num > lisInfo.get(i)) {
-                    maxSize = i + 1;
+            int lisLength = 0;
+            for (int i = maxLength - 1; i >= 0; i--) {
+                if (LisInfo[i] < nums[i1]) {
+                    lisLength = i + 1;
+                    maxLength = Integer.max(lisLength + 1, maxLength);
                     break;
                 }
             }
-            if (maxSize == lisInfo.size()) lisInfo.add(num);
-            else lisInfo.set(maxSize, num);
+//            System.out.println(Arrays.toString(LisInfo));
+            LisInfo[lisLength] = nums[i1];
         }
-        return lisInfo.size();
+        return maxLength;
     }
 }
