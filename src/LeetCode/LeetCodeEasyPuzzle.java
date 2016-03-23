@@ -10,12 +10,14 @@ import java.util.Stack;
 public class LeetCodeEasyPuzzle {
 
     public static void main(String[] args) {
-        LeetCodeEasyPuzzle test = new LeetCodeEasyPuzzle();
+//        LeetCodeEasyPuzzle test = new LeetCodeEasyPuzzle();
 //        test.myAtoi("-2147483649");
 //        test.rotate1(new int[]{1, 2, 3}, 1);
 //        test.rotate2(new int[]{1, 2, 3}, 2);
 //        test.addBinary("11", "1");
-        System.out.println(test.isPowerOfThree(243));
+//        System.out.println(test.isPowerOfThree(243));
+        Array test = new Array();
+        System.out.println(test.lengthOfLIS(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
     }
 
 
@@ -71,7 +73,7 @@ public class LeetCodeEasyPuzzle {
      * Try to come up as many solutions as you can, there are at least 3 different ways to solve this problem.
      *
      * @param nums the num set
-     * @param k rotate times
+     * @param k    rotate times
      */
     public void rotate1(int[] nums, int k) {
         int[] temp = nums.clone();

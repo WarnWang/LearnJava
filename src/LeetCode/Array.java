@@ -283,4 +283,29 @@ public class Array {
             } else break;
         }
     }
+
+    /**
+     * Given an unsorted array of integers, find the length of longest increasing subsequence.
+     *
+     * @param nums unsorted array of integers
+     * @return the longest increasing subsequence
+     */
+    public int lengthOfLIS(int[] nums) {
+        List<Integer> lisInfo = new ArrayList<>();
+        for (int num : nums) {
+            if (lisInfo.size() == 0) lisInfo.add(num);
+            else {
+                int maxSize = 0;
+                for (int i = lisInfo.size() - 1; i >= 0; i--) {
+                    if (num > lisInfo.get(i)) {
+                        maxSize = i + 1;
+                        break;
+                    }
+                }
+                if (maxSize == lisInfo.size()) lisInfo.add(num);
+                else if (lisInfo.get(maxSize) > num) lisInfo.set(maxSize, num);
+            }
+        }
+        return lisInfo.size();
+    }
 }
