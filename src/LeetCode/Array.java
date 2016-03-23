@@ -292,19 +292,19 @@ public class Array {
      */
     public int lengthOfLIS(int[] nums) {
         List<Integer> lisInfo = new ArrayList<>();
-        for (int num : nums) {
-            if (lisInfo.size() == 0) lisInfo.add(num);
-            else {
-                int maxSize = 0;
-                for (int i = lisInfo.size() - 1; i >= 0; i--) {
-                    if (num > lisInfo.get(i)) {
-                        maxSize = i + 1;
-                        break;
-                    }
+        if (nums == null || nums.length == 0) return 0;
+        lisInfo.add(nums[0]);
+        for (int i1 = 1; i1 < nums.length; i1++) {
+            int num = nums[i1];
+            int maxSize = 0;
+            for (int i = lisInfo.size() - 1; i >= 0; i--) {
+                if (num > lisInfo.get(i)) {
+                    maxSize = i + 1;
+                    break;
                 }
-                if (maxSize == lisInfo.size()) lisInfo.add(num);
-                else if (lisInfo.get(maxSize) > num) lisInfo.set(maxSize, num);
             }
+            if (maxSize == lisInfo.size()) lisInfo.add(num);
+            else lisInfo.set(maxSize, num);
         }
         return lisInfo.size();
     }
