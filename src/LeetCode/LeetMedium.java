@@ -84,7 +84,7 @@ public class LeetMedium {
         int[] courseCounter = new int[numCourses];
         for (int[] i : prerequisites) courseCounter[i[0]]++;
 
-        LinkedList<Integer> courseInfo = new LinkedList<>();
+        java.util.LinkedList<Integer> courseInfo = new java.util.LinkedList<>();
         for (int i = 0; i < numCourses; i++) if (courseCounter[i] == 0) courseInfo.add(i);
 
         int numPreCourses = courseInfo.size();
@@ -605,5 +605,18 @@ public class LeetMedium {
             maxRobbery = Integer.max(maxRobbery, sums[i]);
         }
         return maxRobbery;
+    }
+
+
+    public int bulbSwitch(int n) {
+        if (n == 0) return 0;
+        else if (n <= 3) return 1;
+        else {
+            int bulbNumber = 1;
+            for (int i = 2; i * i <= n; i++) {
+                bulbNumber++;
+            }
+            return bulbNumber;
+        }
     }
 }
