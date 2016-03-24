@@ -327,7 +327,6 @@ public class Array {
                 break;
             } else formerTwo[0] = nums[i];
         }
-        if (i == nums.length) return false;
         for (int j = i + 1; j < nums.length; j++) {
             if (nums[j] > formerTwo[1]) return true;
             else if (nums[j] > formerTwo[0]) formerTwo[1] = nums[j];
