@@ -43,16 +43,16 @@ public class Greedy {
             totalCost += cost[index];
             if (totalGas < totalCost) {
                 int temp = startIndex;
-                for (int j = startIndex + 1; j < nGas; j++) {
+                for (int j = i + 1; j < nGas; j++) {
                     if (gas[j] >= cost[j]) {
                         startIndex = j;
                         break;
                     }
                 }
                 if (startIndex == temp) return -1;
-                i = -1;
-                totalCost = 0;
-                totalGas = 0;
+                i = 0;
+                totalCost = cost[startIndex];
+                totalGas = gas[startIndex];
             }
         }
         return startIndex;
