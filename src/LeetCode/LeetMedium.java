@@ -607,16 +607,21 @@ public class LeetMedium {
         return maxRobbery;
     }
 
-
+    /**
+     * There are n bulbs that are initially off. You first turn on all the bulbs. Then, you turn off every second bulb.
+     * On the third round, you toggle every third bulb (turning on if it's off or turning off if it's on). For the ith
+     * round, you toggle every i bulb. For the nth round, you only toggle the last bulb. Find how many bulbs are on
+     * after n rounds.
+     * <p>
+     * In this question, it is easy to find that only those square numbers are on after all the operation, as only those
+     * number has odd number operations, all other number must have even number operations
+     * Come to this problem, only those odd number operations bulb can be on after all the operation, thus, this
+     * question is to find how many square numbers (e.g. 1, 4, 9, 16, 25, ...) under n.
+     *
+     * @param n The number of bulbs
+     * @return how many bulbs are on
+     */
     public int bulbSwitch(int n) {
-        if (n == 0) return 0;
-        else if (n <= 3) return 1;
-        else {
-            int bulbNumber = 1;
-            for (int i = 2; i * i <= n; i++) {
-                bulbNumber++;
-            }
-            return bulbNumber;
-        }
+        return (int) Math.sqrt(n);
     }
 }
