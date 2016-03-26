@@ -1,5 +1,9 @@
 package LeetCode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by warn on 20/3/2016.
  * Use to store the problems with hash table
@@ -174,5 +178,50 @@ public class HashTable {
             }
         }
         return new String(chars, 0, j);
+    }
+
+    /**
+     * Given a list of unique words. Find all pairs of distinct indices (i, j) in the given list, so that the
+     * concatenation of the two words, i.e. words[i] + words[j] is a palindrome.
+     *
+     * @param words a list of unique words
+     * @return all pairs of distinct indices
+     */
+    public List<List<Integer>> palindromePairs(String[] words) {
+        if (words == null) return null;
+        int n = words.length;
+        List<List<Integer>> palindromePairList = new ArrayList<>();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                String temp = words[i] + words[j];
+                int startIndex = 0;
+                int endIndex = temp.length() - 1;
+                while (startIndex < endIndex) {
+                    if (temp.charAt(startIndex) != temp.charAt(endIndex)) break;
+                    startIndex++;
+                    endIndex--;
+                }
+                if (words[i].length() == words[j].length()) {
+                    if (startIndex >= endIndex) {
+                        palindromePairList.add(Arrays.asList(i, j));
+                        palindromePairList.add(Arrays.asList(j, i));
+                    }
+                } else {
+                    if (startIndex >= endIndex) palindromePairList.add(Arrays.asList(i, j));
+                    else {
+                        temp = words[j] + words[i];
+                        startIndex = 0;
+                        endIndex = temp.length() - 1;
+                        while (startIndex < endIndex) {
+                            if (temp.charAt(startIndex) != temp.charAt(endIndex)) break;
+                            startIndex++;
+                            endIndex--;
+                        }
+                        if (startIndex >= endIndex) palindromePairList.add(Arrays.asList(j, i));
+                    }
+                }
+            }
+        }
+        return palindromePairList;
     }
 }
