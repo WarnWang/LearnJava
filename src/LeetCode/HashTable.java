@@ -1,8 +1,6 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by warn on 20/3/2016.
@@ -193,15 +191,17 @@ public class HashTable {
         List<List<Integer>> palindromePairList = new ArrayList<>();
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
+                int iLength = words[i].length();
+                int jLength = words[j].length();
                 String temp = words[i] + words[j];
                 int startIndex = 0;
-                int endIndex = temp.length() - 1;
+                int endIndex = iLength + jLength - 1;
                 while (startIndex < endIndex) {
                     if (temp.charAt(startIndex) != temp.charAt(endIndex)) break;
                     startIndex++;
                     endIndex--;
                 }
-                if (words[i].length() == words[j].length()) {
+                if (iLength == jLength) {
                     if (startIndex >= endIndex) {
                         palindromePairList.add(Arrays.asList(i, j));
                         palindromePairList.add(Arrays.asList(j, i));
@@ -211,7 +211,7 @@ public class HashTable {
                     else {
                         temp = words[j] + words[i];
                         startIndex = 0;
-                        endIndex = temp.length() - 1;
+                        endIndex = iLength + jLength - 1;
                         while (startIndex < endIndex) {
                             if (temp.charAt(startIndex) != temp.charAt(endIndex)) break;
                             startIndex++;
@@ -223,5 +223,73 @@ public class HashTable {
             }
         }
         return palindromePairList;
+    }
+
+    public List<List<Integer>> palindromePairsHashTable(String[] words) {
+        if (words == null) return null;
+        int n = words.length;
+        List<List<Integer>> palindromePairList = new ArrayList<>();
+        Map<String, List<Integer>> wordsIndex = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            if (wordsIndex.containsKey(words[i])) wordsIndex.get(words[i]).add(i);
+            else wordsIndex.put(words[i], new ArrayList<>(Collections.singletonList(i)));
+        }
+        for (int i = 0; i < n; i++) {
+            String temp = words[i];
+            int wordLength = temp.length();
+            for (int j = 1; j < wordLength; j++) {
+                String formerReverse = reverseString(temp.substring(0, j));
+                if (checkPalindrome(temp.substring(j, wordLength)) && wordsIndex.containsKey(formerReverse)) {
+                    for (int k : wordsIndex.get(formerReverse)) {
+                        if (k != i) {
+                            palindromePairList.add(Arrays.asList(i, k));
+                        }
+                    }
+                }
+                String latterReverse = reverseString(temp.substring(j, wordLength));
+                if (checkPalindrome(temp.substring(0, j)) && wordsIndex.containsKey(latterReverse)) {
+                    for (int k : wordsIndex.get(latterReverse)) if (k != i) palindromePairList.add(Arrays.asList(k, i));
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            String word = words[i];
+            String reverseWord = reverseString(word);
+            if (wordsIndex.containsKey(reverseWord)) {
+                for (int j : wordsIndex.get(reverseWord)) {
+                    if (j != i) palindromePairList.add(Arrays.asList(i, j));
+                }
+            }
+        }
+        if (wordsIndex.containsKey("")) {
+            for (int i = 0; i < n; i++) {
+                if (checkPalindrome(words[i])) {
+                    for (int j : wordsIndex.get("")) {
+                        if (j != i) palindromePairList.add(Arrays.asList(i, j));
+                        if (j != i) palindromePairList.add(Arrays.asList(j, i));
+                    }
+                }
+            }
+        }
+        return palindromePairList;
+    }
+
+    public boolean checkPalindrome(String word) {
+        int startIndex = 0;
+        int endIndex = word.length() - 1;
+        while (startIndex < endIndex) {
+            if (word.charAt(startIndex) != word.charAt(endIndex)) return false;
+            startIndex++;
+            endIndex--;
+        }
+        return true;
+    }
+
+    public String reverseString(String input) {
+        StringBuilder output = new StringBuilder();
+        for (int i = input.length() - 1; i >= 0; i--) {
+            output.append(input.charAt(i));
+        }
+        return output.toString();
     }
 }
