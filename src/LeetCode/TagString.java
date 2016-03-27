@@ -1,7 +1,5 @@
 package LeetCode;
 
-import java.util.Arrays;
-
 /**
  * Created by warn on 27/3/2016.
  * Use to store puzzles about string
@@ -20,6 +18,7 @@ public class TagString {
         if (stringLength == 1) return s;
         int startIndex;
         int[] exploredLength = new int[stringLength];
+        char[] strArray = s.toCharArray();
         for (startIndex = stringLength; startIndex > 1; startIndex--) {
             int i, j;
             boolean stopHere = true;
@@ -31,7 +30,7 @@ public class TagString {
                 j = startIndex / 2 + 1 + exploredLength[startIndex - 1];
             }
             while (i >= 0) {
-                if (s.charAt(i--) != s.charAt(j++)) {
+                if (strArray[i--] != strArray[j++]) {
                     stopHere = false;
                     exploredLength[startIndex - 1] = startIndex / 2 - i - 2;
                     break;
@@ -47,13 +46,11 @@ public class TagString {
                 }
             }
         }
-        System.out.println(Arrays.toString(exploredLength));
-        System.out.println(startIndex);
         if (startIndex == stringLength) return s;
         else {
             StringBuilder palindrome = new StringBuilder();
             for (int i = stringLength - 1; i >= startIndex; i--) {
-                palindrome.append(s.charAt(i));
+                palindrome.append(strArray[i]);
             }
             palindrome.append(s);
             return palindrome.toString();
