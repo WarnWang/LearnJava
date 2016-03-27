@@ -1,5 +1,7 @@
 package LeetCode;
 
+import java.util.Arrays;
+
 /**
  * Created by warn on 27/3/2016.
  * Use to store puzzles about string
@@ -17,26 +19,36 @@ public class TagString {
         int stringLength = s.length();
         if (stringLength == 1) return s;
         int startIndex;
+        int[] exploredLength = new int[stringLength];
         for (startIndex = stringLength; startIndex > 1; startIndex--) {
             int i, j;
             boolean stopHere = true;
             if ((startIndex & 1) == 0) {
-                i = startIndex / 2 - 1;
-                j = i + 1;
+                i = startIndex / 2 - 1 - exploredLength[startIndex - 1];
+                j = startIndex / 2 + exploredLength[startIndex - 1];
             } else {
-                i = startIndex / 2 - 1;
-                j = i + 2;
+                i = startIndex / 2 - 1 - exploredLength[startIndex - 1];
+                j = startIndex / 2 + 1 + exploredLength[startIndex - 1];
             }
             while (i >= 0) {
-                if (s.charAt(i) != s.charAt(j)) {
+                if (s.charAt(i--) != s.charAt(j++)) {
                     stopHere = false;
+                    exploredLength[startIndex - 1] = startIndex / 2 - i - 2;
                     break;
                 }
-                i--;
-                j++;
             }
             if (stopHere) break;
+            else {
+                int index = startIndex - 2;
+                int mirrorIndex = startIndex;
+                for (int bound = exploredLength[startIndex - 1] - 1; bound > 0; bound--) {
+                    if (index < 0 || mirrorIndex >= stringLength) break;
+                    exploredLength[index--] = Integer.min(bound, exploredLength[mirrorIndex++]);
+                }
+            }
         }
+        System.out.println(Arrays.toString(exploredLength));
+        System.out.println(startIndex);
         if (startIndex == stringLength) return s;
         else {
             StringBuilder palindrome = new StringBuilder();

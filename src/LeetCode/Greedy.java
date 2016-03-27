@@ -7,10 +7,12 @@ package LeetCode;
 public class Greedy {
 
     public static void main(String[] args) {
-        Greedy test = new Greedy();
-        int[] gas = {1, 2, 1, 9, 6, 7, 8, 9, 100};
-        int[] cost = {4, 6, 7, 8, 10, 8, 9, 10, 11};
-        System.out.println(test.canCompleteCircuit(gas, cost));
+//        Greedy test = new Greedy();
+//        int[] gas = {1, 2, 1, 9, 6, 7, 8, 9, 100};
+//        int[] cost = {4, 6, 7, 8, 10, 8, 9, 10, 11};
+//        System.out.println(test.canCompleteCircuit(gas, cost));
+        TagString test = new TagString();
+        test.shortestPalindrome("aaaaaaaaaabcaaaaaaaaaaaaaaaaaaaa");
     }
 
     /**
