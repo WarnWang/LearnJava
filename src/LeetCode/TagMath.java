@@ -1,7 +1,7 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by warn on 28/3/2016.
@@ -36,19 +36,21 @@ public class TagMath {
      * @return the n-th ugly number
      */
     public int nthUglyNumber(int n) {
-        if (n <= 5) return n;
-        List<Integer> uglyNumber = new ArrayList<>(n);
-        for (int i = 0; i < 5; i++) uglyNumber.add(i + 1);
-        for (int i = 5; i < n; i++) {
-            int nextUgly = uglyNumber.get(i - 1), temp;
+        if (n <= 6) return n;
+        Set<Integer> uglyNumber = new HashSet<>(n);
+        for (int i = 0; i < 6; i++) uglyNumber.add(i + 1);
+        int lastUgly = 6;
+        for (int i = 6; i < n; i++) {
+            int nextUgly = lastUgly, temp;
             do {
                 temp = ++nextUgly;
                 if (nextUgly % 3 == 0) temp /= 3;
                 else if (nextUgly % 2 == 0) temp /= 2;
                 else if (nextUgly % 5 == 0) temp /= 5;
-            } while (uglyNumber.indexOf(temp) < 0);
+            } while (!uglyNumber.contains(temp));
             uglyNumber.add(nextUgly);
+            lastUgly = nextUgly;
         }
-        return uglyNumber.get(n - 1);
+        return lastUgly;
     }
 }
