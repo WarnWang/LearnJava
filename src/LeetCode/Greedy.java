@@ -11,8 +11,8 @@ public class Greedy {
 //        int[] gas = {1, 2, 1, 9, 6, 7, 8, 9, 100};
 //        int[] cost = {4, 6, 7, 8, 10, 8, 9, 10, 11};
 //        System.out.println(test.canCompleteCircuit(gas, cost));
-        TagString test = new TagString();
-        test.shortestPalindrome("aaaaaaaaaabcaaaaaaaaaaaaaaaaaaaa");
+        TagMath test = new TagMath();
+        System.out.println(test.nthUglyNumber(11));
     }
 
     /**
