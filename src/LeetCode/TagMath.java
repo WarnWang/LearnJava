@@ -1,6 +1,7 @@
 package LeetCode;
 
 import java.util.HashSet;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 /**
@@ -37,20 +38,26 @@ public class TagMath {
      */
     public int nthUglyNumber(int n) {
         if (n <= 6) return n;
-        Set<Integer> uglyNumber = new HashSet<>(n);
-        for (int i = 0; i < 6; i++) uglyNumber.add(i + 1);
-        int lastUgly = 6;
-        for (int i = 6; i < n; i++) {
-            int nextUgly = lastUgly, temp;
-            do {
-                temp = ++nextUgly;
-                if (nextUgly % 3 == 0) temp /= 3;
-                else if (nextUgly % 2 == 0) temp /= 2;
-                else if (nextUgly % 5 == 0) temp /= 5;
-            } while (!uglyNumber.contains(temp));
-            uglyNumber.add(nextUgly);
-            lastUgly = nextUgly;
+        Set<Long> uglyNumber = new HashSet<>();
+        PriorityQueue<Long> uglyNumberQueue = new PriorityQueue<>();
+        uglyNumber.add(1L);
+        uglyNumberQueue.add(1L);
+        for (int i = 1; i < n; i++) {
+            long smallest = uglyNumberQueue.remove();
+            long small = 2 * smallest, small2 = 3 * smallest, small3 = 5 * smallest;
+            if (!uglyNumber.contains(small) && small > 0) {
+                uglyNumberQueue.add(small);
+                uglyNumber.add(small);
+            }
+            if (!uglyNumber.contains(small2) && small2 > 0) {
+                uglyNumber.add(small2);
+                uglyNumberQueue.add(small2);
+            }
+            if (!uglyNumber.contains(small3) && small3 > 0) {
+                uglyNumber.add(small3);
+                uglyNumberQueue.add(small3);
+            }
         }
-        return lastUgly;
+        return uglyNumberQueue.peek().intValue();
     }
 }

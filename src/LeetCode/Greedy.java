@@ -12,7 +12,7 @@ public class Greedy {
 //        int[] cost = {4, 6, 7, 8, 10, 8, 9, 10, 11};
 //        System.out.println(test.canCompleteCircuit(gas, cost));
         TagMath test = new TagMath();
-        System.out.println(test.nthUglyNumber(11));
+        System.out.println(test.nthUglyNumber(1600));
     }
 
     /**
