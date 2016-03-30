@@ -624,4 +624,65 @@ public class LeetMedium {
     public int bulbSwitch(int n) {
         return (int) Math.sqrt(n);
     }
+
+    /**
+     * Given an integer, convert it to a roman numeral.
+     * Input is guaranteed to be within the range from 1 to 3999.
+     *
+     * @param num an integer
+     * @return a roman numeral
+     */
+    public String intToRoman(int num) {
+        StringBuilder romanNum = new StringBuilder();
+        for (; num >= 1000; num -= 1000) {
+            romanNum.append('M');
+        }
+        if (num >= 900) {
+            romanNum.append("CM");
+            num -= 900;
+        }
+        if (num >= 500) {
+            romanNum.append('D');
+            num -= 500;
+        }
+        if (num >= 400) {
+            romanNum.append("CD");
+            num -= 400;
+        }
+        while (num >= 100){
+            romanNum.append('C');
+            num -= 100;
+        }
+        if (num >= 90) {
+            romanNum.append("XC");
+            num -= 90;
+        }
+        if (num >= 50) {
+            romanNum.append('L');
+            num -= 50;
+        }
+        if (num >= 40) {
+            romanNum.append("XL");
+            num -= 40;
+        }
+        while (num >= 10) {
+            romanNum.append('X');
+            num -= 10;
+        }
+        if (num == 9) romanNum.append("IX");
+        else {
+            if (num >= 5) {
+                romanNum.append('V');
+                num -= 5;
+            }
+            if (num == 4) {
+                romanNum.append("IV");
+            } else {
+                while (num-- > 0) {
+                    romanNum.append('I');
+                }
+            }
+        }
+        return romanNum.toString();
+    }
 }
