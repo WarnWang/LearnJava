@@ -1,8 +1,6 @@
 package LeetCode;
 
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by warn on 28/3/2016.
@@ -59,5 +57,28 @@ public class TagMath {
             }
         }
         return uglyNumberQueue.peek().intValue();
+    }
+
+    /**
+     * Given a positive integer n, find the least number of perfect square numbers (for example, 1, 4, 9, 16, ...)
+     * which sum to n.
+     * For example, given n = 12, return 3 because 12 = 4 + 4 + 4; given n = 13, return 2 because 13 = 4 + 9.
+     *
+     * @param n a positive integer n
+     * @return the least number of perfect square numbers
+     */
+    public int numSquares(int n) {
+        if (n <= 0) return -1;
+        Queue<int[]> remainder = new ArrayDeque<>();
+        remainder.add(new int[]{0, n});
+        while (!remainder.isEmpty()) {
+            int[] frontier = remainder.remove();
+            int maxNext = (int) Math.sqrt(frontier[1]);
+            for (int i = Integer.max(1, maxNext / 2); i <= maxNext; i++) {
+                if (frontier[1] == i * i) return frontier[0] + 1;
+                else remainder.add(new int[]{frontier[0] + 1, frontier[1] - i * i});
+            }
+        }
+        return -1;
     }
 }
