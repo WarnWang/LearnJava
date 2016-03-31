@@ -81,4 +81,28 @@ public class TagMath {
         }
         return -1;
     }
+
+    // https://en.wikipedia.org/wiki/Lagrange%27s_four-square_theorem
+    public int numSquares4Square(int n) {
+        if (n <= 0)
+            return 0;
+
+        while (n % 4 == 0)
+            n /= 4;
+
+        //4condition
+        if (n % 8 == 7)
+            return 4;
+
+        //1 or 2 condition
+        for (int i = 0; i * i <= n; i++) {
+            int j = (int) Math.sqrt(n - i * i);
+            if (j * j + i * i == n) {
+                return (i > 0 ? 1 : 0) + (j > 0 ? 1 : 0);
+            }
+        }
+
+        //else 3
+        return 3;
+    }
 }
