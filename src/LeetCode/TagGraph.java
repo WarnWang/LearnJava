@@ -1,6 +1,7 @@
 package LeetCode;
 
 import java.util.*;
+import java.util.LinkedList;
 
 /**
  * Created by warn on 1/4/2016.
@@ -73,5 +74,38 @@ public class TagGraph {
             }
         }
         return null;
+    }
+
+    public List<String> findItineraryRecursively(String[][] tickets) {
+        if (tickets == null || tickets.length == 0) return null;
+        else if (tickets.length == 1) return Arrays.asList(tickets[0]);
+        Map<String, List<String>> ticketsMap = new HashMap<>();
+        for (String[] ticket : tickets) {
+            if (ticketsMap.containsKey(ticket[0])) ticketsMap.get(ticket[0]).add(ticket[1]);
+            else ticketsMap.put(ticket[0], new LinkedList<>(Collections.singletonList(ticket[1])));
+        }
+        for (String key : ticketsMap.keySet()) ticketsMap.get(key).sort(String::compareTo);
+        List<String> travelMap = new ArrayList<>(Collections.singletonList("JFK"));
+        findItineraryRecursively(ticketsMap, "JFK", travelMap, tickets.length);
+        return travelMap;
+    }
+
+    public boolean findItineraryRecursively(Map<String, List<String>> tickets, String nextCity,
+                                            List<String> resultList, int ticketNum) {
+        if (!tickets.containsKey(nextCity)) return false;
+        for (int i = 0; i < tickets.get(nextCity).size(); i++) {
+            String newNextCity = tickets.get(nextCity).get(i);
+            tickets.get(nextCity).remove(i);
+            resultList.add(newNextCity);
+            if (resultList.size() > ticketNum) return true;
+            else {
+                if (findItineraryRecursively(tickets, newNextCity, resultList, ticketNum)) return true;
+                else {
+                    tickets.get(nextCity).add(i, newNextCity);
+                    resultList.remove(resultList.size() - 1);
+                }
+            }
+        }
+        return false;
     }
 }
