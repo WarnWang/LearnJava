@@ -35,6 +35,7 @@ public class TagGraph {
         if (tickets == null || tickets.length == 0) return null;
         Map<String, List<String[]>> travelMap = new HashMap<>();
         int ticketNum = tickets.length;
+        if (ticketNum == 1) return Arrays.asList(tickets[0]);
         for (int i = 0; i < ticketNum; i++) {
             if (travelMap.containsKey(tickets[i][0])) {
                 travelMap.get(tickets[i][0]).add(new String[]{tickets[i][1], Integer.toString(i)});
@@ -46,21 +47,21 @@ public class TagGraph {
         for (String key : travelMap.keySet()) {
             travelMap.get(key).sort((o1, o2) -> o2[0].compareTo(o1[0]));
         }
-        Stack<List<Integer>> ticketUsed = new Stack<>();
+        Stack<Set<Integer>> ticketUsed = new Stack<>();
         Stack<List<String>> traveledAirport = new Stack<>();
         for (String[] firstTarget : travelMap.get("JFK")) {
             traveledAirport.add(new ArrayList<>(Arrays.asList("JFK", firstTarget[0])));
-            ticketUsed.add(new ArrayList<>(Collections.singletonList(Integer.parseInt(firstTarget[1]))));
+            ticketUsed.add(new HashSet<>(Collections.singletonList(Integer.parseInt(firstTarget[1]))));
         }
         while (!ticketUsed.isEmpty()) {
             List<String> frontier = traveledAirport.pop();
-            List<Integer> frontierUsedTicket = ticketUsed.pop();
+            Set<Integer> frontierUsedTicket = ticketUsed.pop();
             if (travelMap.containsKey(frontier.get(frontier.size() - 1))) {
                 List<String[]> possibleNextCity = travelMap.get(frontier.get(frontier.size() - 1));
                 for (String[] nextAirport : possibleNextCity) {
-                    if (frontierUsedTicket.indexOf(Integer.parseInt(nextAirport[1])) > 0) continue;
+                    if (frontierUsedTicket.contains(Integer.parseInt(nextAirport[1]))) continue;
                     else {
-                        List<Integer> newTicketUsed = new ArrayList<>(frontierUsedTicket);
+                        Set<Integer> newTicketUsed = new HashSet<>(frontierUsedTicket);
                         newTicketUsed.add(Integer.parseInt(nextAirport[1]));
                         List<String> newTravelMap = new ArrayList<>(frontier);
                         newTravelMap.add(nextAirport[0]);
