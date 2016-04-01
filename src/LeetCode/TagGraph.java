@@ -76,34 +76,38 @@ public class TagGraph {
         return null;
     }
 
+    private Map<String, ArrayList<String>> ticketsMap = new HashMap<>();
+    private int ticketLength;
+
     public List<String> findItineraryRecursively(String[][] tickets) {
         if (tickets == null || tickets.length == 0) return null;
         else if (tickets.length == 1) return Arrays.asList(tickets[0]);
-        Map<String, List<String>> ticketsMap = new HashMap<>();
         for (String[] ticket : tickets) {
-            if (ticketsMap.containsKey(ticket[0])) ticketsMap.get(ticket[0]).add(ticket[1]);
-            else ticketsMap.put(ticket[0], new LinkedList<>(Collections.singletonList(ticket[1])));
+            if (!ticketsMap.containsKey(ticket[0])) {
+                ticketsMap.put(ticket[0], new ArrayList<>());
+            }
+            ticketsMap.get(ticket[0]).add(ticket[1]);
         }
-        for (String key : ticketsMap.keySet()) ticketsMap.get(key).sort(String::compareTo);
-        List<String> travelMap = new ArrayList<>(Collections.singletonList("JFK"));
-        findItineraryRecursively(ticketsMap, "JFK", travelMap, tickets.length);
+        for (ArrayList<String> value : ticketsMap.values()) Collections.sort(value);
+        LinkedList<String> travelMap = new LinkedList<>();
+        travelMap.add("JFK");
+        ticketLength = tickets.length + 1;
+        findItineraryRecursively("JFK", travelMap);
         return travelMap;
     }
 
-    public boolean findItineraryRecursively(Map<String, List<String>> tickets, String nextCity,
-                                            List<String> resultList, int ticketNum) {
-        if (!tickets.containsKey(nextCity)) return false;
-        for (int i = 0; i < tickets.get(nextCity).size(); i++) {
-            String newNextCity = tickets.get(nextCity).get(i);
-            tickets.get(nextCity).remove(i);
+    private boolean findItineraryRecursively(String nextCity, LinkedList<String> resultList) {
+        if (resultList.size() == ticketLength) return true;
+        ArrayList<String> possibleNextCity = ticketsMap.get(nextCity);
+        if (possibleNextCity == null) return false;
+        for (int i = 0, k = possibleNextCity.size(); i < k; i++) {
+            String newNextCity = possibleNextCity.get(i);
+            possibleNextCity.remove(i);
             resultList.add(newNextCity);
-            if (resultList.size() > ticketNum) return true;
+            if (findItineraryRecursively(newNextCity, resultList)) return true;
             else {
-                if (findItineraryRecursively(tickets, newNextCity, resultList, ticketNum)) return true;
-                else {
-                    tickets.get(nextCity).add(i, newNextCity);
-                    resultList.remove(resultList.size() - 1);
-                }
+                possibleNextCity.add(i, newNextCity);
+                resultList.remove(resultList.size() - 1);
             }
         }
         return false;
