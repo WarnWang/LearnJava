@@ -9,15 +9,6 @@ import java.util.Stack;
  * Use to store puzzles with tag Tree
  */
 public class TagTree {
-
-    /**
-     * Given a binary tree, find the maximum path sum.
-     * For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree
-     * along the parent-child connections. The path does not need to go through the root.
-     *
-     * @param root a binary tree
-     * @return the maximum sum of path
-     */
     private int maxValue = Integer.MIN_VALUE;
 
     /**
@@ -84,6 +75,15 @@ public class TagTree {
         return false;
     }
 
+    /**
+     * Given a binary tree, find the maximum path sum.
+     * For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree
+     * along the parent-child connections. The path does not need to go through the root.
+     * https://leetcode.com/problems/binary-tree-maximum-path-sum/
+     *
+     * @param root a binary tree
+     * @return the maximum sum of path
+     */
     public int maxPathSum(TreeNode root) {
         maxPathSumAndBranch(root);
         return maxValue;
