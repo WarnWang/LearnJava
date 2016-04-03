@@ -73,4 +73,46 @@ public class TagTree {
         }
         return false;
     }
+
+    /**
+     * Given a binary tree, find the maximum path sum.
+     * For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree
+     * along the parent-child connections. The path does not need to go through the root.
+     *
+     * @param root a binary tree
+     * @return the maximum sum of path
+     */
+
+    public int maxPathSum(TreeNode root) {
+        return maxPathSumAndBranch(root)[0];
+    }
+
+    private int[] maxPathSumAndBranch(TreeNode root) {
+        if (root == null) return new int[]{0, 0};
+        else if (root.left == null && root.right == null) {
+            return new int[]{root.val, root.val};
+        } else {
+            int[] leftBranch;
+            int[] rightBranch;
+            if (root.left != null) leftBranch = maxPathSumAndBranch(root.left);
+            else {
+                rightBranch = maxPathSumAndBranch(root.right);
+                int maxBranch = root.val + Integer.max(rightBranch[1], 0);
+                int maxSub = Integer.max(rightBranch[0], maxBranch);
+                return new int[]{maxSub, maxBranch};
+            }
+            if (root.right != null) rightBranch = maxPathSumAndBranch(root.right);
+            else {
+                int maxBranch = Integer.max(leftBranch[1], 0) + root.val;
+                int maxSub = Integer.max(leftBranch[0], maxBranch);
+                return new int[]{maxSub, maxBranch};
+            }
+            int maxBranch = Integer.max(leftBranch[1], rightBranch[1]);
+            maxBranch = Integer.max(maxBranch, 0) + root.val;
+            int maxSub = Integer.max(leftBranch[0], rightBranch[0]);
+            int currentSub = Integer.max(leftBranch[1], 0) + Integer.max(rightBranch[1], 0) + root.val;
+            maxSub = Integer.max(maxSub, currentSub);
+            return new int[]{maxSub, maxBranch};
+        }
+    }
 }
