@@ -1,5 +1,7 @@
 package LeetCode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -40,5 +42,41 @@ public class DFS {
     public boolean isSameTreeRecursively(TreeNode p, TreeNode q) {
         return p == null && q == null || !(p == null || q == null || p.val != q.val) &&
                 isSameTreeRecursively(p.left, q.left) && isSameTreeRecursively(p.right, q.right);
+    }
+
+    /**
+     * Given a string s, partition s such that every substring of the partition is a palindrome.
+     * Return all possible palindrome partitioning of s.
+     *
+     * @param s a string
+     * @return all possible palindrome partitioning of s
+     */
+    public List<List<String>> partition(String s) {
+        List<List<String>> partitionList = new ArrayList<>();
+        partition(new ArrayList<>(), s, partitionList);
+        return partitionList;
+    }
+
+    private void partition(List<String> frontier, String remainder, List<List<String>> partitionList) {
+        if (remainder == null || remainder.isEmpty()) {
+            if (!frontier.isEmpty()) partitionList.add(new ArrayList<>(frontier));
+        } else {
+            for (int i = 1; i < remainder.length(); i++) {
+                String newRemainder = remainder.substring(i);
+                String possibleFrontier = remainder.substring(0, i);
+                if (isPalindrome(possibleFrontier)) {
+                    ArrayList<String> newFrontier = new ArrayList<>(frontier);
+                    newFrontier.add(possibleFrontier);
+                    partition(newFrontier, newRemainder, partitionList);
+                }
+            }
+        }
+    }
+
+    private boolean isPalindrome(String s) {
+        for (int i = 0, j = s.length() - 1; i < j; i++, j--) {
+            if (s.charAt(i) != s.charAt(j)) return false;
+        }
+        return true;
     }
 }
