@@ -7,7 +7,7 @@ public class LeetCodeTest {
     public static void testDFS() {
         DFS test;
         test = new DFS();
-        System.out.println(test.partition("baabc").toString());
+        System.out.println(test.partitionDynamicProgramming("baabcafdsdsfasfasec").toString());
     }
 
     public static void main(String[] args) {

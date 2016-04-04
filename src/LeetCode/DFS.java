@@ -1,8 +1,6 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by warn on 15/3/2016.
@@ -82,8 +80,28 @@ public class DFS {
 
     // Dynamic programming version
     public List<List<String>> partitionDynamicProgramming(String s) {
-        List<List<String>> partitionList = new ArrayList<>();
-        partition(new ArrayList<>(), s, partitionList);
-        return partitionList;
+        Set<List<String>> partitionList = new HashSet<>();
+        partitionList.add(new ArrayList<>(Collections.singletonList(s.substring(0, 1))));
+        for (int i = 1; i < s.length(); i++) {
+            char currentChar = s.charAt(i);
+            List<List<String>> newList = new ArrayList<>();
+            for (List<String> currentList: partitionList) {
+                String tempString = Character.toString(currentChar);
+                for (int j = currentList.size() - 1; j >= 0; j--) {
+                    tempString = currentList.get(j) + tempString;
+                    if (isPalindrome(tempString)) {
+                        List<String> newAnswer = new ArrayList<>();
+                        for (int k = 0; k < j; k++) {
+                            newAnswer.add(currentList.get(k));
+                        }
+                        newAnswer.add(tempString);
+                        newList.add(newAnswer);
+                    }
+                }
+                currentList.add(Character.toString(currentChar));
+            }
+            partitionList.addAll(newList);
+        }
+        return new ArrayList<>(partitionList);
     }
 }
