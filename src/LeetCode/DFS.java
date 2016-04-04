@@ -59,9 +59,9 @@ public class DFS {
 
     private void partition(List<String> frontier, String remainder, List<List<String>> partitionList) {
         if (remainder == null || remainder.isEmpty()) {
-            if (!frontier.isEmpty()) partitionList.add(new ArrayList<>(frontier));
+            if (!frontier.isEmpty()) partitionList.add(frontier);
         } else {
-            for (int i = 1; i < remainder.length(); i++) {
+            for (int i = 1; i <= remainder.length(); i++) {
                 String newRemainder = remainder.substring(i);
                 String possibleFrontier = remainder.substring(0, i);
                 if (isPalindrome(possibleFrontier)) {
@@ -78,5 +78,12 @@ public class DFS {
             if (s.charAt(i) != s.charAt(j)) return false;
         }
         return true;
+    }
+
+    // Dynamic programming version
+    public List<List<String>> partitionDynamicProgramming(String s) {
+        List<List<String>> partitionList = new ArrayList<>();
+        partition(new ArrayList<>(), s, partitionList);
+        return partitionList;
     }
 }

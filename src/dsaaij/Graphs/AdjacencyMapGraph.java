@@ -133,6 +133,7 @@ public class AdjacencyMapGraph<V, E> implements Graph<V, E> {
         return edge;
     }
 
+    @SuppressWarnings("TypeParameterHidesVisibleType")
     private class InnerVertex<V> implements Vertex<V> {
         private V element;
         private Position<Vertex<V>> pos;
