@@ -51,24 +51,39 @@ public class DFS {
      */
     public List<List<String>> partition(String s) {
         List<List<String>> partitionList = new ArrayList<>();
-        partition(new ArrayList<>(), s, partitionList);
+        palindromeFlag = new int[s.length()][s.length()];
+        partition(new ArrayList<>(), s, 0, partitionList);
         return partitionList;
     }
 
-    private void partition(List<String> frontier, String remainder, List<List<String>> partitionList) {
-        if (remainder == null || remainder.isEmpty()) {
+    private int[][] palindromeFlag;
+
+    private void partition(List<String> frontier, String s, int remainderIndex, List<List<String>> partitionList) {
+        if (remainderIndex == s.length()) {
             if (!frontier.isEmpty()) partitionList.add(frontier);
         } else {
-            for (int i = 1; i <= remainder.length(); i++) {
-                String newRemainder = remainder.substring(i);
-                String possibleFrontier = remainder.substring(0, i);
-                if (isPalindrome(possibleFrontier)) {
+            for (int i = remainderIndex + 1; i <= s.length(); i++) {
+                if (isPalindrome(s, remainderIndex, i - 1)) {
+                    String possibleFrontier = s.substring(remainderIndex, i);
                     ArrayList<String> newFrontier = new ArrayList<>(frontier);
                     newFrontier.add(possibleFrontier);
-                    partition(newFrontier, newRemainder, partitionList);
+                    partition(newFrontier, s, i, partitionList);
                 }
             }
         }
+    }
+
+    private boolean isPalindrome(String s, int i, int j) {
+        if (palindromeFlag[i][j] == 1 || i == j) return true;
+        else if (palindromeFlag[i][j] == -1) return false;
+        for (; i < j; i++, j--) {
+            if (s.charAt(i) != s.charAt(j)) {
+                palindromeFlag[i][j] = -1;
+                return false;
+            }
+        }
+        palindromeFlag[i][j] = 1;
+        return true;
     }
 
     private boolean isPalindrome(String s) {
