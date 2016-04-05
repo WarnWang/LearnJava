@@ -119,4 +119,58 @@ public class TagDFS {
         }
         return new ArrayList<>(partitionList);
     }
+
+    /**
+     * Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island is surrounded by
+     * water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of
+     * the grid are all surrounded by water.
+     * Also have a BFS version (but BFS TLE)
+     *
+     * @param grid 2d grid map
+     * @return the number of lands
+     */
+    public int numIslands(char[][] grid) {
+        if (grid == null) return 0;
+        if (grid.length == 0) return 0;
+        int[] gridSize = {grid.length, grid[0].length};
+        int gridNum = gridSize[0] * gridSize[1];
+        if (gridSize[1] == 0) return 0;
+        int islandNum = 0;
+
+        HashSet<Integer> exploredPosition = new HashSet<>();
+        for (int i = 0; i < gridNum; i++) {
+            if (exploredPosition.contains(i)) continue;
+            if (grid[i / gridSize[1]][i % gridSize[1]] == '1') {
+                islandNum++;
+                exploreIsland(grid, exploredPosition, i, gridSize);
+            }
+        }
+        return islandNum;
+    }
+
+    private void exploreIsland(char[][] grid, HashSet<Integer> exploredPos, int startPos, int[] gridSize) {
+        if (exploredPos.contains(startPos)) return;
+        exploredPos.add(startPos);
+        int x = startPos / gridSize[1];
+        int y = startPos % gridSize[1];
+        for (int i = 0; i < 4; i++) {
+            int nextX = x;
+            int nextY = y;
+            switch (i) {
+                case 0:
+                    if (--nextX < 0) continue;
+                    break;
+                case 1:
+                    if (++nextX >= gridSize[0]) continue;
+                    break;
+                case 2:
+                    if (--nextY < 0) continue;
+                    break;
+                default:
+                    if (++nextY >= gridSize[1]) continue;
+            }
+            if (grid[nextX][nextY] == '1') exploreIsland(grid, exploredPos, nextX * gridSize[1] + nextY, gridSize);
+            else exploredPos.add(nextX * gridSize[1] + nextY);
+        }
+    }
 }

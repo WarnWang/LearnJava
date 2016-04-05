@@ -60,6 +60,7 @@ public class TagBFS {
      * Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island is surrounded by
      * water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of
      * the grid are all surrounded by water.
+     * There is also a DFS version
      *
      * @param grid 2d grid map
      * @return the number of lands
@@ -72,41 +73,40 @@ public class TagBFS {
         if (gridWidth == 0) return 0;
         int islandNum = 0;
 
-        Set<Integer> exploredPosition = new HashSet<>();
-        for (int i = 0; i < gridHeight; i++) {
-            for (int j = 0; j < gridWidth; j++) {
-                if (exploredPosition.contains(i*gridWidth+j)) continue;
-                if (grid[i][j] == '1') {
-                    islandNum++;
-                    Queue<Integer> islandGrid = new ArrayDeque<>();
-                    islandGrid.add(i * gridWidth + j);
-                    while (!islandGrid.isEmpty()) {
-                        int frontier = islandGrid.remove();
-                        exploredPosition.add(frontier);
-                        for (int k = 0; k < 4; k++) {
-                            int nextI = frontier / gridWidth;
-                            int nextJ = frontier % gridWidth;
-                            
-                            switch (k) {
-                                case 0:
-                                    nextI++;
-                                    if (nextI >= gridHeight) continue;
-                                    break;
-                                case 1:
-                                    nextI--;
-                                    if (nextI < 0) continue;
-                                    break;
-                                case 2:
-                                    nextJ++;
-                                    if (nextJ >= gridWidth) continue;
-                                    break;
-                                default:
-                                    nextJ--;
-                                    if (nextJ < 0) continue;
-                            }
-                            if (!exploredPosition.contains(nextI * gridWidth + nextJ)
-                                    && grid[nextI][nextJ] == '1') islandGrid.add(nextI * gridWidth + nextJ);
+        HashSet<Integer> exploredPosition = new HashSet<>();
+        for (int i = 0; i < gridHeight * gridWidth; i++) {
+            if (exploredPosition.contains(i)) continue;
+            if (grid[i / gridWidth][i % gridWidth] == '1') {
+                islandNum++;
+                ArrayDeque<Integer> islandGrid = new ArrayDeque<>();
+                islandGrid.add(i);
+                while (!islandGrid.isEmpty()) {
+                    int frontier = islandGrid.remove();
+                    exploredPosition.add(frontier);
+                    for (int k = 0; k < 4; k++) {
+                        int nextI = frontier / gridWidth;
+                        int nextJ = frontier % gridWidth;
+
+                        switch (k) {
+                            case 0:
+                                nextI++;
+                                if (nextI >= gridHeight) continue;
+                                break;
+                            case 1:
+                                nextI--;
+                                if (nextI < 0) continue;
+                                break;
+                            case 2:
+                                nextJ++;
+                                if (nextJ >= gridWidth) continue;
+                                break;
+                            default:
+                                nextJ--;
+                                if (nextJ < 0) continue;
                         }
+                        if (!exploredPosition.contains(nextI * gridWidth + nextJ) && grid[nextI][nextJ] == '1'){
+                            islandGrid.add(nextI * gridWidth + nextJ);
+                        } else exploredPosition.add(nextI * gridWidth + nextJ);
                     }
                 }
             }
