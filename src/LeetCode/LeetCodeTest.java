@@ -5,8 +5,8 @@ package LeetCode;
  */
 public class LeetCodeTest {
     public static void testDFS() {
-        DFS test;
-        test = new DFS();
+        TagDFS test;
+        test = new TagDFS();
         System.out.println(test.partition("baabc").toString());
     }
 

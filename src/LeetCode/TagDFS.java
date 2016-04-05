@@ -4,13 +4,13 @@ import java.util.*;
 
 /**
  * Created by warn on 15/3/2016.
- * Use to store DFS search algorithm problem
+ * Use to store TagDFS search algorithm problem
  */
-public class DFS {
+public class TagDFS {
     /**
      * Given two binary trees, write a function to check if they are equal or not.
      * Two binary trees are considered equal if they are structurally identical and the nodes have the same value.
-     * Tag: Tree, DFS
+     * Tag: Tree, TagDFS
      * Difficulty: easy
      *
      * @param p tree A
