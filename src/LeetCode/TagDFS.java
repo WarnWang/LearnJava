@@ -124,7 +124,7 @@ public class TagDFS {
      * Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island is surrounded by
      * water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of
      * the grid are all surrounded by water.
-     * Also have a BFS version (but BFS TLE)
+     * Also have a BFS version (but BFS TLE), a union find version.
      *
      * @param grid 2d grid map
      * @return the number of lands
