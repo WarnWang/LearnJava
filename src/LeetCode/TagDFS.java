@@ -7,6 +7,8 @@ import java.util.*;
  * Use to store TagDFS search algorithm problem
  */
 public class TagDFS {
+    private int[][] palindromeFlag;
+
     /**
      * Given two binary trees, write a function to check if they are equal or not.
      * Two binary trees are considered equal if they are structurally identical and the nodes have the same value.
@@ -56,8 +58,6 @@ public class TagDFS {
         return partitionList;
     }
 
-    private int[][] palindromeFlag;
-
     private void partition(List<String> frontier, String s, int remainderIndex, List<List<String>> partitionList) {
         if (remainderIndex == s.length()) {
             if (!frontier.isEmpty()) partitionList.add(frontier);
@@ -100,7 +100,7 @@ public class TagDFS {
         for (int i = 1; i < s.length(); i++) {
             char currentChar = s.charAt(i);
             List<List<String>> newList = new ArrayList<>();
-            for (List<String> currentList: partitionList) {
+            for (List<String> currentList : partitionList) {
                 String tempString = Character.toString(currentChar);
                 for (int j = currentList.size() - 1; j >= 0; j--) {
                     tempString = currentList.get(j) + tempString;
@@ -173,4 +173,43 @@ public class TagDFS {
             else exploredPos.add(nextX * gridSize[1] + nextY);
         }
     }
+
+    /**
+     * Detail can be found in UnionFindAlgorithm.solve
+     *
+     * @param board a board of 'X' and 'O'
+     */
+    public void solve(char[][] board) {
+        if (board == null) return;
+        int rows = board.length;
+        if (rows <= 2) return;
+        int cols = board[0].length;
+        if (cols <= 2) return;
+
+        for (int i = 0; i < rows; i++) {
+            if (board[i][0] == 'O') solve(board, i, 0, '1', 'O');
+            if (board[i][cols - 1] == 'O') solve(board, i, cols - 1, '1', 'O');
+        }
+
+        for (int i = 0; i < cols; i++) {
+            if (board[0][i] == 'O') solve(board, 0, i, '1', 'O');
+            if (board[rows - 1][i] == 'O') solve(board, rows - 1, i, '1', 'O');
+        }
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (board[i][j] == 'O') board[i][j] = 'X';
+                if (board[i][j] == '1') board[i][j] = 'O';
+            }
+        }
+    }
+
+    private void solve(char[][] board, int x, int y, char setTo, char origin) {
+        board[x][y] = setTo;
+        if (x + 1 < board.length && board[x + 1][y] == origin) solve(board, x + 1, y, setTo, origin);
+        if (x - 1 >= 0 && board[x - 1][y] == origin) solve(board, x - 1, y, setTo, origin);
+        if (y - 1 >= 0 && board[x][y - 1] == origin) solve(board, x, y - 1, setTo, origin);
+        if (y + 1 < board[0].length && board[x][y + 1] == origin) solve(board, x, y + 1, setTo, origin);
+    }
+
 }
