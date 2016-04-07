@@ -187,13 +187,25 @@ public class TagDFS {
         if (cols <= 2) return;
 
         for (int i = 0; i < rows; i++) {
-            if (board[i][0] == 'O') solve(board, i, 0, '1', 'O');
-            if (board[i][cols - 1] == 'O') solve(board, i, cols - 1, '1', 'O');
+            if (board[i][0] == 'O') {
+                board[i][0] = '1';
+                solve(board, i, 0, '1', 'O');
+            }
+            if (board[i][cols - 1] == 'O') {
+                board[i][cols - 1] = '1';
+                solve(board, i, cols - 1, '1', 'O');
+            }
         }
 
         for (int i = 0; i < cols; i++) {
-            if (board[0][i] == 'O') solve(board, 0, i, '1', 'O');
-            if (board[rows - 1][i] == 'O') solve(board, rows - 1, i, '1', 'O');
+            if (board[0][i] == 'O') {
+                board[0][i] = '1';
+                solve(board, 0, i, '1', 'O');
+            }
+            if (board[rows - 1][i] == 'O') {
+                board[rows - 1][i] = '1';
+                solve(board, rows - 1, i, '1', 'O');
+            }
         }
 
         for (int i = 0; i < rows; i++) {
@@ -205,11 +217,22 @@ public class TagDFS {
     }
 
     private void solve(char[][] board, int x, int y, char setTo, char origin) {
-        board[x][y] = setTo;
-        if (x + 1 < board.length && board[x + 1][y] == origin) solve(board, x + 1, y, setTo, origin);
-        if (x - 1 >= 0 && board[x - 1][y] == origin) solve(board, x - 1, y, setTo, origin);
-        if (y - 1 >= 0 && board[x][y - 1] == origin) solve(board, x, y - 1, setTo, origin);
-        if (y + 1 < board[0].length && board[x][y + 1] == origin) solve(board, x, y + 1, setTo, origin);
+        if (x + 1 < board.length - 1 && board[x + 1][y] == origin) {
+            board[x + 1][y] = setTo;
+            solve(board, x + 1, y, setTo, origin);
+        }
+        if (x - 1 > 0 && board[x - 1][y] == origin) {
+            board[x - 1][y] = setTo;
+            solve(board, x - 1, y, setTo, origin);
+        }
+        if (y - 1 > 0 && board[x][y - 1] == origin) {
+            board[x][y - 1] = setTo;
+            solve(board, x, y - 1, setTo, origin);
+        }
+        if (y + 1 < board[0].length - 1 && board[x][y + 1] == origin) {
+            board[x][y + 1] = setTo;
+            solve(board, x, y + 1, setTo, origin);
+        }
     }
 
 }
