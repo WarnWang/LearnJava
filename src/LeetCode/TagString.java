@@ -1,5 +1,8 @@
 package LeetCode;
 
+import java.util.Arrays;
+import java.util.HashMap;
+
 /**
  * Created by warn on 27/3/2016.
  * Use to store puzzles about string
@@ -55,5 +58,29 @@ public class TagString {
             palindrome.append(s);
             return palindrome.toString();
         }
+    }
+
+    /**
+     * Given two strings s and t, write a function to determine if t is an anagram of s.
+     * For example,
+     * s = "anagram", t = "nagaram", return true.
+     * s = "rat", t = "car", return false.
+     *
+     * @param s one string
+     * @param t another string
+     * @return whether these two string are anagram
+     */
+    public boolean isAnagram(String s, String t) {
+        if (s == null && t == null) return true;
+        else if (s == null) return false;
+        else if (t == null) return false;
+        char[] sCharArray = s.toCharArray(), tCharArray = t.toCharArray();
+        if (sCharArray.length != tCharArray.length) return false;
+        Arrays.sort(sCharArray);
+        Arrays.sort(tCharArray);
+        for (int i = 0; i < sCharArray.length; i++) {
+            if (sCharArray[i] != tCharArray[i]) return false;
+        }
+        return true;
     }
 }
