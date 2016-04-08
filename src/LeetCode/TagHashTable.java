@@ -6,7 +6,7 @@ import java.util.*;
  * Created by warn on 20/3/2016.
  * Use to store the problems with hash table
  */
-public class HashTable {
+public class TagHashTable {
     /**
      * Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is
      * 1000, and there exists one unique longest palindromic substring.
@@ -274,7 +274,7 @@ public class HashTable {
         return palindromePairList;
     }
 
-    public boolean checkPalindrome(String word) {
+    private boolean checkPalindrome(String word) {
         int startIndex = 0;
         int endIndex = word.length() - 1;
         while (startIndex < endIndex) {
@@ -285,11 +285,47 @@ public class HashTable {
         return true;
     }
 
-    public String reverseString(String input) {
+    private String reverseString(String input) {
         StringBuilder output = new StringBuilder();
         for (int i = input.length() - 1; i >= 0; i--) {
             output.append(input.charAt(i));
         }
         return output.toString();
+    }
+
+    /**
+     * Given a pattern and a string str, find if str follows the same pattern.
+     * <p>
+     * Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word
+     * in str.
+     * <p>
+     * Examples:
+     * pattern = "abba", str = "dog cat cat dog" should return true.
+     * pattern = "abba", str = "dog cat cat fish" should return false.
+     * pattern = "aaaa", str = "dog cat cat dog" should return false.
+     * pattern = "abba", str = "dog dog dog dog" should return false.
+     * Notes:
+     * You may assume pattern contains only lowercase letters, and str contains lowercase letters separated by a single
+     * space.
+     *
+     * @param pattern a string pattern
+     * @param str Check whether this string follows the pattern
+     * @return true or false
+     */
+    public boolean wordPattern(String pattern, String str) {
+        String[] patternInfo = new String[26];
+        String[] strList = str.split(" ");
+        HashSet<String> containsString = new HashSet<>();
+        if (strList.length != pattern.length()) return false;
+        for (int i = 0; i < strList.length; i++) {
+            int patternIndex = pattern.charAt(i) - 'a';
+            if (patternInfo[patternIndex] == null) {
+                if (containsString.contains(strList[i])) return false;
+                containsString.add(strList[i]);
+                patternInfo[patternIndex] = strList[i];
+            }
+            else if (!patternInfo[patternIndex].equals(strList[i])) return false;
+        }
+        return true;
     }
 }

@@ -25,7 +25,7 @@ public class LeetMedium {
 //        System.out.println(test.fourSum(new int[]{-2, 0, 0, 3, 3, -1}, 5));
 //        DynamicProgramming test = new DynamicProgramming();
 //        System.out.println(test.hammingWeight(Integer.MIN_VALUE));
-        HashTable test = new HashTable();
+        TagHashTable test = new TagHashTable();
         System.out.println(test.longestPalindromeManacher("babab"));
     }
 
