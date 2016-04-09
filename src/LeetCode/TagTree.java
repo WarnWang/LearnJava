@@ -1,14 +1,13 @@
 package LeetCode;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by warn on 2/4/2016.
  * Use to store puzzles with tag Tree
  */
 public class TagTree {
+    int[] dp = null;
     private int maxValue = Integer.MIN_VALUE;
 
     /**
@@ -115,6 +114,130 @@ public class TagTree {
             int currentSub = Integer.max(leftBranch, 0) + Integer.max(rightBranch, 0) + root.val;
             maxValue = Integer.max(maxValue, currentSub);
             return maxBranch;
+        }
+    }
+
+    /**
+     * Given n, how many structurally unique BST's (binary search trees) that store values 1...n?
+     * https://leetcode.com/problems/unique-binary-search-trees/
+     *
+     * @param n nodes number
+     * @return how many BST tree exists
+     */
+    public int numTrees(int n) {
+        if (n <= 2) return n;
+        Set<BinarySearchTree> binaryTreeSet = new HashSet<>();
+        Stack<ArrayList<Integer>> numStack = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            numStack.push(new ArrayList<>(Collections.singletonList(i + 1)));
+        }
+        while (!numStack.isEmpty()) {
+            ArrayList<Integer> frontier = numStack.pop();
+            if (frontier.size() == n) {
+                BinarySearchTree temp = new BinarySearchTree(frontier.get(0));
+                for (int i = 1; i < n; i++) {
+                    temp.insert(frontier.get(i));
+                }
+                System.out.println(temp.toString());
+                binaryTreeSet.add(temp);
+            } else {
+                Set<Integer> nextArraySet = new HashSet<>();
+                for (int i = 0; i < n; i++) {
+                    nextArraySet.add(i + 1);
+                }
+                nextArraySet.removeAll(frontier);
+                for (int i : nextArraySet) {
+                    ArrayList<Integer> nextExplorer = new ArrayList<>(frontier);
+                    nextExplorer.add(i);
+                    numStack.push(nextExplorer);
+                }
+            }
+        }
+
+        return binaryTreeSet.size();
+    }
+
+    public int numTreesBetter(int n) {
+        if (n <= 1) return 1;
+        if (dp == null) {
+            dp = new int[n + 1];
+            dp[0] = 1;
+            dp[1] = 1;
+        } else if (dp[n] != 0) return dp[n];
+        int answer = 0;
+        for (int i = 0; i < n; i++) {
+            int numI = (dp[i] == 0) ? numTreesBetter(i) : dp[i];
+            int numJ = (dp[n - i - 1] == 0) ? numTreesBetter(n - i - 1) : dp[n - i - 1];
+            answer += numI * numJ;
+        }
+        dp[n] = answer;
+        return answer;
+    }
+
+    private class BinarySearchTree {
+        Node root;
+
+        BinarySearchTree(int val) {
+            root = new Node(val);
+        }
+
+        void insert(int val) {
+            Node temp = root;
+            while (true) {
+                if (val > temp.value) {
+                    if (temp.rightChild != null) temp = temp.rightChild;
+                    else {
+                        temp.rightChild = new Node(val);
+                        break;
+                    }
+                } else {
+                    if (temp.leftChild != null) temp = temp.leftChild;
+                    else {
+                        temp.leftChild = new Node(val);
+                        break;
+                    }
+                }
+            }
+        }
+
+        public String toString() {
+            StringBuilder stringBuilder = new StringBuilder();
+            Node temp = root;
+            ArrayDeque<Node> tempQueue = new ArrayDeque<>();
+            tempQueue.add(temp);
+            stringBuilder.append(temp.value);
+            while (!tempQueue.isEmpty()) {
+                Node frontier = tempQueue.removeFirst();
+                if (frontier.leftChild != null) {
+                    stringBuilder.append(frontier.leftChild.value);
+                    tempQueue.add(frontier.leftChild);
+                } else stringBuilder.append('X');
+
+                if (frontier.rightChild != null) {
+                    stringBuilder.append(frontier.rightChild.value);
+                    tempQueue.add(frontier.rightChild);
+                } else stringBuilder.append('X');
+            }
+            return stringBuilder.toString();
+        }
+
+        @Override
+        public int hashCode() {
+            return toString().hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return toString().equals(obj.toString());
+        }
+
+        class Node {
+            int value;
+            Node leftChild = null, rightChild = null;
+
+            Node(int val) {
+                value = val;
+            }
         }
     }
 }
