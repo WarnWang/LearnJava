@@ -69,8 +69,7 @@ public class DynamicProgramming {
             if (numOfAmount[i] == 0) {
                 int minCoin = Integer.MAX_VALUE;
                 for (int j: coins) {
-                    if (j > i) continue;
-                    if (numOfAmount[i - j] != -1) minCoin = Integer.min(minCoin, numOfAmount[i - j]);
+                    if (j <= i && numOfAmount[i - j] != -1) minCoin = Integer.min(minCoin, numOfAmount[i - j]);
                 }
                 if (minCoin == Integer.MAX_VALUE) numOfAmount[i] = -1;
                 else numOfAmount[i] = minCoin + 1;
