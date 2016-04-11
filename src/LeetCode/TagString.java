@@ -107,19 +107,6 @@ public class TagString {
             lastOccurrence.put(needleCharArray[i] , i);
         }
 
-//        for (int i = 0; i <= lenHaystack - lenNeedle; i++) {
-//            for (int j = lenNeedle - 1; j >= 0; j--) {
-//                if (haystackCharArray[i + j] == needleCharArray[j]){
-//                    if (j == 0) return i;
-//                } else {
-//                    int lastIndex = lastOccurrence.get(haystackCharArray[i + j]);
-//                    if (lastIndex == -1) i += j;
-//                    else if (lastIndex > j) i += lenNeedle - j - 2;
-//                    else i += lenNeedle - lastIndex - 3;
-//                    break;
-//                }
-//            }
-//        }
         int i = lenNeedle-1;                                     // an index into the text
         int k = lenNeedle-1;                                     // an index into the pattern
         while (i < lenHaystack) {
