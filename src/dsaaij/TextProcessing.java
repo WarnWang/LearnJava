@@ -31,29 +31,23 @@ public class TextProcessing {
         int m = pattern.length;
         if (m == 0) return 0;
         if (n == 0 || n < m) return -1;
-        Map<Character, Integer> lastOccurence = new HashMap<>();
-        for (char aText : text) lastOccurence.put(aText, -1);
+        Map<Character, Integer> lastOccurrence = new HashMap<>();
+        for (char aText : text) lastOccurrence.put(aText, -1);
         for (int i = 0; i < m; i++) {
-            if (!lastOccurence.containsKey(pattern[i])) return -1;
-            lastOccurence.put(pattern[i], i);
+            if (!lastOccurrence.containsKey(pattern[i])) return -1;
+            lastOccurrence.put(pattern[i], i);
         }
 
-        for (int i = 0; i <= n - m; i++) {
-            for (int j = m - 1; j >= 0; j--) {
-                if (text[j + i] == pattern[j]) {
-                    if (j == 0) return i;
-                } else {
-                    if (lastOccurence.get(text[j + i]) == -1) {
-                        i += j;
-                        break;
-                    } else if (lastOccurence.get(text[j + i]) > j) {
-                        i += m - j - 1;
-                        break;
-                    } else {
-                        i += m - lastOccurence.get(text[j + i]) - 2;
-                        break;
-                    }
-                }
+        int i = m-1;                                     // an index into the text
+        int k = m-1;                                     // an index into the pattern
+        while (i < n) {
+            if (text[i] == pattern[k]) {                   // a matching character
+                if (k == 0) return i;                        // entire pattern has been found
+                i--;                                         // otherwise, examine previous
+                k--;                                         // characters of text/pattern
+            } else {
+                i += m - Math.min(k, 1 + lastOccurrence.get(text[i])); // case analysis for jump step
+                k = m - 1;                                   // restart at end of pattern
             }
         }
         return -1;
