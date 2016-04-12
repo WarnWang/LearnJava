@@ -1,7 +1,9 @@
 package LeetCode;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by warn on 27/3/2016.

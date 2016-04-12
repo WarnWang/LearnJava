@@ -1,6 +1,7 @@
 package LeetCode;
 
 import java.util.*;
+import java.util.zip.CheckedInputStream;
 
 /**
  * Created by warn on 28/3/2016.
@@ -104,5 +105,69 @@ public class TagMath {
 
         //else 3
         return 3;
+    }
+
+    /**
+     * mplement a basic calculator to evaluate a simple expression string.
+     * The expression string may contain open ( and closing parentheses ), the plus + or minus sign -, non-negative
+     * integers and empty spaces .
+     * You may assume that the given expression is always valid.
+     *
+     * @param s the expression string
+     * @return the result of give string.
+     */
+    public int calculate(String s) {
+        if (s == null || s.length() == 0) return 0;
+        char[] sChars = s.toCharArray();
+        Stack<Integer> numbers = new Stack<>();
+        Stack<Character> operators = new Stack<>();
+
+        int sLen = s.length();
+        for (int i = 0; i < sLen; i++) {
+            if (Character.isDigit(sChars[i])) {
+                int tempInt = sChars[i] - '0';
+                for (int j = i + 1; j < sLen; j++) {
+                    if (!Character.isDigit(sChars[j])) break;
+                    tempInt = 10 * tempInt + sChars[j] - '0';
+                    i = j;
+                }
+                while (!operators.isEmpty() && !numbers.isEmpty()) {
+                    char peekOperators = operators.pop();
+                    if (peekOperators == '(') {
+                        operators.push(peekOperators);
+                        break;
+                    } else {
+                        int anotherInteger = numbers.pop();
+                        switch (peekOperators) {
+                            case '+':
+                                tempInt += anotherInteger;
+                                break;
+                            default:
+                                tempInt -= anotherInteger;
+                                tempInt *= -1;
+                        }
+                    }
+                }
+                numbers.push(tempInt);
+            } else if (sChars[i] != ' '){
+                if (sChars[i] == ')') {
+                    operators.pop();
+                    if (operators.isEmpty()) continue;
+                    int tempInt = numbers.pop();
+                    char tempOperator = operators.pop();
+                    if (tempOperator == '(') {
+                        operators.push(tempOperator);
+                    } else {
+                        int anotherInteger = numbers.pop();
+                        if (tempOperator == '-') {
+                            tempInt -= anotherInteger;
+                            tempInt *= -1;
+                        } else tempInt += anotherInteger;
+                    }
+                    numbers.push(tempInt);
+                } else operators.push(sChars[i]);
+            }
+        }
+        return numbers.peek();
     }
 }
