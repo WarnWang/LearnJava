@@ -16,7 +16,7 @@ public class LeetCodeEasyPuzzle {
 //        test.rotate2(new int[]{1, 2, 3}, 2);
 //        test.addBinary("11", "1");
 //        System.out.println(test.isPowerOfThree(243));
-        Array test = new Array();
+        TagArray test = new TagArray();
         System.out.println(test.lengthOfLIS(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
     }
 

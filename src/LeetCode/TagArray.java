@@ -9,7 +9,7 @@ import java.util.Stack;
  * Created by warn on 16/3/2016.
  * Used to store information about array problems
  */
-public class Array {
+public class TagArray {
     /**
      * Given an array of integers, return indices of the two numbers such that they add up to a specific target.
      * You may assume that each input would have exactly one solution.
@@ -333,5 +333,36 @@ public class Array {
             else formerTwo[0] = nums[j];
         }
         return false;
+    }
+
+    /**
+     * A peak element is an element that is greater than its neighbors.
+     * Given an input array where num[i] ≠ num[i+1], find a peak element and return its index.
+     * The array may contain multiple peaks, in that case return the index to any one of the peaks is fine.
+     * You may imagine that num[-1] = num[n] = -∞.
+     * For example, in array [1, 2, 3, 1], 3 is a peak element and your function should return the index number 2.
+     *
+     * @param nums an element array
+     * @return the peak index
+     */
+    public int findPeakElement(int[] nums) {
+        if (nums == null) return 0;
+        int numsLen = nums.length;
+        if (numsLen <= 1) return 0;
+        return findPeakElement(nums, 0, nums.length - 1);
+    }
+
+    private int findPeakElement(int[] nums, int startIndex, int endIndex){
+        int mid = (startIndex + endIndex) / 2;
+        if (startIndex > endIndex) return startIndex;
+        else if (nums[startIndex] > nums[startIndex + 1]) return startIndex;
+        else if (nums[endIndex] > nums[endIndex - 1]) return endIndex;
+        else if (endIndex - startIndex < 2) {
+            if (nums[startIndex] > nums[endIndex]) return startIndex;
+            else return endIndex;
+        }
+        else if (nums[mid] > nums[mid - 1] && nums[mid] > nums[mid + 1]) return mid;
+        else if (nums[mid] > nums[mid - 1]) return findPeakElement(nums, mid + 1, endIndex);
+        else return findPeakElement(nums, startIndex, mid - 1);
     }
 }

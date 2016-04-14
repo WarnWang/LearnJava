@@ -21,7 +21,7 @@ public class LeetMedium {
 //        System.out.println(test.canFinishBFS(4, courseInfo));
 //        System.out.println(test.findMin(new int[]{10, 20, 40, 60, 0, 1, 4, 6}));
 //        System.out.println(test.minPatches2(new int[]{1, 2, 9}, 11));
-//        Array test = new Array();
+//        TagArray test = new TagArray();
 //        System.out.println(test.fourSum(new int[]{-2, 0, 0, 3, 3, -1}, 5));
 //        DynamicProgramming test = new DynamicProgramming();
 //        System.out.println(test.hammingWeight(Integer.MIN_VALUE));
