@@ -352,7 +352,7 @@ public class TagArray {
         return findPeakElement(nums, 0, nums.length - 1);
     }
 
-    private int findPeakElement(int[] nums, int startIndex, int endIndex){
+    private int findPeakElement(int[] nums, int startIndex, int endIndex) {
         int mid = (startIndex + endIndex) / 2;
         if (startIndex > endIndex) return startIndex;
         else if (nums[startIndex] > nums[startIndex + 1]) return startIndex;
@@ -360,9 +360,49 @@ public class TagArray {
         else if (endIndex - startIndex < 2) {
             if (nums[startIndex] > nums[endIndex]) return startIndex;
             else return endIndex;
-        }
-        else if (nums[mid] > nums[mid - 1] && nums[mid] > nums[mid + 1]) return mid;
+        } else if (nums[mid] > nums[mid - 1] && nums[mid] > nums[mid + 1]) return mid;
         else if (nums[mid] > nums[mid - 1]) return findPeakElement(nums, mid + 1, endIndex);
         else return findPeakElement(nums, startIndex, mid - 1);
+    }
+
+    /**
+     * Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of
+     * numbers.
+     * If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending
+     * order).
+     * The replacement must be in-place, do not allocate extra memory.
+     * Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand
+     * column.
+     * 1,2,3 → 1,3,2
+     * 3,2,1 → 1,2,3
+     * 1,1,5 → 1,5,1
+     *
+     * @param nums array need to be rearranged
+     */
+    public void nextPermutation(int[] nums) {
+        if (nums == null || nums.length <= 1) return;
+        for (int i = nums.length - 1; i >= 1; i--) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (nums[i] > nums[j]) {
+                    int nearestIndex = i;
+                    int nearestValue = nums[i] - nums[j];
+                    for (int k = j + 1; k <= i; k++) {
+                        if (nums[k] > nums[j] && nums[k] - nums[j] < nearestValue) {
+                            nearestIndex = k;
+                            nearestValue = nums[k] - nums[j];
+                        }
+                    }
+                    nums[nearestIndex] = nums[j];
+                    nums[j] = nums[nearestIndex] + nearestValue;
+                    Arrays.sort(nums, j + 1, nums.length);
+                    return;
+                } else if (nums[i] < nums[j]) {
+                    int temp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j] = temp;
+                }
+            }
+        }
+        Arrays.sort(nums);
     }
 }
