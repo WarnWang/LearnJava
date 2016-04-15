@@ -381,28 +381,27 @@ public class TagArray {
      */
     public void nextPermutation(int[] nums) {
         if (nums == null || nums.length <= 1) return;
-        for (int i = nums.length - 1; i >= 1; i--) {
-            for (int j = i - 1; j >= 0; j--) {
-                if (nums[i] > nums[j]) {
-                    int nearestIndex = i;
-                    int nearestValue = nums[i] - nums[j];
-                    for (int k = j + 1; k <= i; k++) {
-                        if (nums[k] > nums[j] && nums[k] - nums[j] < nearestValue) {
-                            nearestIndex = k;
-                            nearestValue = nums[k] - nums[j];
-                        }
+        int endIndex = nums.length - 1;
+        for (int j = endIndex - 1; j >= 0; j--) {
+            if (nums[endIndex] > nums[j]) {
+                int nearestIndex = endIndex;
+                int nearestValue = nums[endIndex] - nums[j];
+                for (int k = j + 1; k <= endIndex; k++) {
+                    if (nums[k] > nums[j] && nums[k] - nums[j] <= nearestValue && k < nearestIndex) {
+                        nearestIndex = k;
+                        nearestValue = nums[k] - nums[j];
                     }
-                    nums[nearestIndex] = nums[j];
-                    nums[j] = nums[nearestIndex] + nearestValue;
-                    Arrays.sort(nums, j + 1, nums.length);
-                    return;
-                } else if (nums[i] < nums[j]) {
+                }
+                nums[nearestIndex] = nums[j];
+                nums[j] = nums[nearestIndex] + nearestValue;
+                break;
+            } else {
+                for (int i = j + 1; i <= endIndex; i++) {
                     int temp = nums[i];
                     nums[i] = nums[j];
                     nums[j] = temp;
                 }
             }
         }
-        Arrays.sort(nums);
     }
 }
