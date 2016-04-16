@@ -1,12 +1,10 @@
 package LeetCode;
 
-import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
-
 import java.util.*;
 
 /**
  * Created by warn on 16/4/2016.
- *
+ * <p>
  * Use to store puzzles with tag Divide and Conquer
  */
 public class TagDivideAndConquer {
@@ -15,7 +13,7 @@ public class TagDivideAndConquer {
      * (not unary) +, -, or * between the digits so they evaluate to the target value.
      * -1 means +, -2 means -, -3 means bfs version
      *
-     * @param num a string that contains only digits 0-9
+     * @param num    a string that contains only digits 0-9
      * @param target target value
      * @return all possibilities to add binary operators between the digits so they evaluate to the target value
      */
@@ -27,16 +25,16 @@ public class TagDivideAndConquer {
         char[] numArray = num.toCharArray();
         int numLength = numArray.length;
         exploreQueue.add(new ArrayList<>(Collections.singletonList(0)));
-        exploreQueue.add(new ArrayList<>(Arrays.asList(new Integer[] {0, -1})));
-        exploreQueue.add(new ArrayList<>(Arrays.asList(new Integer[] {0, -2})));
-        exploreQueue.add(new ArrayList<>(Arrays.asList(new Integer[] {0, -3})));
+        exploreQueue.add(new ArrayList<>(Arrays.asList(new Integer[]{0, -1})));
+        exploreQueue.add(new ArrayList<>(Arrays.asList(new Integer[]{0, -2})));
+        exploreQueue.add(new ArrayList<>(Arrays.asList(new Integer[]{0, -3})));
         while (!exploreQueue.isEmpty()) {
             ArrayList<Integer> frontier = exploreQueue.removeLast();
             int lastCharIndex = frontier.get(frontier.size() - 1);
             if (lastCharIndex < 0) lastCharIndex = frontier.get(frontier.size() - 2);
-            if (lastCharIndex == numLength - 1){
+            if (lastCharIndex == numLength - 1) {
                 StringBuilder possibleEquation = new StringBuilder();
-                for (int i: frontier) {
+                for (int i : frontier) {
                     switch (i) {
                         case -1:
                             possibleEquation.append('+');
@@ -57,11 +55,12 @@ public class TagDivideAndConquer {
                 try {
                     if (calculateEquation(equation) == target)
                         possibleEquations.add(equation);
-                } catch (Exception ignored){}
+                } catch (Exception ignored) {
+                }
             } else {
-                int[] nextOperator = (lastCharIndex + 2 == numLength) ? new int[] {lastCharIndex + 1} :
-                        new int[] {lastCharIndex + 1, -1, -2, -3};
-                for (int i: nextOperator){
+                int[] nextOperator = (lastCharIndex + 2 == numLength) ? new int[]{lastCharIndex + 1} :
+                        new int[]{lastCharIndex + 1, -1, -2, -3};
+                for (int i : nextOperator) {
                     ArrayList<Integer> nextFrontier = new ArrayList<>(frontier);
                     if (i != lastCharIndex + 1) nextFrontier.add(lastCharIndex + 1);
                     nextFrontier.add(i);
@@ -78,7 +77,7 @@ public class TagDivideAndConquer {
         boolean isMultiple = false;
         int tempInteger;
         StringBuilder tempInt = new StringBuilder();
-        for (int i = 0; i < equation.length(); i++){
+        for (int i = 0; i < equation.length(); i++) {
             char c = equation.charAt(i);
             if (Character.isDigit(c)) {
                 tempInt.append(c);
@@ -90,7 +89,7 @@ public class TagDivideAndConquer {
                     tempInteger = lastInteger * Integer.parseInt(tempInt.toString());
                     isMultiple = false;
                 } else tempInteger = Integer.parseInt(tempInt.toString());
-                switch (c){
+                switch (c) {
                     case '+':
                     case '-':
                         operators.addLast(c);
@@ -109,7 +108,7 @@ public class TagDivideAndConquer {
             tempInteger = lastInteger * Integer.parseInt(tempInt.toString());
         } else tempInteger = Integer.parseInt(tempInt.toString());
         parameters.addLast(tempInteger);
-        while (!operators.isEmpty()){
+        while (!operators.isEmpty()) {
             int first = parameters.remove();
             int second = parameters.remove();
             char operator = operators.remove();
@@ -118,5 +117,40 @@ public class TagDivideAndConquer {
             parameters.addFirst(first);
         }
         return parameters.remove();
+    }
+
+    public List<String> addOperatorsFromDiscuss(String num, int target) {
+        List<String> possibleEquations = new ArrayList<>();
+        if (num == null || num.length() == 0) return possibleEquations;
+        char[] digits = num.toCharArray();
+        char[] path = new char[num.length() * 2 - 1];
+        long n = 0;
+        for (int i = 0; i < digits.length; i++) {
+            path[i] = digits[i];
+            n = 10 * n + digits[i] - '0';
+            addOperatorsDFS(digits, path, i + 1, i + 1, 0, n, target, possibleEquations);
+            if (n == 0) break;
+        }
+        return possibleEquations;
+    }
+
+    private void addOperatorsDFS(char[] digits, char[] path, int pos, int len, long left, long middle, int target,
+                                 List<String> possibleEquations) {
+        if (pos == digits.length) {
+            if (left + middle == target) possibleEquations.add(new String(path, 0, len));
+        }
+        int j = len + 1;
+        long n = 0;
+        for (int i = pos; i < digits.length; i++) {
+            n = 10 * n + digits[i] - '0';
+            path[j++] = digits[i];
+            path[len] = '+';
+            addOperatorsDFS(digits, path, i + 1, j, left + middle, n, target, possibleEquations);
+            path[len] = '-';
+            addOperatorsDFS(digits, path, i + 1, j, left + middle, -n, target, possibleEquations);
+            path[len] = '*';
+            addOperatorsDFS(digits, path, i + 1, j, left, middle * n, target, possibleEquations);
+            if (digits[pos] == '0') break;
+        }
     }
 }
