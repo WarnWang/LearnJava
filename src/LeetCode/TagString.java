@@ -127,6 +127,7 @@ public class TagString {
      * The expression string contains only non-negative integers, +, -, *, / operators and empty spaces . The integer
      * division should truncate toward zero.
      * You may assume that the given expression is always valid.
+     * https://leetcode.com/problems/basic-calculator-ii/
      *
      * @param s a simple expression string
      * @return the answer of the experssion
@@ -135,30 +136,33 @@ public class TagString {
         s = s.replaceAll("\\s+", "");
         char[] expression = s.toCharArray();
         int n = 0;
-        for (int i = 0; i < expression.length; i++) {
-            char c = expression[i];
+        char lastOperator = '+';
+        int left = 0, right = 0;
+        for (char c : expression) {
             if (Character.isDigit(c)) n = n * 10 + c - '0';
-            else {
-                return calculate(0, n, expression, i + 1, c);
+            else if (c != ' ') {
+                switch (lastOperator) {
+                    case '+':
+                        left += right;
+                        right = n;
+                        break;
+                    case '-':
+                        left += right;
+                        right = -n;
+                        break;
+                    case '*':
+                        right *= n;
+                        break;
+                    case '/':
+                        right /= n;
+                }
+                lastOperator = c;
+                n = 0;
             }
         }
-        return n;
-    }
-
-    private int calculate(int left, int right, char[] expression, int pos, char operator) {
-        if (pos == expression.length) return left + right;
-        int n = 0;
-        for (int i = pos; i < expression.length; i++) {
-            char c = expression[i];
-            if (Character.isDigit(c)) n = 10 * n + c - '0';
-            else if (operator == '+') return calculate(left + right, n, expression, i + 1, c);
-            else if (operator == '-') return calculate(left + right, -n, expression, i + 1, c);
-            else if (operator == '*') return calculate(left, right * n, expression, i + 1, c);
-            else if (operator == '/') return calculate(left, right / n, expression, i + 1, c);
-        }
-        if (operator == '+') return left + right + n;
-        else if (operator == '-') return left + right - n;
-        else if (operator == '*') return left + right * n;
+        if (lastOperator == '+') return left + right + n;
+        else if (lastOperator == '-') return left + right - n;
+        else if (lastOperator == '*') return left + right * n;
         else return left + right / n;
     }
 }
