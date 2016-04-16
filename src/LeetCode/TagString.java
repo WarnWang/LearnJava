@@ -1,9 +1,7 @@
 package LeetCode;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * Created by warn on 27/3/2016.
@@ -91,7 +89,7 @@ public class TagString {
      * Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
      *
      * @param haystack a string
-     * @param needle target string
+     * @param needle   target string
      * @return the index of first occurrence of needle in haystack
      */
     public int strStr(String haystack, String needle) {
@@ -103,14 +101,14 @@ public class TagString {
         HashMap<Character, Integer> lastOccurrence = new HashMap<>();
         char[] haystackCharArray = haystack.toCharArray();
         char[] needleCharArray = needle.toCharArray();
-        for (char c: haystackCharArray) lastOccurrence.put(c, -1);
+        for (char c : haystackCharArray) lastOccurrence.put(c, -1);
         for (int i = 0; i < lenNeedle; i++) {
             if (!lastOccurrence.containsKey(needleCharArray[i])) return -1;
-            lastOccurrence.put(needleCharArray[i] , i);
+            lastOccurrence.put(needleCharArray[i], i);
         }
 
-        int i = lenNeedle-1;                                     // an index into the text
-        int k = lenNeedle-1;                                     // an index into the pattern
+        int i = lenNeedle - 1;                                     // an index into the text
+        int k = lenNeedle - 1;                                     // an index into the pattern
         while (i < lenHaystack) {
             if (haystackCharArray[i] == needleCharArray[k]) {                   // a matching character
                 if (k == 0) return i;                        // entire pattern has been found
@@ -122,5 +120,45 @@ public class TagString {
             }
         }
         return -1;
+    }
+
+    /**
+     * Implement a basic calculator to evaluate a simple expression string.
+     * The expression string contains only non-negative integers, +, -, *, / operators and empty spaces . The integer
+     * division should truncate toward zero.
+     * You may assume that the given expression is always valid.
+     *
+     * @param s a simple expression string
+     * @return the answer of the experssion
+     */
+    public int calculate(String s) {
+        s = s.replaceAll("\\s+", "");
+        char[] expression = s.toCharArray();
+        int n = 0;
+        for (int i = 0; i < expression.length; i++) {
+            char c = expression[i];
+            if (Character.isDigit(c)) n = n * 10 + c - '0';
+            else {
+                return calculate(0, n, expression, i + 1, c);
+            }
+        }
+        return n;
+    }
+
+    private int calculate(int left, int right, char[] expression, int pos, char operator) {
+        if (pos == expression.length) return left + right;
+        int n = 0;
+        for (int i = pos; i < expression.length; i++) {
+            char c = expression[i];
+            if (Character.isDigit(c)) n = 10 * n + c - '0';
+            else if (operator == '+') return calculate(left + right, n, expression, i + 1, c);
+            else if (operator == '-') return calculate(left + right, -n, expression, i + 1, c);
+            else if (operator == '*') return calculate(left, right * n, expression, i + 1, c);
+            else if (operator == '/') return calculate(left, right / n, expression, i + 1, c);
+        }
+        if (operator == '+') return left + right + n;
+        else if (operator == '-') return left + right - n;
+        else if (operator == '*') return left + right * n;
+        else return left + right / n;
     }
 }
