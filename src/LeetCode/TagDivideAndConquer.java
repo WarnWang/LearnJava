@@ -65,8 +65,8 @@ public class TagDivideAndConquer {
     }
 
     private int calculateEquation(String equation){
-        Stack<Integer> parameters = new Stack<>();
-        Stack<Character> operators = new Stack<>();
+        ArrayDeque<Integer> parameters = new ArrayDeque<>();
+        ArrayDeque<Character> operators = new ArrayDeque<>();
         boolean isMultiple = false;
         int tempInteger = 0;
         for (int i = 0; i < equation.length(); i++){
@@ -82,34 +82,28 @@ public class TagDivideAndConquer {
                 switch (c){
                     case '+':
                     case '-':
-                        operators.push(c);
-                        parameters.push(tempInteger);
-                        tempInteger = 0;
+                        operators.addLast(c);
                         break;
                     case '*':
                         isMultiple = true;
-                        parameters.push(tempInteger);
                 }
+                parameters.addLast(tempInteger);
+                tempInteger = 0;
             }
-            parameters.push(tempInteger);
         }
-        System.out.println(parameters.toString());
-        System.out.println(operators.toString());
         if (isMultiple) {
-            int lastInteger = parameters.pop();
+            int lastInteger = parameters.removeLast();
             tempInteger *= lastInteger;
         }
-        parameters.push(tempInteger);
+        parameters.addLast(tempInteger);
         while (!operators.isEmpty()){
-            int second = parameters.pop();
-            int first = parameters.pop();
-            char operator = operators.pop();
+            int first = parameters.remove();
+            int second = parameters.remove();
+            char operator = operators.remove();
             if (operator == '+') first += second;
             else first -= second;
-            parameters.push(first);
+            parameters.addFirst(first);
         }
-        int result = parameters.pop();
-        System.out.println(equation + '=' + result);
-        return result;
+        return parameters.remove();
     }
 }
