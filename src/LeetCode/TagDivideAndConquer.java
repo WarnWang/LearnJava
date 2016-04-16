@@ -1,5 +1,7 @@
 package LeetCode;
 
+import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
+
 import java.util.*;
 
 /**
@@ -48,8 +50,10 @@ public class TagDivideAndConquer {
                             possibleEquation.append(numArray[i]);
                     }
                 }
-                if (calculateEquation(possibleEquation.toString()) == target)
-                    possibleEquations.add(possibleEquation.toString());
+                try {
+                    if (calculateEquation(possibleEquation.toString()) == target)
+                        possibleEquations.add(possibleEquation.toString());
+                } catch (Exception ignored){}
             } else {
                 int[] nextOperator = (lastCharIndex + 2 == numLength) ? new int[] {lastCharIndex + 1} :
                         new int[] {lastCharIndex + 1, -1, -2, -3};
@@ -64,21 +68,24 @@ public class TagDivideAndConquer {
         return possibleEquations;
     }
 
-    private int calculateEquation(String equation){
+    private int calculateEquation(String equation) throws Exception {
         ArrayDeque<Integer> parameters = new ArrayDeque<>();
         ArrayDeque<Character> operators = new ArrayDeque<>();
         boolean isMultiple = false;
-        int tempInteger = 0;
+        int tempInteger;
+        StringBuilder tempInt = new StringBuilder();
         for (int i = 0; i < equation.length(); i++){
             char c = equation.charAt(i);
             if (Character.isDigit(c)) {
-                tempInteger = 10 * tempInteger + c - '0';
+                tempInt.append(c);
             } else {
+                if (tempInt.length() > 1 && tempInt.toString().charAt(0) == '0')
+                    throw new Exception("Wrong Value type");
                 if (isMultiple) {
                     int lastInteger = parameters.pop();
-                    tempInteger *= lastInteger;
+                    tempInteger = lastInteger * Integer.parseInt(tempInt.toString());
                     isMultiple = false;
-                }
+                } else tempInteger = Integer.parseInt(tempInt.toString());
                 switch (c){
                     case '+':
                     case '-':
@@ -88,13 +95,15 @@ public class TagDivideAndConquer {
                         isMultiple = true;
                 }
                 parameters.addLast(tempInteger);
-                tempInteger = 0;
+                tempInt = new StringBuilder();
             }
         }
+        if (tempInt.length() > 1 && tempInt.toString().charAt(0) == '0')
+            throw new Exception("Wrong Value type");
         if (isMultiple) {
             int lastInteger = parameters.removeLast();
-            tempInteger *= lastInteger;
-        }
+            tempInteger = lastInteger * Integer.parseInt(tempInt.toString());
+        } else tempInteger = Integer.parseInt(tempInt.toString());
         parameters.addLast(tempInteger);
         while (!operators.isEmpty()){
             int first = parameters.remove();
