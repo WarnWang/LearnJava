@@ -22,6 +22,7 @@ public class TagDivideAndConquer {
     public List<String> addOperators(String num, int target) {
         if (num == null || num.length() == 0) return null;
         List<String> possibleEquations = new ArrayList<>();
+        HashSet<String> exploredEquations = new HashSet<>();
         ArrayDeque<ArrayList<Integer>> exploreQueue = new ArrayDeque<>();
         char[] numArray = num.toCharArray();
         int numLength = numArray.length;
@@ -50,9 +51,12 @@ public class TagDivideAndConquer {
                             possibleEquation.append(numArray[i]);
                     }
                 }
+                String equation = possibleEquation.toString();
+                if (exploredEquations.contains(equation)) continue;
+                exploredEquations.add(equation);
                 try {
-                    if (calculateEquation(possibleEquation.toString()) == target)
-                        possibleEquations.add(possibleEquation.toString());
+                    if (calculateEquation(equation) == target)
+                        possibleEquations.add(equation);
                 } catch (Exception ignored){}
             } else {
                 int[] nextOperator = (lastCharIndex + 2 == numLength) ? new int[] {lastCharIndex + 1} :
