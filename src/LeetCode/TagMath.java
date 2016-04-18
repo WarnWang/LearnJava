@@ -1,7 +1,6 @@
 package LeetCode;
 
 import java.util.*;
-import java.util.zip.CheckedInputStream;
 
 /**
  * Created by warn on 28/3/2016.
@@ -149,7 +148,7 @@ public class TagMath {
                     }
                 }
                 numbers.push(tempInt);
-            } else if (sChars[i] != ' '){
+            } else if (sChars[i] != ' ') {
                 if (sChars[i] == ')') {
                     operators.pop();
                     if (operators.isEmpty()) continue;
@@ -173,6 +172,7 @@ public class TagMath {
 
     /**
      * Count the number of prime numbers less than a non-negative number, n.
+     *
      * @param n a non-negative number
      * @return the number of prime numbers
      */
@@ -191,6 +191,22 @@ public class TagMath {
         }
         for (int i = sqrtN + 1; i < n - 1; i++) {
             if (!isPrime[i]) primeNum++;
+        }
+        return primeNum;
+    }
+
+    public int countPrimesOdd(int n) {
+        if (n < 3) return 0;
+        int primeNum = n / 2;
+        boolean[] isPrime = new boolean[n];
+        int sqrtN = (int) Math.sqrt(n);
+        for (int i = 3; i <= sqrtN; i += 2) {
+            if (!isPrime[i]) {
+                for (int j = i * i; j < n; j += i * 2) {
+                    primeNum -= (isPrime[j])? 0: 1;
+                    isPrime[j] = true;
+                }
+            }
         }
         return primeNum;
     }
