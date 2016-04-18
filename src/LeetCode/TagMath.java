@@ -170,4 +170,28 @@ public class TagMath {
         }
         return numbers.peek();
     }
+
+    /**
+     * Count the number of prime numbers less than a non-negative number, n.
+     * @param n a non-negative number
+     * @return the number of prime numbers
+     */
+    public int countPrimes(int n) {
+        if (n <= 2) return 0;
+        boolean[] isPrime = new boolean[n - 1];
+        int primeNum = 0;
+        int sqrtN = (int) Math.sqrt(n);
+        for (int i = 1; i <= sqrtN; i++) {
+            if (!isPrime[i]) {
+                primeNum++;
+                for (int j = 2 * i + 1; j < n - 1; j += (i + 1)) {
+                    isPrime[j] = true;
+                }
+            }
+        }
+        for (int i = sqrtN + 1; i < n - 1; i++) {
+            if (!isPrime[i]) primeNum++;
+        }
+        return primeNum;
+    }
 }
