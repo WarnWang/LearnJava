@@ -203,11 +203,42 @@ public class TagMath {
         for (int i = 3; i <= sqrtN; i += 2) {
             if (!isPrime[i]) {
                 for (int j = i * i; j < n; j += i * 2) {
-                    primeNum -= (isPrime[j])? 0: 1;
+                    primeNum -= (isPrime[j]) ? 0 : 1;
                     isPrime[j] = true;
                 }
             }
         }
         return primeNum;
+    }
+
+    /**
+     * Given a number, check whether it is a power of four
+     *
+     * @param num a number
+     * @return whether this number is power of four or not
+     */
+    public boolean isPowerOfFour(int num) {
+        if (num < 1) return false;
+        int binSLen = Integer.toBinaryString(num).length() - 1;
+        return (1 << binSLen == num) && (binSLen & 1) == 0;
+    }
+
+    public boolean isPowerOfTwo(int n) {
+        if (n < 1) return false;
+
+        // First version use binary string length
+//        int binSLen = Integer.toBinaryString(n).length() - 1;
+//        return 1 << binSLen == n;
+
+        // Second version use math.log
+        int m = (int) (Math.log(n) / Math.log(2));
+        return 1 << m == n;
+
+        // iteration version
+//        while (n > 1) {
+//            if ((n & 1) == 1) return false;
+//            n >>= 1;
+//        }
+//        return true;
     }
 }
