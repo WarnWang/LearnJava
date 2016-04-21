@@ -404,4 +404,68 @@ public class TagArray {
             }
         }
     }
+
+    /**
+     * Given a 2D board and a word, find if the word exists in the grid.
+     * <p>
+     * The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those
+     * horizontally or vertically neighboring. The same letter cell may not be used more than once.
+     * <p>
+     * For example,
+     * Given board =
+     * [
+     * ['A','B','C','E'],
+     * ['S','F','C','S'],
+     * ['A','D','E','E']
+     * ]
+     * word = "ABCCED", -> returns true,
+     * word = "SEE", -> returns true,
+     * word = "ABCB", -> returns false.
+     *
+     * @param board 2d board
+     * @param word  if the word exists in the grid
+     * @return exist or not
+     */
+    public boolean exist(char[][] board, String word) {
+        if (word == null || word.length() == 0) return true;
+        if (board == null || board.length == 0 || board[0].length == 0) return false;
+        char[] wordArray = word.toCharArray();
+        boolean[][] explored = new boolean[board.length][board[0].length];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == wordArray[0]) {
+                    explored[i][j] = true;
+                    if (exist(board, wordArray, 1, i, j, explored))
+                        return true;
+                    else explored[i][j] = false;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean exist(char[][] board, char[] word, int wordIndex, int x, int y, boolean[][] explored) {
+        if (wordIndex == word.length) return true;
+        if (x > 0 && !explored[x-1][y] && board[x - 1][y] == word[wordIndex]){
+            explored[x - 1][y] = true;
+            if (exist(board, word, wordIndex + 1, x - 1, y, explored)) return true;
+            explored[x - 1][y] = false;
+        }
+        if (x < board.length - 1 && !explored[x+1][y] && board[x + 1][y] == word[wordIndex]){
+            explored[x + 1][y] = true;
+            if (exist(board, word, wordIndex + 1, x + 1, y, explored)) return true;
+            explored[x + 1][y] = false;
+        }
+        if (y < board[0].length - 1 && !explored[x][y + 1] && board[x][y + 1] == word[wordIndex]){
+            explored[x][y + 1] = true;
+            if (exist(board, word, wordIndex + 1, x, y + 1, explored)) return true;
+            explored[x][y + 1] = false;
+        }
+        if (y > 0 && !explored[x][y - 1] && board[x][y - 1] == word[wordIndex]){
+            explored[x][y - 1] = true;
+            if (exist(board, word, wordIndex + 1, x, y - 1, explored)) return true;
+            explored[x][y - 1] = false;
+        }
+        return false;
+    }
 }
