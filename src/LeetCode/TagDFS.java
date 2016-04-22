@@ -243,7 +243,7 @@ public class TagDFS {
      * take to finish all courses.
      * There may be multiple correct orders, you just need to return one of them. If it is impossible to finish all
      * courses, return an empty array.
-     *
+     * <p>
      * For example:
      * 2, [[1,0]]
      * There are a total of 2 courses to take. To take course 1 you should have finished course 0. So the correct
@@ -252,16 +252,16 @@ public class TagDFS {
      * There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both
      * courses 1 and 2 should be taken after you finished course 0. So one correct course order is [0,1,2,3]. Another
      * correct ordering is[0,2,1,3].
-     *
+     * <p>
      * Note:
      * The input prerequisites is a graph represented by a list of edges, not adjacency matrices.
      *
-     * @param numCourses Course number
+     * @param numCourses    Course number
      * @param prerequisites the prerequisite course of one course
      * @return the course taken order
      */
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        if (numCourses == 0) return new int[] {};
+        if (numCourses == 0) return new int[]{};
         int[] courseSchedule = new int[numCourses];
         if (prerequisites == null || prerequisites.length == 0) {
             for (int i = 0; i < numCourses; i++) {
@@ -272,9 +272,11 @@ public class TagDFS {
 
         // key is the prerequisites course, and the target is
         boolean[] isPrerequisite = new boolean[numCourses];
+        boolean[] hasPrerequisite = new boolean[numCourses];
         HashMap<Integer, ArrayList<Integer>> prerequisiteMap = new HashMap<>();
-        for (int[] prerequisite: prerequisites) {
+        for (int[] prerequisite : prerequisites) {
             isPrerequisite[prerequisite[0]] = true;
+            hasPrerequisite[prerequisite[1]] = true;
             if (prerequisiteMap.containsKey(prerequisite[1])) prerequisiteMap.get(prerequisite[1]).add(prerequisite[0]);
             else prerequisiteMap.put(prerequisite[1], new ArrayList<>(Collections.singletonList(prerequisite[0])));
         }
@@ -283,7 +285,7 @@ public class TagDFS {
 
         int courseIndex = 0;
         for (int i = 0; i < numCourses; i++) {
-            if (!prerequisiteMap.containsKey(i)) {
+            if (!hasPrerequisite[i]) {
                 courseSchedule[courseIndex++] = i;
                 isPrerequisite[i] = false;
             }
@@ -291,9 +293,9 @@ public class TagDFS {
 
         while (!prerequisiteMap.isEmpty()) {
             ArrayList<Integer> courseTaken = new ArrayList<>();
-            for (int course: prerequisiteMap.keySet()) {
+            for (int course : prerequisiteMap.keySet()) {
                 boolean canTake = true;
-                for (int prerequisite: prerequisiteMap.get(course)) {
+                for (int prerequisite : prerequisiteMap.get(course)) {
                     if (isPrerequisite[prerequisite]) {
                         canTake = false;
                         break;
@@ -306,11 +308,78 @@ public class TagDFS {
                 }
             }
             if (courseIndex == numCourses) break;
-            if (courseTaken.isEmpty()) return new int[] {};
+            if (courseTaken.isEmpty()) return new int[]{};
             else {
-                for (int course: courseTaken) prerequisiteMap.remove(course);
+                for (int course : courseTaken) prerequisiteMap.remove(course);
             }
         }
         return courseSchedule;
+    }
+
+    public int[] findOrderImprove(int numCourses, int[][] prerequisites) {
+        if (numCourses == 0) return new int[]{};
+        int[] courseSchedule = new int[numCourses];
+        if (prerequisites == null || prerequisites.length == 0) {
+            for (int i = 0; i < numCourses; i++) {
+                courseSchedule[i] = i;
+            }
+            return courseSchedule;
+        }
+
+        boolean[] hasPrerequisites = new boolean[numCourses];
+        boolean[] isTaken = new boolean[numCourses];
+        HashMap<Integer, ArrayList<Integer>> prerequisiteMap = new HashMap<>();
+        HashMap<Integer, ArrayList<Integer>> courseMap = new HashMap<>();
+
+        for (int[] coursePair: prerequisites){
+            hasPrerequisites[coursePair[0]] = true;
+            if (prerequisiteMap.containsKey(coursePair[1])) prerequisiteMap.get(coursePair[1]).add(coursePair[0]);
+            else prerequisiteMap.put(coursePair[1], new ArrayList<>(Collections.singletonList(coursePair[0])));
+
+            if (courseMap.containsKey(coursePair[0])) courseMap.get(coursePair[0]).add(coursePair[1]);
+            else courseMap.put(coursePair[0], new ArrayList<>(Collections.singletonList(coursePair[1])));
+        }
+
+        int courseIndex = 0;
+        Stack<Integer> courseToExplore = new Stack<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (!hasPrerequisites[i]) {
+                courseSchedule[courseIndex++] = i;
+                isTaken[i] = true;
+                courseToExplore.push(i);
+            }
+        }
+
+        while (!courseToExplore.isEmpty()) {
+            int frontier = courseToExplore.pop();
+            if (isTaken[frontier]){
+                if (prerequisiteMap.containsKey(frontier))
+                    courseToExplore.addAll(prerequisiteMap.get(frontier));
+            }
+            else {
+                if (!courseMap.containsKey(frontier)){
+                    isTaken[frontier] = true;
+                    courseSchedule[courseIndex++] = frontier;
+                    if (prerequisiteMap.containsKey(frontier)) courseToExplore.addAll(prerequisiteMap.get(frontier));
+                } else {
+                    boolean canTake = true;
+                    for (int i: courseMap.get(frontier)) {
+                        if (!isTaken[i]) {
+                            canTake = false;
+                            break;
+                        }
+                    }
+                    if (canTake) {
+                        isTaken[frontier] = true;
+                        courseSchedule[courseIndex++] = frontier;
+                        if (prerequisiteMap.containsKey(frontier))
+                            courseToExplore.addAll(prerequisiteMap.get(frontier));
+                    }
+                }
+            }
+            if (courseIndex == numCourses) return courseSchedule;
+        }
+        if (courseIndex == numCourses) return courseSchedule;
+        else return new int[] {};
     }
 }
