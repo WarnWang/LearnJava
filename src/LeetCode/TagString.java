@@ -209,4 +209,15 @@ public class TagString {
 //        return new String(chars);
         return String.valueOf(chars);
     }
+
+    public String reverseString(String s) {
+        if (s == null || s.length() < 2) return s;
+        char[] sCharArray = s.toCharArray();
+        for (int i = 0, j = sCharArray.length - 1; i < j; i++, j--){
+            char tmp = s.charAt(i);
+            sCharArray[i] = s.charAt(j);
+            sCharArray[j] = tmp;
+        }
+        return new String(sCharArray);
+    }
 }
