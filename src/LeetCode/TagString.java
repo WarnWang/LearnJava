@@ -2,6 +2,7 @@ package LeetCode;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by warn on 27/3/2016.
@@ -164,5 +165,48 @@ public class TagString {
         else if (lastOperator == '-') return left + right - n;
         else if (lastOperator == '*') return left + right * n;
         else return left + right / n;
+    }
+
+    /**
+     * Write a function that takes a string as input and reverse only the vowels of a string.
+     * <p>
+     * Example 1:
+     * Given s = "hello", return "holle".
+     * <p>
+     * Example 2:
+     * Given s = "leetcode", return "leotcede".
+     *
+     * @param s a string
+     * @return the reverse vowel version
+     */
+    public String reverseVowels(String s) {
+        if (s == null || s.length() < 2) return s;
+        char[] chars = s.toCharArray();
+        int i = 0, j = chars.length - 1;
+        HashSet<Character> vowel = new HashSet<>();
+        boolean[] isVowel = new boolean[26];
+        isVowel[0] = true;
+        isVowel['e' - 'a'] = true;
+        isVowel['i' - 'a'] = true;
+        isVowel['o' - 'a'] = true;
+        isVowel['u' - 'a'] = true;
+        while (i < j) {
+            char iC = chars[i];
+            char jC = chars[j];
+            boolean iIsVowel = Character.isAlphabetic(iC) && ((iC < 'a' && isVowel[iC - 'A'])
+                    || (iC >= 'a' && isVowel[iC - 'a']));
+            boolean jIsVowel = Character.isAlphabetic(jC) && ((jC < 'a' && isVowel[jC - 'A'])
+                    || (jC >= 'a' && isVowel[jC - 'a']));
+            if (iIsVowel && jIsVowel) {
+                char tmp = chars[i];
+                chars[i++] = chars[j];
+                chars[j--] = tmp;
+            } else {
+                if (!iIsVowel) i++;
+                if (!jIsVowel) j--;
+            }
+        }
+//        return new String(chars);
+        return String.valueOf(chars);
     }
 }
