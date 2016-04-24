@@ -1,8 +1,6 @@
 package LeetCode;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Created by warn on 27/3/2016.
@@ -219,5 +217,97 @@ public class TagString {
             sCharArray[j] = tmp;
         }
         return new String(sCharArray);
+    }
+
+    /**
+     * Given a digit string, return all possible letter combinations that the number could represent.
+     * @param digits a digit string
+     * @return all possible letter combinations the number could represent
+     */
+    public List<String> letterCombinations(String digits) {
+        ArrayList<String> combinations = new ArrayList<>();
+        if (digits == null || digits.length() == 0) return combinations;
+        char[] digitArray = digits.toCharArray();
+//        for (char c: digitArray) if (!Character.isDigit(c) || c - '0' < 2) return combinations;
+        letterCombinations(digitArray, new char[digitArray.length], 0, combinations);
+        return combinations;
+    }
+
+    private void letterCombinations(char[] digitArray, char[] tempString, int index,
+                                    ArrayList<String> combinations) {
+        if (index == digitArray.length) combinations.add(new String(tempString));
+        else {
+            char c = digitArray[index];
+            switch (c){
+                case '2':
+                    tempString[index] = 'a';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'b';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'c';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    break;
+                case '3':
+                    tempString[index] = 'd';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'e';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'f';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    break;
+                case '4':
+                    tempString[index] = 'g';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'h';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'i';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    break;
+                case '5':
+                    tempString[index] = 'j';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'k';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'l';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    break;
+                case '6':
+                    tempString[index] = 'm';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'n';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'o';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    break;
+                case '7':
+                    tempString[index] = 'p';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'q';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'r';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 's';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    break;
+                case '8':
+                    tempString[index] = 't';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'u';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'v';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    break;
+                case '9':
+                    tempString[index] = 'w';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'x';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'y';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    tempString[index] = 'z';
+                    letterCombinations(digitArray, tempString, index + 1, combinations);
+                    break;
+            }
+        }
     }
 }
