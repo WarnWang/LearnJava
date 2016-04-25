@@ -499,4 +499,22 @@ public class TagArray {
             else nums[i] = 2;
         }
     }
+
+    public void sortColorsTwoPointer(int[] nums){
+        int target = 0;
+        for (int i = 0; i < nums.length && target < 2; i++) {
+            if (nums[i] != target){
+                for (int j = nums.length - 1; j > i; j--) {
+                    if (nums[j] == target) {
+                        nums[j] = nums[i];
+                        nums[i] = target;
+                    }
+                }
+                if (nums[i] != target){
+                    target++;
+                    i--;
+                }
+            }
+        }
+    }
 }
