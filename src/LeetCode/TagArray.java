@@ -446,26 +446,57 @@ public class TagArray {
 
     private boolean exist(char[][] board, char[] word, int wordIndex, int x, int y, boolean[][] explored) {
         if (wordIndex == word.length) return true;
-        if (x > 0 && !explored[x-1][y] && board[x - 1][y] == word[wordIndex]){
+        if (x > 0 && !explored[x - 1][y] && board[x - 1][y] == word[wordIndex]) {
             explored[x - 1][y] = true;
             if (exist(board, word, wordIndex + 1, x - 1, y, explored)) return true;
             explored[x - 1][y] = false;
         }
-        if (x < board.length - 1 && !explored[x+1][y] && board[x + 1][y] == word[wordIndex]){
+        if (x < board.length - 1 && !explored[x + 1][y] && board[x + 1][y] == word[wordIndex]) {
             explored[x + 1][y] = true;
             if (exist(board, word, wordIndex + 1, x + 1, y, explored)) return true;
             explored[x + 1][y] = false;
         }
-        if (y < board[0].length - 1 && !explored[x][y + 1] && board[x][y + 1] == word[wordIndex]){
+        if (y < board[0].length - 1 && !explored[x][y + 1] && board[x][y + 1] == word[wordIndex]) {
             explored[x][y + 1] = true;
             if (exist(board, word, wordIndex + 1, x, y + 1, explored)) return true;
             explored[x][y + 1] = false;
         }
-        if (y > 0 && !explored[x][y - 1] && board[x][y - 1] == word[wordIndex]){
+        if (y > 0 && !explored[x][y - 1] && board[x][y - 1] == word[wordIndex]) {
             explored[x][y - 1] = true;
             if (exist(board, word, wordIndex + 1, x, y - 1, explored)) return true;
             explored[x][y - 1] = false;
         }
         return false;
+    }
+
+    /**
+     * Given an array with n objects colored red, white or blue, sort them so that objects of the same color are
+     * adjacent, with the colors in the order red, white and blue.
+     * <p>
+     * Here, we will use the integers 0, 1, and 2 to represent the color red, white, and blue respectively.
+     * <p>
+     * Note:
+     * You are not suppose to use the library's sort function for this problem.
+     *
+     * @param nums n objects
+     */
+    public void sortColors(int[] nums) {
+        int nRed = 0, nWhite = 0;
+        for (int num: nums) {
+            switch (num){
+                case 0:
+                    nRed++;
+                    break;
+                case 1:
+                    nWhite++;
+                    break;
+            }
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (i < nRed) nums[i] = 0;
+            else if (i - nRed < nWhite) nums[i] = 1;
+            else nums[i] = 2;
+        }
     }
 }
