@@ -211,7 +211,7 @@ public class TagString {
     public String reverseString(String s) {
         if (s == null || s.length() < 2) return s;
         char[] sCharArray = s.toCharArray();
-        for (int i = 0, j = sCharArray.length - 1; i < j; i++, j--){
+        for (int i = 0, j = sCharArray.length - 1; i < j; i++, j--) {
             char tmp = s.charAt(i);
             sCharArray[i] = s.charAt(j);
             sCharArray[j] = tmp;
@@ -221,6 +221,7 @@ public class TagString {
 
     /**
      * Given a digit string, return all possible letter combinations that the number could represent.
+     *
      * @param digits a digit string
      * @return all possible letter combinations the number could represent
      */
@@ -238,7 +239,7 @@ public class TagString {
         if (index == digitArray.length) combinations.add(new String(tempString));
         else {
             char c = digitArray[index];
-            switch (c){
+            switch (c) {
                 case '2':
                     tempString[index] = 'a';
                     letterCombinations(digitArray, tempString, index + 1, combinations);
@@ -309,5 +310,33 @@ public class TagString {
                     break;
             }
         }
+    }
+
+    /**
+     * Related to question Excel Sheet Column Title
+     * <p>
+     * Given a column title as appear in an Excel sheet, return its corresponding column number.
+     * <p>
+     * For example:
+     * <p>
+     * A -> 1
+     * B -> 2
+     * C -> 3
+     * ...
+     * Z -> 26
+     * AA -> 27
+     * AB -> 28
+     *
+     * @param s Excel Sheet Column index
+     * @return corresponding column number
+     */
+    public int titleToNumber(String s) {
+        if (s == null || s.length() == 0) return 0;
+        int index = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            index = index * 26 + ((c >= 'a') ? (c - 'a') : (c - 'A')) + 1;
+        }
+        return index;
     }
 }

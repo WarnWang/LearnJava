@@ -19,7 +19,7 @@ public class TagSort {
     public ListNode sortList(ListNode head) {
         if (head == null) return null;
         ArrayList<Integer> integerArrayList = new ArrayList<>();
-        for (ListNode i = head; i != null; i = i.next){
+        for (ListNode i = head; i != null; i = i.next) {
             integerArrayList.add(head.val);
         }
         Collections.sort(integerArrayList);
