@@ -339,4 +339,34 @@ public class TagString {
         }
         return index;
     }
+
+    /**
+     * Given a positive integer, return its corresponding column title as appear in an Excel sheet.
+     * <p>
+     * For example:
+     * <p>
+     * 1 -> A
+     * 2 -> B
+     * 3 -> C
+     * ...
+     * 26 -> Z
+     * 27 -> AA
+     * 28 -> AB
+     *
+     * @param n the column index
+     * @return the column title
+     */
+    public String convertToTitle(int n) {
+        StringBuilder a = new StringBuilder();
+        while (n > 0) {
+            if (n % 26 == 0){
+                a.append('Z');
+                n = n / 26 - 1;
+            } else {
+                a.append((char) (n % 26 + 'A' - 1));
+                n /= 26;
+            }
+        }
+        return a.reverse().toString();
+    }
 }
