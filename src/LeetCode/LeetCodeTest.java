@@ -31,8 +31,8 @@ public class LeetCodeTest {
 //        }
         int[] num = {4, 5, 5, 6};
         TagSort test = new TagSort();
-        test.wiggleSort(num);
-        System.out.println(Arrays.toString(num));
+//        test.wiggleSort(num);
+//        System.out.println(Arrays.toString(num));
     }
 
     public static void main(String[] args) {

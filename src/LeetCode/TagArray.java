@@ -1,9 +1,6 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by warn on 16/3/2016.
@@ -482,8 +479,8 @@ public class TagArray {
      */
     public void sortColors(int[] nums) {
         int nRed = 0, nWhite = 0;
-        for (int num: nums) {
-            switch (num){
+        for (int num : nums) {
+            switch (num) {
                 case 0:
                     nRed++;
                     break;
@@ -500,21 +497,94 @@ public class TagArray {
         }
     }
 
-    public void sortColorsTwoPointer(int[] nums){
+    public void sortColorsTwoPointer(int[] nums) {
         int target = 0;
         for (int i = 0; i < nums.length && target < 2; i++) {
-            if (nums[i] != target){
+            if (nums[i] != target) {
                 for (int j = nums.length - 1; j > i; j--) {
                     if (nums[j] == target) {
                         nums[j] = nums[i];
                         nums[i] = target;
                     }
                 }
-                if (nums[i] != target){
+                if (nums[i] != target) {
                     target++;
                     i--;
                 }
             }
         }
+    }
+
+    /**
+     * Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order,
+     * not the kth distinct element.
+     * <p>
+     * For example,
+     * Given [3,2,1,5,6,4] and k = 2, return 5.
+     * <p>
+     * Note:
+     * You may assume k is always valid, 1 ≤ k ≤ array's length.
+     *
+     * @param nums an array with n elements
+     * @param k the kth largest
+     * @return the kth largest number
+     */
+    public int findKthLargest(int[] nums, int k) {
+        if (nums == null || nums.length == 0) return 0;
+        else if (nums.length == 1) return nums[0];
+        int n = nums.length;
+        Random random = new Random();
+        ArrayList<Integer> large = new ArrayList<>();
+        ArrayList<Integer> small = new ArrayList<>();
+        int equal = 0;
+        int randInt = nums[random.nextInt(n)];
+        for (int num: nums){
+            if (num > randInt) large.add(num);
+            else if (num < randInt) small.add(num);
+            else equal++;
+        }
+        int nLarge = large.size();
+        if (nLarge >= k) return findKthLargest(large, k);
+        else if (k <= nLarge + equal) return randInt;
+        else return findKthLargest(small, k - equal - nLarge);
+    }
+
+    public int findKthLargest(ArrayList<Integer> nums, int k){
+        int n = nums.size();
+        Random random = new Random();
+        ArrayList<Integer> large = new ArrayList<>();
+        ArrayList<Integer> small = new ArrayList<>();
+        int equal = 0;
+        int randInt = nums.get(random.nextInt(n));
+        for (int num: nums){
+            if (num > randInt) large.add(num);
+            else if (num < randInt) small.add(num);
+            else equal++;
+        }
+        int nLarge = large.size();
+        if (nLarge >= k) return findKthLargest(large, k);
+        else if (k <= nLarge + equal) return randInt;
+        else return findKthLargest(small, k - equal - nLarge);
+    }
+
+    public int findKthLargestArrayOnly(int[] nums, int k) {
+        if (nums == null || nums.length == 0) return 0;
+        else if (nums.length == 1) return nums[0];
+        int n = nums.length;
+        Random random = new Random();
+        int[] large = new int[n];
+        int[] small = new int[n];
+        int nLarge = 0;
+        int nSmall = 0;
+        int equal = 0;
+        int randInt = nums[random.nextInt(n)];
+        for (int num: nums){
+            if (num > randInt) large[nLarge++] = num;
+            else if (num < randInt) small[nSmall++] = num;
+            else equal++;
+        }
+        if (nLarge >= k) return findKthLargest(large, k);
+        else if (k <= nLarge + equal) return randInt;
+        else return findKthLargest(small, k - equal - nLarge);
     }
 }
