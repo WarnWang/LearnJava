@@ -526,19 +526,32 @@ public class TagArray {
      * You may assume k is always valid, 1 ≤ k ≤ array's length.
      *
      * @param nums an array with n elements
-     * @param k the kth largest
+     * @param k    the kth largest
      * @return the kth largest number
      */
     public int findKthLargest(int[] nums, int k) {
         if (nums == null || nums.length == 0) return 0;
         else if (nums.length == 1) return nums[0];
         int n = nums.length;
+        if (k == 1) {
+            int maximum = nums[0];
+            for (int num : nums) {
+                maximum = Math.max(num, maximum);
+            }
+            return maximum;
+        } else if (k == n) {
+            int minimum = nums[0];
+            for (int num : nums) {
+                minimum = Math.min(num, minimum);
+            }
+            return minimum;
+        }
         Random random = new Random();
         ArrayList<Integer> large = new ArrayList<>();
         ArrayList<Integer> small = new ArrayList<>();
         int equal = 0;
         int randInt = nums[random.nextInt(n)];
-        for (int num: nums){
+        for (int num : nums) {
             if (num > randInt) large.add(num);
             else if (num < randInt) small.add(num);
             else equal++;
@@ -549,14 +562,27 @@ public class TagArray {
         else return findKthLargest(small, k - equal - nLarge);
     }
 
-    public int findKthLargest(ArrayList<Integer> nums, int k){
+    public int findKthLargest(ArrayList<Integer> nums, int k) {
         int n = nums.size();
+        if (k == 1) {
+            int maximum = nums.get(0);
+            for (int num : nums) {
+                maximum = Math.max(num, maximum);
+            }
+            return maximum;
+        } else if (k == n) {
+            int minimum = nums.get(0);
+            for (int num : nums) {
+                minimum = Math.min(num, minimum);
+            }
+            return minimum;
+        }
         Random random = new Random();
         ArrayList<Integer> large = new ArrayList<>();
         ArrayList<Integer> small = new ArrayList<>();
         int equal = 0;
         int randInt = nums.get(random.nextInt(n));
-        for (int num: nums){
+        for (int num : nums) {
             if (num > randInt) large.add(num);
             else if (num < randInt) small.add(num);
             else equal++;
@@ -570,21 +596,35 @@ public class TagArray {
     public int findKthLargestArrayOnly(int[] nums, int k) {
         if (nums == null || nums.length == 0) return 0;
         else if (nums.length == 1) return nums[0];
-        int n = nums.length;
-        Random random = new Random();
-        int[] large = new int[n];
-        int[] small = new int[n];
-        int nLarge = 0;
-        int nSmall = 0;
-        int equal = 0;
-        int randInt = nums[random.nextInt(n)];
-        for (int num: nums){
-            if (num > randInt) large[nLarge++] = num;
-            else if (num < randInt) small[nSmall++] = num;
-            else equal++;
+        return findKthLargestArrayOnly(nums, nums.length, k);
+    }
+
+    public int findKthLargestArrayOnly(int[] nums, int n, int k) {
+        if (k == 1) {
+            int maximum = nums[0];
+            for (int i = 0; i < n; i++) {
+                maximum = Math.max(nums[i], maximum);
+            }
+            return maximum;
+        } else if (k == n) {
+            int minimum = nums[0];
+            for (int i = 0; i < n; i++) {
+                minimum = Math.min(nums[i], minimum);
+            }
+            return minimum;
         }
-        if (nLarge >= k) return findKthLargest(large, k);
+        Random random = new Random();
+        int[] small = new int[n];
+        int[] large = new int[n];
+        int nLarge = 0, nSmall = 0, equal = 0;
+        int randInt = nums[random.nextInt(n)];
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > randInt) large[nLarge++] = nums[i];
+            else if (nums[i] == randInt) equal++;
+            else small[nSmall++] = nums[i];
+        }
+        if (nLarge >= k) return findKthLargestArrayOnly(large, nLarge, k);
         else if (k <= nLarge + equal) return randInt;
-        else return findKthLargest(small, k - equal - nLarge);
+        else return findKthLargestArrayOnly(small, nSmall, k - equal - nLarge);
     }
 }

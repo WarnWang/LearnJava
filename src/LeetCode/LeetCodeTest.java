@@ -35,10 +35,17 @@ public class LeetCodeTest {
 //        System.out.println(Arrays.toString(num));
     }
 
+    private static void testArray() {
+        TagArray test = new TagArray();
+        int[] nums = {-1, 2, 0};
+        System.out.println(test.findKthLargestArrayOnly(nums, 3));
+    }
+
     public static void main(String[] args) {
+        int runTime = 1;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < 1; i++) testSort();
+        for (int i = 0; i < runTime; i++) testArray();
         long runningTime = System.currentTimeMillis() - startTime;
-        System.out.println("Running time is " + runningTime / 10);
+        System.out.println("Running time is " + runningTime / runTime);
     }
 }
