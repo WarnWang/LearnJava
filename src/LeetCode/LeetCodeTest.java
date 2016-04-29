@@ -37,8 +37,10 @@ public class LeetCodeTest {
 
     private static void testArray() {
         TagArray test = new TagArray();
-        int[] nums = {-1, 2, 0};
-        System.out.println(test.findKthLargestArrayOnly(nums, 3));
+        int[] nums = {1, 3, 2, 2, 3, 1};
+//        System.out.println(test.findKthLargestArrayOnly(nums, 3));
+        test.wiggleSort(nums);
+        System.out.println(Arrays.toString(nums));
     }
 
     public static void main(String[] args) {

@@ -627,4 +627,54 @@ public class TagArray {
         else if (k <= nLarge + equal) return randInt;
         else return findKthLargestArrayOnly(small, nSmall, k - equal - nLarge);
     }
+
+    /**
+     * Given an unsorted array nums, reorder it such that nums[0] < nums[1] > nums[2] < nums[3]....
+     * <p>
+     * Example:
+     * (1) Given nums = [1, 5, 1, 1, 6, 4], one possible answer is [1, 4, 1, 5, 1, 6].
+     * (2) Given nums = [1, 3, 2, 2, 3, 1], one possible answer is [2, 3, 1, 3, 1, 2].
+     * <p>
+     * Note:
+     * You may assume all input has valid answer.
+     *
+     * @param nums  an unsorted array nums
+     */
+    public void wiggleSort(int[] nums) {
+        if (nums == null || nums.length <= 1) return;
+        int n = nums.length;
+        int median = n / 2;
+        int med = findKthLargestArrayOnly(nums, median + 1);
+        int[] large = new int[median];
+        int[] small = new int[median];
+        int smallIndex = 0, largeIndex = 0, index;
+        for (int num : nums) {
+            if (num > med) large[largeIndex++] = num;
+            else if (num < med) small[smallIndex++] = num;
+        }
+        if (n % 2 == 1) {
+            nums[0] = med;
+            int smallEqual = median - smallIndex;
+            for (index = 1; index < n; index += 2){
+                if (largeIndex > 0) {
+                    nums[index] = large[--largeIndex];
+                } else nums[index] = med;
+                if (smallEqual > 0) {
+                    nums[index + 1] = med;
+                    smallEqual--;
+                } else nums[index + 1] = small[--smallIndex];
+            }
+        } else {
+            int smallEqual = median - smallIndex;
+            for (index = 0; index < n; index += 2){
+                if (largeIndex > 0) {
+                    nums[index + 1] = large[--largeIndex];
+                } else nums[index + 1] = med;
+                if (smallEqual > 0) {
+                    nums[index] = med;
+                    smallEqual--;
+                } else nums[index] = small[--smallIndex];
+            }
+        }
+    }
 }
