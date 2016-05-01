@@ -331,7 +331,7 @@ public class TagDFS {
         HashMap<Integer, ArrayList<Integer>> prerequisiteMap = new HashMap<>();
         HashMap<Integer, ArrayList<Integer>> courseMap = new HashMap<>();
 
-        for (int[] coursePair: prerequisites){
+        for (int[] coursePair : prerequisites) {
             hasPrerequisites[coursePair[0]] = true;
             if (prerequisiteMap.containsKey(coursePair[1])) prerequisiteMap.get(coursePair[1]).add(coursePair[0]);
             else prerequisiteMap.put(coursePair[1], new ArrayList<>(Collections.singletonList(coursePair[0])));
@@ -352,18 +352,17 @@ public class TagDFS {
 
         while (!courseToExplore.isEmpty()) {
             int frontier = courseToExplore.pop();
-            if (isTaken[frontier]){
+            if (isTaken[frontier]) {
                 if (prerequisiteMap.containsKey(frontier))
                     courseToExplore.addAll(prerequisiteMap.get(frontier));
-            }
-            else {
-                if (!courseMap.containsKey(frontier)){
+            } else {
+                if (!courseMap.containsKey(frontier)) {
                     isTaken[frontier] = true;
                     courseSchedule[courseIndex++] = frontier;
                     if (prerequisiteMap.containsKey(frontier)) courseToExplore.addAll(prerequisiteMap.get(frontier));
                 } else {
                     boolean canTake = true;
-                    for (int i: courseMap.get(frontier)) {
+                    for (int i : courseMap.get(frontier)) {
                         if (!isTaken[i]) {
                             canTake = false;
                             break;
@@ -380,6 +379,41 @@ public class TagDFS {
             if (courseIndex == numCourses) return courseSchedule;
         }
         if (courseIndex == numCourses) return courseSchedule;
-        else return new int[] {};
+        else return new int[]{};
+    }
+
+    /**
+     * Given a binary tree, return the inorder traversal of its nodes' values.
+     * <p>
+     * For example:
+     * Given binary tree {1,#,2,3},
+     * 1
+     *  \
+     *   2
+     *  /
+     * 3
+     * return [1,3,2].
+     *
+     * @param root a binary tree
+     * @return the inorder traversal of its nodes' values
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        if (root == null) return new ArrayList<>();
+        HashSet<TreeNode> traveledNode = new HashSet<>();
+        ArrayList<Integer> inorderTraversal = new ArrayList<>();
+        Stack<TreeNode> frontier = new Stack<>();
+        frontier.push(root);
+        while (!frontier.isEmpty()) {
+            TreeNode currentNode = frontier.peek();
+            if (currentNode.left == null || traveledNode.contains(currentNode.left)) {
+                inorderTraversal.add(currentNode.val);
+                traveledNode.add(currentNode);
+                frontier.pop();
+                if (currentNode.right != null) frontier.push(currentNode.right);
+            } else if (currentNode.left != null && !traveledNode.contains(currentNode.left)) {
+                frontier.push(currentNode.left);
+            }
+        }
+        return inorderTraversal;
     }
 }
