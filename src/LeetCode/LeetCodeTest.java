@@ -20,7 +20,8 @@ public class LeetCodeTest {
 
     private static void testMath() {
         TagMath test = new TagMath();
-        System.out.print(test.calculate("(((((8 - 12))))) +3"));
+//        System.out.print(test.calculate("(((((8 - 12))))) +3"));
+        System.out.println(test.isAdditiveNumber("12345"));
     }
 
     private static void testSort() {
@@ -46,7 +47,7 @@ public class LeetCodeTest {
     public static void main(String[] args) {
         int runTime = 1;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < runTime; i++) testArray();
+        for (int i = 0; i < runTime; i++) testMath();
         long runningTime = System.currentTimeMillis() - startTime;
         System.out.println("Running time is " + runningTime / runTime);
     }

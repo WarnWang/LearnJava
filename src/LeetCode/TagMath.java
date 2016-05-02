@@ -260,4 +260,54 @@ public class TagMath {
         }
         return maxValue;
     }
+
+    /**
+     * Additive number is a string whose digits can form additive sequence.
+     * A valid additive sequence should contain at least three numbers. Except for the first two numbers, each
+     * subsequent number in the sequence must be the sum of the preceding two.
+     * For example:
+     * "112358" is an additive number because the digits can form an additive sequence: 1, 1, 2, 3, 5, 8.
+     * 1 + 1 = 2, 1 + 2 = 3, 2 + 3 = 5, 3 + 5 = 8
+     * "199100199" is also an additive number, the additive sequence is: 1, 99, 100, 199.
+     * 1 + 99 = 100, 99 + 100 = 199
+     * Note: Numbers in the additive sequence cannot have leading zeros, so sequence 1, 2, 03 or 1, 02, 3 is invalid.
+     * Given a string containing only digits '0'-'9', write a function to determine if it's an additive number.
+     *
+     * @param num a string contains only '0' - '9'
+     * @return whether this string is additive number or not
+     */
+    public boolean isAdditiveNumber(String num) {
+        if (num == null || num.length() == 0) return false;
+        char[] numArray = num.toCharArray();
+        LinkedList<Long> numList = new LinkedList<>();
+        return isAdditiveNumber(numArray, numList, 0);
+    }
+
+    private boolean isAdditiveNumber(char[] num, LinkedList<Long> numList, int index){
+        if (index == num.length && numList.size() > 2) return true;
+        int maxLength;
+        if (numList.size() < 2) {
+            maxLength = num.length / 2;
+        } else maxLength = num.length - index;
+        maxLength = Math.min(16, maxLength);
+        maxLength = Math.min(num.length, index + maxLength);
+        for (int i = index + 1; i <= maxLength; i++) {
+            long newNum = Long.parseLong(new String(num, index, i - index));
+            if (numList.size() > 1){
+                int n = numList.size() - 1;
+                long a = numList.get(n), b = numList.get(n - 1);
+                if (newNum == (a + b)) {
+                    numList.add(newNum);
+                    if (isAdditiveNumber(num, numList, i)) return true;
+                    else numList.removeLast();
+                } else if (newNum > (a + b)) return false;
+            } else {
+                numList.add(newNum);
+                if (isAdditiveNumber(num, numList, i)) return true;
+                else numList.removeLast();
+            }
+            if (newNum == 0) return false;
+        }
+        return false;
+    }
 }
