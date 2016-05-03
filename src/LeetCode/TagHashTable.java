@@ -1,5 +1,6 @@
 package LeetCode;
 
+import javax.swing.text.html.HTMLDocument;
 import java.util.*;
 
 /**
@@ -327,5 +328,43 @@ public class TagHashTable {
             else if (!patternInfo[patternIndex].equals(strList[i])) return false;
         }
         return true;
+    }
+
+    /**
+     * Given a non-empty array of integers, return the k most frequent elements.
+     * <p>
+     * For example,
+     * Given [1,1,1,2,2,3] and k = 2, return [1,2].
+     * <p>
+     * Note:
+     * You may assume k is always valid, 1 ≤ k ≤ number of unique elements.
+     * Your algorithm's time complexity must be better than O(n log n), where n is the array's size.
+     *
+     * @param nums a non-empty array of integers
+     * @param k the k most frequent element
+     * @return the k most frequent element
+     */
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        for (int num :
+                nums) {
+            if (hashMap.containsKey(num)) hashMap.put(num, hashMap.get(num) + 1);
+            else hashMap.put(num, 1);
+        }
+        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>(hashMap.size(), new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[1] - o2[1];
+            }
+        });
+        for (int key :
+                hashMap.keySet()) {
+            priorityQueue.add(new int[]{key, hashMap.get(key)});
+        }
+        List<Integer> integerList = new ArrayList<>(k);
+        for (int i = 0; i < k; i++) {
+            integerList.add(priorityQueue.poll()[0]);
+        }
+        return integerList;
     }
 }
