@@ -153,4 +153,64 @@ public class TagDivideAndConquer {
             if (digits[pos] == '0') break;
         }
     }
+
+    /**
+     * Given n balloons, indexed from 0 to n-1. Each balloon is painted with a number on it represented by array nums.
+     * You are asked to burst all the balloons. If the you burst balloon i you will get nums[left] * nums[i] *
+     * nums[right] coins. Here left and right are adjacent indices of i. After the burst, the left and right then
+     * becomes adjacent.
+     * <p>
+     * Find the maximum coins you can collect by bursting the balloons wisely.
+     * <p>
+     * Note:
+     * (1) You may imagine nums[-1] = nums[n] = 1. They are not real therefore you can not burst them.
+     * (2) 0 ≤ n ≤ 500, 0 ≤ nums[i] ≤ 100
+     * <p>
+     * Example:
+     * <p>
+     * Given [3, 1, 5, 8]
+     * <p>
+     * Return 167
+     * <p>
+     * nums = [3,1,5,8] --> [3,5,8] -->   [3,8]   -->  [8]  --> []
+     * coins =  3*1*5      +  3*5*8    +  1*3*8      + 1*8*1   = 167
+     *
+     * @param nums a coin of balloons
+     * @return maximum coins you can collect
+     */
+    public int maxCoins(int[] nums) {
+        HashSet<Integer> burstedIndex = new HashSet<>();
+        int maxCoin = 0;
+        for (int i = 0; i < nums.length; i++) {
+            burstedIndex.add(i);
+            maxCoin = Integer.max(maxCoin, getCoins(nums, burstedIndex, i) + maxCoins(nums, burstedIndex));
+            burstedIndex.remove(i);
+        }
+        return maxCoin;
+    }
+
+    private int maxCoins(int[] nums, HashSet<Integer> burstedIndex){
+        int maxCoin = 0;
+        if (burstedIndex.size() == nums.length) return 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (burstedIndex.contains(i)) continue;
+            burstedIndex.add(i);
+            maxCoin = Integer.max(maxCoin, getCoins(nums, burstedIndex, i) + maxCoins(nums, burstedIndex));
+            burstedIndex.remove(i);
+        }
+        return maxCoin;
+    }
+
+    private int getCoins(int[] nums, HashSet<Integer> burstedIndex, int index){
+        int i, j;
+        for (i = index + 1; i < nums.length; i++) {
+            if (!burstedIndex.contains(i)) break;
+        }
+        for (j = index - 1; j >= 0; j--) {
+            if (!burstedIndex.contains(j)) break;
+        }
+        int a = (j >= 0) ? nums[j] : 1;
+        int b = (i < nums.length) ? nums[i]: 1;
+        return nums[index] * a * b;
+    }
 }

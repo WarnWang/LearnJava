@@ -44,10 +44,15 @@ public class LeetCodeTest {
         System.out.println(Arrays.toString(nums));
     }
 
+    private static void testDivideAndConquer(){
+        TagDivideAndConquer test = new TagDivideAndConquer();
+        System.out.println(test.maxCoins(new int[] {3,1,5,8}));
+    }
+
     public static void main(String[] args) {
         int runTime = 1;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < runTime; i++) testMath();
+        for (int i = 0; i < runTime; i++) testDivideAndConquer();
         long runningTime = System.currentTimeMillis() - startTime;
         System.out.println("Running time is " + runningTime / runTime);
     }
