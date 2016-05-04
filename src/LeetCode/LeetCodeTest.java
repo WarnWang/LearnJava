@@ -44,15 +44,26 @@ public class LeetCodeTest {
         System.out.println(Arrays.toString(nums));
     }
 
-    private static void testDivideAndConquer(){
+    private static void testDivideAndConquer() {
         TagDivideAndConquer test = new TagDivideAndConquer();
-        System.out.println(test.maxCoins(new int[] {3,1,5,8}));
+        System.out.println(test.maxCoins(new int[]{1, 6, 8, 5, 1, 7, 7, 4, 1, 8, 5, 4, 3, 5, 8, 8, 9, 7, 4, 4, 5, 2, 2,
+                1, 5, 3, 4, 7, 8, 4, 3, 9, 2, 1, 5, 4, 9, 8, 5, 4, 7, 8, 6, 4, 1, 8, 8, 7, 2, 9, 8, 8, 9, 4, 2, 1, 3,
+                4, 7, 9, 5, 7, 5, 5, 2, 5, 3, 6, 6, 3, 3, 4, 1, 3, 7, 1, 3, 5, 1, 5, 5, 7, 2, 4, 8, 2, 1, 8, 6, 8, 8,
+                1, 5, 1, 9, 9, 1, 4, 6, 2}));
+    }
+
+    private static void testDynamicProgramming() {
+        TagDynamicProgramming test = new TagDynamicProgramming();
+        System.out.println(test.maxCoins(new int[]{1, 6, 8, 5, 1, 7, 7, 4, 1, 8, 5, 4, 3, 5, 8, 8, 9, 7, 4, 4, 5, 2, 2,
+                1, 5, 3, 4, 7, 8, 4, 3, 9, 2, 1, 5, 4, 9, 8, 5, 4, 7, 8, 6, 4, 1, 8, 8, 7, 2, 9, 8, 8, 9, 4, 2, 1, 3,
+                4, 7, 9, 5, 7, 5, 5, 2, 5, 3, 6, 6, 3, 3, 4, 1, 3, 7, 1, 3, 5, 1, 5, 5, 7, 2, 4, 8, 2, 1, 8, 6, 8, 8,
+                1, 5, 1, 9, 9, 1, 4, 6, 2}));
     }
 
     public static void main(String[] args) {
         int runTime = 1;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < runTime; i++) testDivideAndConquer();
+        for (int i = 0; i < runTime; i++) testDynamicProgramming();
         long runningTime = System.currentTimeMillis() - startTime;
         System.out.println("Running time is " + runningTime / runTime);
     }

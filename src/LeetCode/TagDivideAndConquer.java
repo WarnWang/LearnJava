@@ -179,35 +179,34 @@ public class TagDivideAndConquer {
      * @return maximum coins you can collect
      */
     public int maxCoins(int[] nums) {
-        HashSet<Integer> burstedIndex = new HashSet<>();
+        boolean[] burstedIndex = new boolean[nums.length];
         int maxCoin = 0;
         for (int i = 0; i < nums.length; i++) {
-            burstedIndex.add(i);
+            burstedIndex[i] = true;
             maxCoin = Integer.max(maxCoin, getCoins(nums, burstedIndex, i) + maxCoins(nums, burstedIndex));
-            burstedIndex.remove(i);
+            burstedIndex[i] = false;
         }
         return maxCoin;
     }
 
-    private int maxCoins(int[] nums, HashSet<Integer> burstedIndex){
+    private int maxCoins(int[] nums, boolean[] burstedIndex){
         int maxCoin = 0;
-        if (burstedIndex.size() == nums.length) return 0;
         for (int i = 0; i < nums.length; i++) {
-            if (burstedIndex.contains(i)) continue;
-            burstedIndex.add(i);
+            if (burstedIndex[i]) continue;
+            burstedIndex[i] = true;
             maxCoin = Integer.max(maxCoin, getCoins(nums, burstedIndex, i) + maxCoins(nums, burstedIndex));
-            burstedIndex.remove(i);
+            burstedIndex[i] = false;
         }
         return maxCoin;
     }
 
-    private int getCoins(int[] nums, HashSet<Integer> burstedIndex, int index){
+    private int getCoins(int[] nums, boolean[] burstedIndex, int index){
         int i, j;
         for (i = index + 1; i < nums.length; i++) {
-            if (!burstedIndex.contains(i)) break;
+            if (!burstedIndex[i]) break;
         }
         for (j = index - 1; j >= 0; j--) {
-            if (!burstedIndex.contains(j)) break;
+            if (!burstedIndex[j]) break;
         }
         int a = (j >= 0) ? nums[j] : 1;
         int b = (i < nums.length) ? nums[i]: 1;
