@@ -700,7 +700,7 @@ public class TagArray {
         for (int index = nums.length - 2; index >= 0; index--){
             if (index + nums[index] >= nums.length - 1) jumpNum[index] = 1;
             else {
-                int miniJumpNum = Integer.MAX_VALUE;
+                int miniJumpNum = Integer.MAX_VALUE - 1;
                 for (int i = Integer.min(index + nums[index], nums.length - 1); i > index; i--){
                     miniJumpNum = Integer.min(miniJumpNum, jumpNum[i]);
                     if (miniJumpNum <= 1) break;
