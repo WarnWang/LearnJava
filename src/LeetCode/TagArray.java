@@ -638,7 +638,7 @@ public class TagArray {
      * Note:
      * You may assume all input has valid answer.
      *
-     * @param nums  an unsorted array nums
+     * @param nums an unsorted array nums
      */
     public void wiggleSort(int[] nums) {
         if (nums == null || nums.length <= 1) return;
@@ -655,7 +655,7 @@ public class TagArray {
         if (n % 2 == 1) {
             nums[0] = med;
             int smallEqual = median - smallIndex;
-            for (index = 1; index < n; index += 2){
+            for (index = 1; index < n; index += 2) {
                 if (largeIndex > 0) {
                     nums[index] = large[--largeIndex];
                 } else nums[index] = med;
@@ -666,7 +666,7 @@ public class TagArray {
             }
         } else {
             int smallEqual = median - smallIndex;
-            for (index = 0; index < n; index += 2){
+            for (index = 0; index < n; index += 2) {
                 if (largeIndex > 0) {
                     nums[index + 1] = large[--largeIndex];
                 } else nums[index + 1] = med;
@@ -676,5 +676,38 @@ public class TagArray {
                 } else nums[index] = small[--smallIndex];
             }
         }
+    }
+
+    /**
+     * Given an array of non-negative integers, you are initially positioned at the first index of the array.
+     * <p>
+     * Each element in the array represents your maximum jump length at that position.
+     * <p>
+     * Your goal is to reach the last index in the minimum number of jumps.
+     * <p>
+     * For example:
+     * Given array A = [2,3,1,1,4]
+     * <p>
+     * The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the
+     * last index.)
+     *
+     * @param nums an array of non-negative integers
+     * @return the minimum number of jumps
+     */
+    public int jump(int[] nums) {
+        if (nums == null || nums.length < 2) return 0;
+        int[] jumpNum = new int[nums.length];
+        for (int index = nums.length - 2; index >= 0; index--){
+            if (index + nums[index] >= nums.length - 1) jumpNum[index] = 1;
+            else {
+                int miniJumpNum = Integer.MAX_VALUE;
+                for (int i = Integer.min(index + nums[index], nums.length - 1); i > index; i--){
+                    miniJumpNum = Integer.min(miniJumpNum, jumpNum[i]);
+                    if (miniJumpNum <= 1) break;
+                }
+                jumpNum[index] = miniJumpNum + 1;
+            }
+        }
+        return jumpNum[0];
     }
 }
