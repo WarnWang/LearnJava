@@ -697,11 +697,11 @@ public class TagArray {
     public int jump(int[] nums) {
         if (nums == null || nums.length < 2) return 0;
         int[] jumpNum = new int[nums.length];
-        for (int index = nums.length - 2; index >= 0; index--){
+        for (int index = nums.length - 2; index >= 0; index--) {
             if (index + nums[index] >= nums.length - 1) jumpNum[index] = 1;
             else {
                 int miniJumpNum = Integer.MAX_VALUE - 1;
-                for (int i = Integer.min(index + nums[index], nums.length - 1); i > index; i--){
+                for (int i = Integer.min(index + nums[index], nums.length - 1); i > index; i--) {
                     miniJumpNum = Integer.min(miniJumpNum, jumpNum[i]);
                     if (miniJumpNum <= 1) break;
                 }
@@ -709,5 +709,35 @@ public class TagArray {
             }
         }
         return jumpNum[0];
+    }
+
+    /**
+     * You are given an n x n 2D matrix representing an image.
+     * <p>
+     * Rotate the image by 90 degrees (clockwise).
+     *
+     * @param matrix an n x n 2D matrix
+     */
+    public void rotate(int[][] matrix) {
+        // Transpose matrix first
+        if (matrix == null || matrix.length <= 1) return;
+        int n = matrix.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+
+        // Inverse between middle
+        int middle = n / 2;
+        for (int i = 0; i < middle; i++) {
+            for (int j = 0; j < n; j++) {
+                int temp = matrix[j][i];
+                matrix[j][i] = matrix[j][n - i - 1];
+                matrix[j][n - i - 1] = temp;
+            }
+        }
     }
 }
