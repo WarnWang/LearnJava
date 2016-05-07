@@ -240,4 +240,52 @@ public class TagTree {
             }
         }
     }
+
+    /**
+     * Given preorder and inorder traversal of a tree, construct the binary tree.
+     *
+     * @param preorder preorder traversal of a tree
+     * @param inorder inorder traversal of a tree
+     * @return the reconstruct tree
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || inorder == null || preorder.length != inorder.length || preorder.length == 0)
+            return null;
+        TreeNode root = new TreeNode(preorder[0]);
+        int n = preorder.length;
+        for (int i = 0; i < n; i++) {
+            if (inorder[i] == preorder[0]) {
+                if (i != 0) {
+                    root.left = new TreeNode(preorder[1]);
+                    constructTree(root.left, preorder, 1, i + 1, inorder, 0, i);
+                }
+                if (i < n - 1) {
+                    root.right = new TreeNode(preorder[i + 1]);
+                    constructTree(root.right, preorder, i + 1, n, inorder, i + 1, n);
+                }
+                break;
+            }
+        }
+        return root;
+    }
+
+    private void constructTree(TreeNode root, int[] preorder, int preorderStart, int preorderEnd,
+                               int inorder[], int inorderStart, int inorderEnd){
+        if (preorderEnd - preorderStart < 2) return;
+        for (int i = inorderStart; i < inorderEnd; i++) {
+            if (inorder[i] == preorder[preorderStart]){
+                if (i != inorderStart) {
+                    root.left = new TreeNode(preorder[preorderStart + 1]);
+                    constructTree(root.left, preorder, preorderStart + 1, preorderStart + i - inorderStart, inorder,
+                            inorderStart, i);
+                }
+                if (i < inorderEnd - 1) {
+                    root.right = new TreeNode(preorder[preorderStart + i + 1 - inorderStart]);
+                    constructTree(root.right, preorder, preorderStart + i + 1 - inorderStart, preorderEnd, inorder,
+                            i + 1, inorderEnd);
+                }
+                break;
+            }
+        }
+    }
 }
