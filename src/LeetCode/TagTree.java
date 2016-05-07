@@ -271,7 +271,7 @@ public class TagTree {
 
     private void constructTree(TreeNode root, int[] preorder, int preorderStart, int preorderEnd,
                                int inorder[], int inorderStart, int inorderEnd){
-        if (preorderEnd - preorderStart < 2) return;
+        if (preorderEnd - preorderStart < 1) return;
         for (int i = inorderStart; i < inorderEnd; i++) {
             if (inorder[i] == preorder[preorderStart]){
                 if (i != inorderStart) {
