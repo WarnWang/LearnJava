@@ -288,4 +288,41 @@ public class TagTree {
             }
         }
     }
+
+    /**
+     * Given inorder and postorder traversal of a tree, construct the binary tree.
+     * @param inorder inorder traversal of a tree
+     * @param postorder postorder traversal of a tree
+     * @return the reconstruct tree
+     */
+    public TreeNode buildTree2(int[] inorder, int[] postorder) {
+        if (inorder == null || postorder == null || inorder.length != postorder.length || inorder.length == 0)
+            return null;
+        if (inorder.length == 1) return new TreeNode(inorder[0]);
+        int n = postorder.length;
+        TreeNode root = new TreeNode(postorder[n - 1]);
+        constructTree(root, inorder, new int[] {0, n}, postorder, new int[] {0, n});
+        return root;
+    }
+
+    private void constructTree(TreeNode root, int[] inorder, int[] inorderRange, int[] postOrder, int[] postOrderRange){
+        if (inorderRange[1] <= inorderRange[0]) return;
+        for (int i = inorderRange[0]; i < inorderRange[1]; i++) {
+            if (inorder[i] == root.val) {
+                if (i != inorderRange[1] - 1) {
+                    int[] newInorderRange = {i + 1, inorderRange[1]};
+                    int[] newPostorderRange = {postOrderRange[1] - (inorderRange[1] - i), postOrderRange[1] - 1};
+                    root.right = new TreeNode(postOrder[postOrderRange[1] - 2]);
+                    constructTree(root.right, inorder, newInorderRange, postOrder, newPostorderRange);
+                }
+                if (i > inorderRange[0]) {
+                    int[] newInorderRange = {inorderRange[0], i};
+                    int[] newPostOrderRange = {postOrderRange[0], postOrderRange[0] + i - inorderRange[0]};
+                    root.left = new TreeNode(postOrder[postOrderRange[0] + i - inorderRange[0] - 1]);
+                    constructTree(root.left, inorder, newInorderRange, postOrder, newPostOrderRange);
+                }
+                break;
+            }
+        }
+    }
 }
