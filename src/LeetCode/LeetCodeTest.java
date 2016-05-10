@@ -60,10 +60,25 @@ public class LeetCodeTest {
                 1, 5, 1, 9, 9, 1, 4, 6, 2}));
     }
 
+    private static void testGraph() {
+        TagGraph test = new TagGraph();
+        UndirectedGraphNode node = new UndirectedGraphNode(0);
+        node.neighbors.add(node);
+        node.neighbors.add(node);
+        for (UndirectedGraphNode node1: node.neighbors){
+            System.out.println("old: " + node1.label);
+        }
+        UndirectedGraphNode clonedNode = test.cloneGraph(node);
+
+        for (UndirectedGraphNode node1: clonedNode.neighbors){
+            System.out.println("new: " + node1.label);
+        }
+    }
+
     public static void main(String[] args) {
         int runTime = 1;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < runTime; i++) testDynamicProgramming();
+        for (int i = 0; i < runTime; i++) testGraph();
         long runningTime = System.currentTimeMillis() - startTime;
         System.out.println("Running time is " + runningTime / runTime);
     }

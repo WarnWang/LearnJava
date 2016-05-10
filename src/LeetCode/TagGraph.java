@@ -1,13 +1,15 @@
 package LeetCode;
 
 import java.util.*;
-import java.util.LinkedList;
 
 /**
  * Created by warn on 1/4/2016.
  * Store puzzles with tag graph
  */
 public class TagGraph {
+    private Map<String, ArrayList<String>> ticketsMap = new HashMap<>();
+    private int ticketLength;
+
     /**
      * Given a list of airline tickets represented by pairs of departure and arrival airports [from, to], reconstruct
      * the itinerary in order. All of the tickets belong to a man who departs from JFK. Thus, the itinerary must begin
@@ -76,9 +78,6 @@ public class TagGraph {
         return null;
     }
 
-    private Map<String, ArrayList<String>> ticketsMap = new HashMap<>();
-    private int ticketLength;
-
     public List<String> findItineraryRecursively(String[][] tickets) {
         if (tickets == null || tickets.length == 0) return null;
         else if (tickets.length == 1) return Arrays.asList(tickets[0]);
@@ -111,5 +110,55 @@ public class TagGraph {
             }
         }
         return false;
+    }
+
+    /**
+     * Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.
+     * <p>
+     * OJ's undirected graph serialization:
+     * Nodes are labeled uniquely.
+     * <p>
+     * We use # as a separator for each node, and , as a separator for node label and each neighbor of the node.
+     * As an example, consider the serialized graph {0,1,2#1,2#2,2}.
+     * <p>
+     * The graph has a total of three nodes, and therefore contains three parts as separated by #.
+     * <p>
+     * First node is labeled as 0. Connect node 0 to both nodes 1 and 2.
+     * Second node is labeled as 1. Connect node 1 to node 2.
+     * Third node is labeled as 2. Connect node 2 to node 2 (itself), thus forming a self-cycle.
+     * Visually, the graph looks like the following:
+     * 1
+     * / \
+     * /   \
+     * 0 --- 2
+     * / \
+     * \_/
+     *
+     * @param node an undirected graph
+     * @return the clone of such graph
+     */
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if (node == null) return null;
+        UndirectedGraphNode clonedGraph = new UndirectedGraphNode(node.label);
+        HashMap<Integer, UndirectedGraphNode> exploredSet = new HashMap<>();
+        exploredSet.put(node.label, clonedGraph);
+        Stack<UndirectedGraphNode> nodesToExplore = new Stack<>();
+        Stack<UndirectedGraphNode> clonedNodesToExplore = new Stack<>();
+        nodesToExplore.add(node);
+        clonedNodesToExplore.add(clonedGraph);
+        while (!nodesToExplore.isEmpty()) {
+            UndirectedGraphNode nodesFrontier = nodesToExplore.pop();
+            UndirectedGraphNode clonedNodesFrontier = clonedNodesToExplore.pop();
+            for (UndirectedGraphNode tempNode : nodesFrontier.neighbors) {
+                UndirectedGraphNode tempClonedNode = (exploredSet.containsKey(tempNode.label)) ? exploredSet.get(tempNode.label) : new UndirectedGraphNode(tempNode.label);
+                clonedNodesFrontier.neighbors.add(tempClonedNode);
+                if (!exploredSet.containsKey(tempNode.label)) {
+                    nodesToExplore.push(tempNode);
+                    clonedNodesToExplore.push(tempClonedNode);
+                    exploredSet.put(tempNode.label, tempClonedNode);
+                }
+            }
+        }
+        return clonedGraph;
     }
 }
