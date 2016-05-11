@@ -75,10 +75,24 @@ public class LeetCodeTest {
         }
     }
 
+    private static void testRandomListNode() {
+        TagLinkedList test = new TagLinkedList();
+        RandomListNode root = new RandomListNode(-1);
+        root.next = new RandomListNode(-1);
+        root.next.random = root;
+        RandomListNode randomListNode = test.copyRandomList(root);
+        for (RandomListNode i = randomListNode; i != null; i = i.next){
+            if (i.random == null)
+                System.out.println(i.label);
+            else
+                System.out.println(i.label + "" + i.random.label);
+        }
+    }
+
     public static void main(String[] args) {
         int runTime = 1;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < runTime; i++) testGraph();
+        for (int i = 0; i < runTime; i++) testRandomListNode();
         long runningTime = System.currentTimeMillis() - startTime;
         System.out.println("Running time is " + runningTime / runTime);
     }

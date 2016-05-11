@@ -1,5 +1,7 @@
 package LeetCode;
 
+import java.util.HashMap;
+
 /**
  * Created by warn on 22/3/2016.
  * Store problems with tag linked list
@@ -98,7 +100,7 @@ public class TagLinkedList {
      * You should preserve the original relative order of the nodes in each of the two partitions.
      *
      * @param head a linked list
-     * @param x a value x
+     * @param x    a value x
      * @return nodes less than x come before nodes greater than or equal to x
      */
     public ListNode partition(ListNode head, int x) {
@@ -123,14 +125,14 @@ public class TagLinkedList {
             }
         } else {
             ListNode j;
-            for (j = head; j.next != null && j.next.val < x; j = j.next);
+            for (j = head; j.next != null && j.next.val < x; j = j.next) ;
             if (j.next == null) return head;
             else {
                 i = j.next;
                 tail = j;
             }
         }
-        for (ListNode frontier = tail; i.next !=null;) {
+        for (ListNode frontier = tail; i.next != null; ) {
             if (i.next.val < x) {
                 ListNode temp = i.next;
                 i.next = i.next.next;
@@ -140,5 +142,31 @@ public class TagLinkedList {
             } else i = i.next;
         }
         return head;
+    }
+
+    /**
+     * Return a deep copy of the random list node.
+     *
+     * @param head that each node contains an additional random pointer which could point to any node in the list or
+     *             null
+     * @return the deep copy of the given node
+     */
+    public RandomListNode copyRandomList(RandomListNode head) {
+        if (head == null) return null;
+        HashMap<RandomListNode, RandomListNode> existsNode = new HashMap<>();
+        for (RandomListNode pointer = head; pointer != null; pointer = pointer.next) {
+            existsNode.put(pointer, new RandomListNode(pointer.label));
+        }
+
+        for (RandomListNode pointer = head; pointer != null; pointer = pointer.next){
+            if (pointer.next != null){
+                existsNode.get(pointer).next = existsNode.get(pointer.next);
+            }
+
+            if (pointer.random != null) {
+                existsNode.get(pointer).random = existsNode.get(pointer.random);
+            }
+        }
+        return existsNode.get(head);
     }
 }
