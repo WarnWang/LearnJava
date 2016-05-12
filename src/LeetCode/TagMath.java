@@ -348,4 +348,33 @@ public class TagMath {
         if (b <= a || d <= c) return rec1 + rec2;
         return rec1 + rec2 - (b - a) * (d - c);
     }
+
+    /**
+     * Given a non-negative number represented as an array of digits, plus one to the number.
+     * <p>
+     * The digits are stored such that the most significant digit is at the head of the list.
+     *
+     * @param digits a non-negative number
+     * @return the array of the output number
+     */
+    public int[] plusOne(int[] digits) {
+        if (digits == null || digits.length == 0) return new int[] {1};
+        int carry = 0;
+        digits[digits.length - 1]++;
+        for (int i = digits.length - 1; i >= 0; i--) {
+            digits[i] += carry;
+            if (digits[i] > 9) {
+                carry = digits[i] / 10;
+                digits[i] %= 10;
+            } else {
+                carry = 0;
+                break;
+            }
+        }
+        if (carry != 0) {
+            digits = new int[digits.length + 1];
+            digits[0] = 1;
+        }
+        return digits;
+    }
 }
