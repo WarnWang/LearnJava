@@ -344,7 +344,8 @@ public class TagMath {
             H = temp;
         }
         int rec1 = (C - A) * (D - B), rec2 = (G - E) * (H - F);
-        if (Integer.min(G, C) <= Integer.max(A, E) || Integer.min(D, H) <= Integer.max(B, F)) return rec1 + rec2;
-        return rec1 + rec2 - (Integer.min(G, C) - Integer.max(A, E)) * (Integer.min(D, H) - Integer.max(B, F));
+        int b = Integer.min(G, C), a = Integer.max(A, E), c = Integer.max(B, F), d = Integer.min(D, H);
+        if (b <= a || d <= c) return rec1 + rec2;
+        return rec1 + rec2 - (b - a) * (d - c);
     }
 }
