@@ -1,6 +1,7 @@
 package LeetCode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by warn on 4/5/2016.
@@ -96,38 +97,40 @@ public class TagDynamicProgramming {
             maxNumber(maximum, maxIndex, nums1, nums1Index, nums2, nums2Index);
             return;
         }
-        int[] tempMaximum = new int[remainLength], temp = new int[remainLength];
+        int[] temp = new int[remainLength];
         int tmpMax = 0;
-        ArrayList<Integer> tmpMaxIndex1 = new ArrayList<>(), tmpMaxIndex2 = new ArrayList<>();
+        int tmpMaxIndex1 = -1, tmpMaxIndex2 = -1;
         for (int i = nums1Index; i < nums1.length; i++) {
             if (nums2.length - nums2Index + nums1.length - i < remainLength) break;
             if (nums1[i] > tmpMax) {
+                tmpMaxIndex1 = i;
                 tmpMax = nums1[i];
-                tmpMaxIndex1.clear();
-                tmpMaxIndex1.add(i);
-            } else if (nums1[i] == tmpMax) tmpMaxIndex1.add(i);
+                if (tmpMax == 9) break;
+            }
         }
         for (int i = nums2Index; i < nums2.length; i++) {
             if (nums2.length - i + nums1.length - nums1Index < remainLength) break;
             if (nums2[i] > tmpMax) {
                 tmpMax = nums2[i];
-                tmpMaxIndex2.clear();
-                tmpMaxIndex1.clear();
-                tmpMaxIndex2.add(i);
-            } else if (nums2[i] == tmpMax) tmpMaxIndex2.add(i);
+                tmpMaxIndex1 = -1;
+                tmpMaxIndex2 = i;
+                if (tmpMax == 9) break;
+            } else if (tmpMaxIndex2 == -1 && nums2[i] == tmpMax) {
+                tmpMaxIndex2 = i;
+                if (tmpMax == 9) break;
+            }
         }
 
-        for (int i: tmpMaxIndex1) {
-            temp[0] = nums1[i];
-            findMaxNumber(temp, 1, nums1, i + 1, nums2, nums2Index);
-            if (isBigger(temp, maximum, maxIndex)) System.arraycopy(temp, 0, maximum, maxIndex, remainLength);
+        if (tmpMaxIndex1 != -1) {
+            temp[0] = tmpMax;
+            findMaxNumber(temp, 1, nums1, tmpMaxIndex1 + 1, nums2, nums2Index);
         }
 
-        for (int i: tmpMaxIndex2) {
-            temp[0] = nums2[i];
-            findMaxNumber(temp, 1, nums1, nums1Index, nums2, i + 1);
-            if (isBigger(temp, maximum, maxIndex)) System.arraycopy(temp, 0, maximum, maxIndex, remainLength);
+        if (tmpMaxIndex2 != -1) {
+            maximum[maxIndex] = tmpMax;
+            findMaxNumber(maximum, maxIndex + 1, nums1, nums1Index, nums2, tmpMaxIndex2 + 1);
         }
+        if (isBigger(temp, maximum, maxIndex)) System.arraycopy(temp, 0, maximum, maxIndex, remainLength);
     }
 
     private boolean isBigger(int[] nums1, int[] nums2, int nums2Index){
@@ -156,5 +159,40 @@ public class TagDynamicProgramming {
                 maximum[maxIndex++] = nums2[nums2Index];
             }
         }
+    }
+
+    public int[] maxNumber2(int[] nums1, int[] nums2, int k) {
+        if (nums1 == null && nums2 == null) return null;
+        if (nums1 == null) nums1 = new int[0];
+        else if (nums2 == null) nums2 = new int[0];
+        int n1 = nums1.length, n2 = nums2.length;
+        int[] maximum = new int[n1 + n2];
+        maxNumber(maximum, 0, nums1, 0, nums2, 0);
+        boolean[] isRemoved = new boolean[n1 + n2];
+        for (int i = n1 + n2; i > k; i--) {
+            boolean removed = false;
+            for (int j = 0; j < n1 + n2 && !removed;) {
+                if (!isRemoved[j]) {
+                    for (int l = j + 1; l < n1 + n2; l++) {
+                        if (!isRemoved[l]){
+                            if (maximum[j] >= maximum[l]) {
+                                j = l;
+                            } else {
+                                isRemoved[j] = true;
+                                removed = true;
+                            }
+                            break;
+                        }
+                    }
+                } else j++;
+            }
+        }
+        int[] maxNum = new int[k];
+        int index = 0;
+        for (int i = 0; i < k; i++) {
+            while (isRemoved[index]) index++;
+            maxNum[i] = maximum[index++];
+        }
+        return maxNum;
     }
 }
