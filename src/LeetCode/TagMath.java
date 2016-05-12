@@ -283,7 +283,7 @@ public class TagMath {
         return isAdditiveNumber(numArray, numList, 0);
     }
 
-    private boolean isAdditiveNumber(char[] num, LinkedList<Long> numList, int index){
+    private boolean isAdditiveNumber(char[] num, LinkedList<Long> numList, int index) {
         if (index == num.length && numList.size() > 2) return true;
         int maxLength;
         if (numList.size() < 2) {
@@ -293,7 +293,7 @@ public class TagMath {
         maxLength = Math.min(num.length, index + maxLength);
         for (int i = index + 1; i <= maxLength; i++) {
             long newNum = Long.parseLong(new String(num, index, i - index));
-            if (numList.size() > 1){
+            if (numList.size() > 1) {
                 int n = numList.size() - 1;
                 long a = numList.get(n), b = numList.get(n - 1);
                 if (newNum == (a + b)) {
@@ -309,5 +309,42 @@ public class TagMath {
             if (newNum == 0) return false;
         }
         return false;
+    }
+
+    /**
+     * Find the total area covered by two rectilinear rectangles in a 2D plane.
+     * <p>
+     * Each rectangle is defined by its bottom left corner and top right corner as shown in the figure.
+     *
+     * @param A, B: down left point of first Rectangle
+     * @param C, D: up right point of first Rectangle
+     * @param E, F: down left point of first Rectangle
+     * @param G, H: up right point of first Rectangle
+     * @return the intersection area
+     */
+    public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        if (A > C) {
+            int temp = C;
+            C = A;
+            A = temp;
+        }
+        if (B > D) {
+            int temp = B;
+            B = D;
+            D = temp;
+        }
+        if (E > G) {
+            int temp = E;
+            E = G;
+            G = temp;
+        }
+        if (F > H) {
+            int temp = F;
+            F = H;
+            H = temp;
+        }
+        int rec1 = (C - A) * (D - B), rec2 = (G - E) * (H - F);
+        if (Integer.min(G, C) <= Integer.max(A, E) || Integer.min(D, H) <= Integer.max(B, F)) return rec1 + rec2;
+        return rec1 + rec2 - (Integer.min(G, C) - Integer.max(A, E)) * (Integer.min(D, H) - Integer.max(B, F));
     }
 }
