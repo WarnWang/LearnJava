@@ -1,7 +1,6 @@
 package LeetCode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Comparator;
 
 /**
  * Created by warn on 4/5/2016.
@@ -76,10 +75,10 @@ public class TagDynamicProgramming {
      *
      * @param nums1 array 1
      * @param nums2 array 2
-     * @param k maximum number length
+     * @param k     maximum number length
      * @return the maximum number
      */
-    public int[] maxNumber(int[] nums1, int[] nums2, int k) {
+    public int[] maxNumberTLE(int[] nums1, int[] nums2, int k) {
         if (nums1 == null && nums2 == null) return null;
         if (nums1 == null) nums1 = new int[0];
         else if (nums2 == null) nums2 = new int[0];
@@ -90,14 +89,13 @@ public class TagDynamicProgramming {
         return maximum;
     }
 
-    private void findMaxNumber(int[] maximum, int maxIndex, int[] nums1, int nums1Index, int[] nums2, int nums2Index){
+    private void findMaxNumber(int[] maximum, int maxIndex, int[] nums1, int nums1Index, int[] nums2, int nums2Index) {
         if (maxIndex == maximum.length) return;
         int remainLength = maximum.length - maxIndex;
-        if (nums2.length - nums2Index + nums1.length - nums1Index == maximum.length - maxIndex) {
+        if (nums2.length - nums2Index + nums1.length - nums1Index == remainLength) {
             maxNumber(maximum, maxIndex, nums1, nums1Index, nums2, nums2Index);
             return;
         }
-        int[] temp = new int[remainLength];
         int tmpMax = 0;
         int tmpMaxIndex1 = -1, tmpMaxIndex2 = -1;
         for (int i = nums1Index; i < nums1.length; i++) {
@@ -121,19 +119,31 @@ public class TagDynamicProgramming {
             }
         }
 
-        if (tmpMaxIndex1 != -1) {
-            temp[0] = tmpMax;
-            findMaxNumber(temp, 1, nums1, tmpMaxIndex1 + 1, nums2, nums2Index);
-        }
-
-        if (tmpMaxIndex2 != -1) {
+        if (tmpMaxIndex1 == -1 || tmpMaxIndex2 == -1) {
             maximum[maxIndex] = tmpMax;
-            findMaxNumber(maximum, maxIndex + 1, nums1, nums1Index, nums2, tmpMaxIndex2 + 1);
+            if (tmpMaxIndex1 == -1) findMaxNumber(maximum, maxIndex + 1, nums1, nums1Index, nums2, tmpMaxIndex2 + 1);
+            else findMaxNumber(maximum, maxIndex + 1, nums1, tmpMaxIndex1 + 1, nums2, nums2Index);
         }
-        if (isBigger(temp, maximum, maxIndex)) System.arraycopy(temp, 0, maximum, maxIndex, remainLength);
+//        else if (nums1.length - tmpMaxIndex1 + nums2.length - tmpMaxIndex2 >= maximum.length - maxIndex) {
+//            maximum[maxIndex] = tmpMax;
+//            if (maxIndex + 1 == maximum.length) return;
+//            maximum[maxIndex + 1] = tmpMax;
+//            findMaxNumber(maximum, maxIndex + 2, nums1, tmpMaxIndex1 + 1, nums2, tmpMaxIndex2 + 1);
+//        }
+        else {
+            maximum[maxIndex] = tmpMax;
+            int[] temp1 = new int[remainLength - 1];
+            int[] temp2 = new int[remainLength - 1];
+            findMaxNumber(temp1, 0, nums1, tmpMaxIndex1 + 1, nums2, nums2Index);
+            findMaxNumber(temp2, 0, nums1, nums1Index, nums2, tmpMaxIndex2 + 1);
+            if (isBigger(temp1, temp2, 0))
+                System.arraycopy(temp1, 0, maximum, maxIndex + 1, remainLength - 1);
+            else
+                System.arraycopy(temp2, 0, maximum, maxIndex + 1, remainLength - 1);
+        }
     }
 
-    private boolean isBigger(int[] nums1, int[] nums2, int nums2Index){
+    private boolean isBigger(int[] nums1, int[] nums2, int nums2Index) {
         for (int i = 0, n = nums1.length; i < n; i++) {
             if (nums1[i] < nums2[i + nums2Index]) return false;
             else if (nums1[i] > nums2[i]) return true;
@@ -141,7 +151,7 @@ public class TagDynamicProgramming {
         return false;
     }
 
-    private void maxNumber(int[] maximum, int maxIndex, int[] nums1, int nums1Index, int[] nums2, int nums2Index){
+    private void maxNumber(int[] maximum, int maxIndex, int[] nums1, int nums1Index, int[] nums2, int nums2Index) {
         for (int n = maximum.length; maxIndex < n; maxIndex++) {
             if (nums1Index >= nums1.length || nums2Index >= nums2.length) break;
             if (nums1[nums1Index] > nums2[nums2Index]) {
@@ -155,44 +165,100 @@ public class TagDynamicProgramming {
                 nums2 = nums1;
                 nums2Index = nums1Index;
             }
-            for (int n = nums2.length; nums2Index < n; nums2Index++){
+            for (int n = nums2.length; nums2Index < n; nums2Index++) {
                 maximum[maxIndex++] = nums2[nums2Index];
             }
         }
     }
 
-    public int[] maxNumber2(int[] nums1, int[] nums2, int k) {
-        if (nums1 == null && nums2 == null) return null;
-        if (nums1 == null) nums1 = new int[0];
-        else if (nums2 == null) nums2 = new int[0];
-        int n1 = nums1.length, n2 = nums2.length;
-        int[] maximum = new int[n1 + n2];
-        maxNumber(maximum, 0, nums1, 0, nums2, 0);
-        boolean[] isRemoved = new boolean[n1 + n2];
-        for (int i = n1 + n2; i > k; i--) {
-            boolean removed = false;
-            for (int j = 0; j < n1 + n2 && !removed;) {
-                if (!isRemoved[j]) {
-                    for (int l = j + 1; l < n1 + n2; l++) {
-                        if (!isRemoved[l]){
-                            if (maximum[j] >= maximum[l]) {
-                                j = l;
-                            } else {
-                                isRemoved[j] = true;
-                                removed = true;
-                            }
-                            break;
-                        }
-                    }
-                } else j++;
+    // Reference: https://leetcode.com/discuss/93176/12ms-java-code-beat-javasubmissions-little-long-messy-fast
+    public int[] maxNumber(int[] nums1, int[] nums2, int k) {
+        int k1 = Integer.min(k, nums1.length);
+        int k2 = Integer.min(k, nums2.length);
+        int[][] v1 = new int[k + 1][];
+        int[][] v2 = new int[k + 1][];
+        v1[k1] = bestChoice(nums1, k1);
+        v2[k2] = bestChoice(nums2, k2);
+        if (nums1.length + nums2.length > k) {
+            for (int i = k1; i > 0; i--) {
+                v1[i - 1] = trimList(v1[i], i);
+            }
+            for (int i = k2; i > 0; i--) {
+                v2[i - 1] = trimList(v2[i], i);
             }
         }
-        int[] maxNum = new int[k];
-        int index = 0;
-        for (int i = 0; i < k; i++) {
-            while (isRemoved[index]) index++;
-            maxNum[i] = maximum[index++];
+
+        int[] merged = null;
+        for (int i = 0; i <= k; i++) {
+            if (v1[i] == null || v2[k - i] == null) continue;
+            merged = mergeTwoList(v1[i], i, v2[k - i], k - i, merged);
         }
-        return maxNum;
+        return merged;
+    }
+
+    private int[] trimList(int[] lastInput, int lastLength) {
+        if (lastLength == 1) return new int[0];
+        int[] output = new int[lastLength - 1];
+        int j = 0;
+        for (int i = 0; i < lastLength; i++) {
+            if (j == i && (i == lastLength -1 || lastInput[i] < lastInput[i + 1])) continue;
+            output[j++] = lastInput[i];
+        }
+        return output;
+    }
+
+    private int[] bestChoice(int[] inputNum, int k){
+        if (k == 0) return new int[0];
+        int[] output = new int[Math.max(k, inputNum.length)];
+        int cur = 1;
+        output[0] = inputNum[0];
+        for (int i = 1; i < inputNum.length; i++) {
+            while (cur > 0 && inputNum[i] > output[cur - 1] && k - cur < inputNum.length - i) cur--;
+            output[cur++] = inputNum[i];
+        }
+        return output;
+    }
+
+    private int[] mergeTwoList(int[] nums1, int n1, int[] nums2, int n2, int[] previous){
+        int i1 = 0, i2 = 0;
+        int[] output = new int[n1 + n2];
+        int i = 0;
+        while (i1 < n1 && i2 < n2) {
+            if (nums1[i1] > nums2[i2]) output[i++] = nums1[i1++];
+            else if (nums2[i2] > nums1[i1]) output[i++] = nums2[i2++];
+            else {
+                int ii1 = i1;
+                int ii2 = i2;
+                while (nums1[ii1] == nums2[ii2]){
+                    if (ii1 < n1 - 1) ii1++;
+                    if (ii2 < n2 - 1) ii2++;
+                    if (ii1 == n1 - 1 && ii2 == n2 - 1) break;
+                }
+                if (nums1[ii1] > nums2[ii2]) output[i++] = nums1[i1++];
+                else output[i++] = nums2[i2++];
+            }
+            if (previous != null) {
+                if (output[i - 1] < previous[i - 1]) return previous;
+                if (output[i - 1] > previous[i - 1]) previous = null;
+            }
+        }
+        if (i1 != n1) {
+            while (i1 < n1) {
+                output[i++] = nums1[i1++];
+                if (previous != null) {
+                    if (output[i - 1] < previous[i - 1]) return previous;
+                    if (output[i - 1] > previous[i - 1]) previous = null;
+                }
+            }
+        } else {
+            while (i2 < n2) {
+                output[i++] = nums2[i2++];
+                if (previous != null) {
+                    if (output[i - 1] < previous[i - 1]) return previous;
+                    if (output[i - 1] > previous[i - 1]) previous = null;
+                }
+            }
+        }
+        return output;
     }
 }
