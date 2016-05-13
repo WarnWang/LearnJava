@@ -1,6 +1,5 @@
 package LeetCode;
 
-import javax.swing.text.html.HTMLDocument;
 import java.util.*;
 
 /**
@@ -310,7 +309,7 @@ public class TagHashTable {
      * space.
      *
      * @param pattern a string pattern
-     * @param str Check whether this string follows the pattern
+     * @param str     Check whether this string follows the pattern
      * @return true or false
      */
     public boolean wordPattern(String pattern, String str) {
@@ -324,8 +323,7 @@ public class TagHashTable {
                 if (containsString.contains(strList[i])) return false;
                 containsString.add(strList[i]);
                 patternInfo[patternIndex] = strList[i];
-            }
-            else if (!patternInfo[patternIndex].equals(strList[i])) return false;
+            } else if (!patternInfo[patternIndex].equals(strList[i])) return false;
         }
         return true;
     }
@@ -341,7 +339,7 @@ public class TagHashTable {
      * Your algorithm's time complexity must be better than O(n log n), where n is the array's size.
      *
      * @param nums a non-empty array of integers
-     * @param k the k most frequent element
+     * @param k    the k most frequent element
      * @return the k most frequent element
      */
     public List<Integer> topKFrequent(int[] nums, int k) {
@@ -366,5 +364,22 @@ public class TagHashTable {
             integerList.add(priorityQueue.poll()[0]);
         }
         return integerList;
+    }
+
+    /**
+     * Given an array of integers, find if the array contains any duplicates. Your function should return true if any
+     * value appears at least twice in the array, and it should return false if every element is distinct.
+     *
+     * @param nums  an array of integers
+     * @return that array contains duplicate or not
+     */
+    public boolean containsDuplicate(int[] nums) {
+        if (nums == null || nums.length < 1) return false;
+        HashSet<Integer> numSet = new HashSet<>();
+        for (int num: nums) {
+            if (numSet.contains(num)) return true;
+            numSet.add(num);
+        }
+        return false;
     }
 }
