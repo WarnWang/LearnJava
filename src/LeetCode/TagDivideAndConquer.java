@@ -1,6 +1,10 @@
 package LeetCode;
 
+import net.datastructures.*;
+
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by warn on 16/4/2016.
@@ -245,7 +249,7 @@ public class TagDivideAndConquer {
         ArrayList<Integer> inputNumber = new ArrayList<>();
         ArrayList<Character> operatorList = new ArrayList<>();
         int number = 0;
-        for (char c: input.toCharArray()){
+        for (char c : input.toCharArray()) {
             if (Character.isDigit(c)) {
                 number = 10 * number + c - '0';
             } else {
@@ -265,7 +269,7 @@ public class TagDivideAndConquer {
     }
 
     private void getDiffWaysInteger(List<Integer> numbers, List<Character> operators,
-                                   ArrayList<Integer> possibleResult){
+                                    ArrayList<Integer> possibleResult) {
         if (numbers.size() == 1) possibleResult.add(numbers.get(0));
         else if (numbers.size() == 2) possibleResult.add(getResult(numbers.get(0), numbers.get(1), operators.get(0)));
         else {
@@ -279,8 +283,8 @@ public class TagDivideAndConquer {
                 ArrayList<Integer> endPossible = new ArrayList<>();
                 getDiffWaysInteger(frontNum, frontOper, frontPossible);
                 getDiffWaysInteger(backNum, backOper, endPossible);
-                for (int fNum: frontPossible){
-                    for (int bNum: endPossible) {
+                for (int fNum : frontPossible) {
+                    for (int bNum : endPossible) {
                         possibleResult.add(getResult(fNum, bNum, currentOperator));
                     }
                 }
@@ -288,11 +292,60 @@ public class TagDivideAndConquer {
         }
     }
 
-    private int getResult(int a, int b, char operator){
-        switch (operator){
-            case '+': return a + b;
-            case '-': return a - b;
-            default: return a * b;
+    private int getResult(int a, int b, char operator) {
+        switch (operator) {
+            case '+':
+                return a + b;
+            case '-':
+                return a - b;
+            default:
+                return a * b;
+        }
+    }
+
+    public List<Integer> diffWaysToComputeImprove(String input) {
+        if (input == null || input.length() == 0) return null;
+        HashMap<List<Integer>, List<Integer>> resultMap = new HashMap<>();
+        ArrayList<Integer> stringInfo = new ArrayList<>();
+        int number = 0;
+        for (char c : input.toCharArray()) {
+            if (Character.isDigit(c)) {
+                number = 10 * number + c - '0';
+            } else {
+                stringInfo.add(number);
+                stringInfo.add(-(int) c);
+                number = 0;
+            }
+        }
+        stringInfo.add(number);
+        getAllPossibleResult(stringInfo, resultMap);
+        return resultMap.get(stringInfo);
+    }
+
+    private void getAllPossibleResult(List<Integer> stringInfo, HashMap<List<Integer>, List<Integer>> resultMap) {
+        if (resultMap.containsKey(stringInfo)) return;
+        if (stringInfo.size() == 1) {
+            resultMap.put(stringInfo, Collections.singletonList(stringInfo.get(0)));
+        } else if (stringInfo.size() == 3) {
+            resultMap.put(stringInfo, Collections.singletonList(getResult(stringInfo.get(0), stringInfo.get(2),
+                    (char) -stringInfo.get(1))));
+        } else {
+            ArrayList<Integer> possibleList = new ArrayList<>();
+            for (int i = 1, n = stringInfo.size(); i < n; i += 2) {
+                List<Integer> frontier = stringInfo.subList(0, i);
+                List<Integer> backer = stringInfo.subList(i + 1, n);
+                char operator = (char) -stringInfo.get(i);
+                getAllPossibleResult(frontier, resultMap);
+                getAllPossibleResult(backer, resultMap);
+                frontier = resultMap.get(frontier);
+                backer = resultMap.get(backer);
+                for (int front: frontier) {
+                    for (int back: backer) {
+                        possibleList.add(getResult(front, back, operator));
+                    }
+                }
+            }
+            resultMap.put(stringInfo, possibleList);
         }
     }
 }
