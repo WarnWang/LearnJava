@@ -189,7 +189,7 @@ public class TagDivideAndConquer {
         return maxCoin;
     }
 
-    private int maxCoins(int[] nums, boolean[] burstedIndex){
+    private int maxCoins(int[] nums, boolean[] burstedIndex) {
         int maxCoin = 0;
         for (int i = 0; i < nums.length; i++) {
             if (burstedIndex[i]) continue;
@@ -200,7 +200,7 @@ public class TagDivideAndConquer {
         return maxCoin;
     }
 
-    private int getCoins(int[] nums, boolean[] burstedIndex, int index){
+    private int getCoins(int[] nums, boolean[] burstedIndex, int index) {
         int i, j;
         for (i = index + 1; i < nums.length; i++) {
             if (!burstedIndex[i]) break;
@@ -209,7 +209,90 @@ public class TagDivideAndConquer {
             if (!burstedIndex[j]) break;
         }
         int a = (j >= 0) ? nums[j] : 1;
-        int b = (i < nums.length) ? nums[i]: 1;
+        int b = (i < nums.length) ? nums[i] : 1;
         return nums[index] * a * b;
+    }
+
+    /**
+     * Given a string of numbers and operators, return all possible results from computing all the different possible
+     * ways to group numbers and operators. The valid operators are +, - and *.
+     * <p>
+     * <p>
+     * Example 1
+     * Input: "2-1-1".
+     * <p>
+     * ((2-1)-1) = 0
+     * (2-(1-1)) = 2
+     * Output: [0, 2]
+     * <p>
+     * <p>
+     * Example 2
+     * Input: "2*3-4*5"
+     * <p>
+     * (2*(3-(4*5))) = -34
+     * ((2*3)-(4*5)) = -14
+     * ((2*(3-4))*5) = -10
+     * (2*((3-4)*5)) = -10
+     * (((2*3)-4)*5) = 10
+     * Output: [-34, -14, -10, -10, 10]
+     *
+     * @param input a string of numbers and operators
+     * @return all possible results from computing all the different possible ways to group numbers and operators
+     */
+    public List<Integer> diffWaysToCompute(String input) {
+        if (input == null || input.length() == 0) return null;
+        ArrayList<Integer> possibleResult = new ArrayList<>();
+        ArrayList<Integer> inputNumber = new ArrayList<>();
+        ArrayList<Character> operatorList = new ArrayList<>();
+        int number = 0;
+        for (char c: input.toCharArray()){
+            if (Character.isDigit(c)) {
+                number = 10 * number + c - '0';
+            } else {
+                inputNumber.add(number);
+                operatorList.add(c);
+                number = 0;
+            }
+        }
+        inputNumber.add(number);
+        if (inputNumber.size() == 1) return inputNumber;
+        else if (inputNumber.size() == 2) {
+            possibleResult.add(getResult(inputNumber.get(0), inputNumber.get(1), operatorList.get(0)));
+            return possibleResult;
+        }
+        getDiffWaysInteger(inputNumber, operatorList, possibleResult);
+        return possibleResult;
+    }
+
+    private void getDiffWaysInteger(List<Integer> numbers, List<Character> operators,
+                                   ArrayList<Integer> possibleResult){
+        if (numbers.size() == 1) possibleResult.add(numbers.get(0));
+        else if (numbers.size() == 2) possibleResult.add(getResult(numbers.get(0), numbers.get(1), operators.get(0)));
+        else {
+            for (int i = 0, n = operators.size(); i < n; i++) {
+                List<Integer> frontNum = numbers.subList(0, i + 1);
+                List<Integer> backNum = numbers.subList(i + 1, n + 1);
+                char currentOperator = operators.get(i);
+                List<Character> frontOper = operators.subList(0, i);
+                List<Character> backOper = operators.subList(i + 1, n);
+                ArrayList<Integer> frontPossible = new ArrayList<>();
+                ArrayList<Integer> endPossible = new ArrayList<>();
+                getDiffWaysInteger(frontNum, frontOper, frontPossible);
+                getDiffWaysInteger(backNum, backOper, endPossible);
+                for (int fNum: frontPossible){
+                    for (int bNum: endPossible) {
+                        possibleResult.add(getResult(fNum, bNum, currentOperator));
+                    }
+                }
+            }
+        }
+    }
+
+    private int getResult(int a, int b, char operator){
+        switch (operator){
+            case '+': return a + b;
+            case '-': return a - b;
+            default: return a * b;
+        }
     }
 }
