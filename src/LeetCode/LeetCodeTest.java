@@ -99,10 +99,25 @@ public class LeetCodeTest {
         }
     }
 
+    private static void testTree() {
+        TagTree test = new TagTree();
+        System.out.println(test.generateTrees(7).size());
+
+//        ExtendTree tree1, tree2;
+//        tree1 = new ExtendTree(2);
+//        tree2 = new ExtendTree(2);
+//        tree1.left = new ExtendTree(1);
+//        tree2.left = new ExtendTree(1);
+//        tree1.right = new ExtendTree(3);
+//        tree2.right = new ExtendTree(3);
+//        System.out.println(tree1.hashCode());
+//        System.out.println(tree2.hashCode());
+    }
+
     public static void main(String[] args) {
         int runTime = 1;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < runTime; i++) testDivideAndConquer();
+        for (int i = 0; i < runTime; i++) testTree();
         long runningTime = System.currentTimeMillis() - startTime;
         System.out.println("Running time is " + runningTime / runTime);
     }

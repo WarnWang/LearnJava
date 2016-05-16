@@ -10,6 +10,18 @@ public class TagTree {
     int[] dp = null;
     private int maxValue = Integer.MIN_VALUE;
 
+    static void main (String[] args) {
+        ExtendTree tree1, tree2;
+        tree1 = new ExtendTree(2);
+        tree2 = new ExtendTree(2);
+        tree1.left = new ExtendTree(1);
+        tree2.left = new ExtendTree(1);
+        tree1.right = new ExtendTree(3);
+        tree2.right = new ExtendTree(3);
+        System.out.println(tree1.hashCode());
+        System.out.println(tree2.hashCode());
+    }
+
     /**
      * Given a binary tree, find its minimum depth.
      * The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf
@@ -174,6 +186,166 @@ public class TagTree {
         return answer;
     }
 
+    /**
+     * Given preorder and inorder traversal of a tree, construct the binary tree.
+     *
+     * @param preorder preorder traversal of a tree
+     * @param inorder  inorder traversal of a tree
+     * @return the reconstruct tree
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || inorder == null || preorder.length != inorder.length || preorder.length == 0)
+            return null;
+        TreeNode root = new TreeNode(preorder[0]);
+        int n = preorder.length;
+        for (int i = 0; i < n; i++) {
+            if (inorder[i] == preorder[0]) {
+                if (i != 0) {
+                    root.left = new TreeNode(preorder[1]);
+                    constructTree(root.left, preorder, 1, i + 1, inorder, 0, i);
+                }
+                if (i < n - 1) {
+                    root.right = new TreeNode(preorder[i + 1]);
+                    constructTree(root.right, preorder, i + 1, n, inorder, i + 1, n);
+                }
+                break;
+            }
+        }
+        return root;
+    }
+
+    private void constructTree(TreeNode root, int[] preorder, int preorderStart, int preorderEnd,
+                               int inorder[], int inorderStart, int inorderEnd) {
+        if (preorderEnd - preorderStart < 1) return;
+        for (int i = inorderStart; i < inorderEnd; i++) {
+            if (inorder[i] == preorder[preorderStart]) {
+                if (i != inorderStart) {
+                    root.left = new TreeNode(preorder[preorderStart + 1]);
+                    constructTree(root.left, preorder, preorderStart + 1, preorderStart + i - inorderStart, inorder,
+                            inorderStart, i);
+                }
+                if (i < inorderEnd - 1) {
+                    root.right = new TreeNode(preorder[preorderStart + i + 1 - inorderStart]);
+                    constructTree(root.right, preorder, preorderStart + i + 1 - inorderStart, preorderEnd, inorder,
+                            i + 1, inorderEnd);
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     * Given inorder and postorder traversal of a tree, construct the binary tree.
+     *
+     * @param inorder   inorder traversal of a tree
+     * @param postorder postorder traversal of a tree
+     * @return the reconstruct tree
+     */
+    public TreeNode buildTree2(int[] inorder, int[] postorder) {
+        if (inorder == null || postorder == null || inorder.length != postorder.length || inorder.length == 0)
+            return null;
+        if (inorder.length == 1) return new TreeNode(inorder[0]);
+        int n = postorder.length;
+        TreeNode root = new TreeNode(postorder[n - 1]);
+        constructTree(root, inorder, new int[]{0, n}, postorder, new int[]{0, n});
+        return root;
+    }
+
+    private void constructTree(TreeNode root, int[] inorder, int[] inorderRange, int[] postOrder, int[] postOrderRange) {
+        if (inorderRange[1] <= inorderRange[0]) return;
+        for (int i = inorderRange[0]; i < inorderRange[1]; i++) {
+            if (inorder[i] == root.val) {
+                if (i != inorderRange[1] - 1) {
+                    int[] newInorderRange = {i + 1, inorderRange[1]};
+                    int[] newPostorderRange = {postOrderRange[1] - (inorderRange[1] - i), postOrderRange[1] - 1};
+                    root.right = new TreeNode(postOrder[postOrderRange[1] - 2]);
+                    constructTree(root.right, inorder, newInorderRange, postOrder, newPostorderRange);
+                }
+                if (i > inorderRange[0]) {
+                    int[] newInorderRange = {inorderRange[0], i};
+                    int[] newPostOrderRange = {postOrderRange[0], postOrderRange[0] + i - inorderRange[0]};
+                    root.left = new TreeNode(postOrder[postOrderRange[0] + i - inorderRange[0] - 1]);
+                    constructTree(root.left, inorder, newInorderRange, postOrder, newPostOrderRange);
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     * Given n, generate all structurally unique BST's (binary search trees) that store values 1...n.
+     * <p>
+     * For example,
+     * Given n = 3, your program should return all 5 unique BST's shown below.
+     * <p>
+     * 1         3     3      2      1
+     * \       /     /      / \      \
+     * 3     2     1      1   3      2
+     * /     /       \                 \
+     * 2     1         2                 3
+     * confused what "{1,#,2,3}" means? > read more on how binary tree is serialized on OJ.
+     * <p>
+     *
+     * @param n a tree with different tree node
+     * @return all possible of different binarysearch tree
+     */
+    public List<TreeNode> generateTrees(int n) {
+        if (n == 0) return new ArrayList<>();
+        HashSet<ExtendTree> treeNodes = new HashSet<>();
+        generateTrees(new boolean[n], n, treeNodes, new int[n], 0);
+        ArrayList<TreeNode> treeNodes1 = new ArrayList<>(treeNodes.size());
+        for (ExtendTree tree: treeNodes) {
+            treeNodes1.add(tree.toTreeNode());
+        }
+        return treeNodes1;
+    }
+
+    private void generateTrees(boolean[] isUsed, int n, HashSet<ExtendTree> treeNodes, int[] nodeArray, int nodeIndex){
+        if (nodeIndex == isUsed.length) treeNodes.add(getTreesFromArray(nodeArray));
+        else {
+            for (int i = 0; i < n; i++) {
+                if (isUsed[i]) continue;
+                nodeArray[nodeIndex] = i + 1;
+                isUsed[i] = true;
+                generateTrees(isUsed, n, treeNodes, nodeArray, nodeIndex + 1);
+                isUsed[i] = false;
+            }
+        }
+    }
+
+    private ExtendTree getTreesFromArray(int[] nodeArray){
+        BSTree bsTree = new BSTree(nodeArray[0]);
+        for (int i = 1, n = nodeArray.length; i < n; i++) {
+            bsTree.insert(nodeArray[i]);
+        }
+        return bsTree.root;
+    }
+
+    private class BSTree {
+        ExtendTree root;
+
+        BSTree(int x) {
+            root = new ExtendTree(x);
+        }
+
+        void insert(int x){
+            ExtendTree pointer = root;
+            while (true) {
+                if (x > pointer.val) {
+                    if (pointer.right == null) {
+                        pointer.right = new ExtendTree(x);
+                        break;
+                    } else pointer = pointer.right;
+                } else {
+                    if (pointer.left == null) {
+                        pointer.left = new ExtendTree(x);
+                        break;
+                    } else pointer = pointer.left;
+                }
+            }
+        }
+    }
+
     private class BinarySearchTree {
         Node root;
 
@@ -240,89 +412,56 @@ public class TagTree {
             }
         }
     }
+}
 
-    /**
-     * Given preorder and inorder traversal of a tree, construct the binary tree.
-     *
-     * @param preorder preorder traversal of a tree
-     * @param inorder inorder traversal of a tree
-     * @return the reconstruct tree
-     */
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if (preorder == null || inorder == null || preorder.length != inorder.length || preorder.length == 0)
-            return null;
-        TreeNode root = new TreeNode(preorder[0]);
-        int n = preorder.length;
-        for (int i = 0; i < n; i++) {
-            if (inorder[i] == preorder[0]) {
-                if (i != 0) {
-                    root.left = new TreeNode(preorder[1]);
-                    constructTree(root.left, preorder, 1, i + 1, inorder, 0, i);
-                }
-                if (i < n - 1) {
-                    root.right = new TreeNode(preorder[i + 1]);
-                    constructTree(root.right, preorder, i + 1, n, inorder, i + 1, n);
-                }
-                break;
+class ExtendTree extends TreeNode{
+    ExtendTree left;
+    ExtendTree right;
+
+    ExtendTree(int x) {
+        super(x);
+    }
+
+    @Override
+    public int hashCode() {
+        ArrayList<Integer> nodeList = new ArrayList<>();
+        Stack<ExtendTree> treeNodeStack = new Stack<>();
+        treeNodeStack.push(this);
+        while (!treeNodeStack.isEmpty()) {
+            ExtendTree frontier = treeNodeStack.pop();
+            nodeList.add(frontier.val);
+            if (frontier.left != null) treeNodeStack.push(frontier.left);
+            if (frontier.right != null) treeNodeStack.push(frontier.right);
+        }
+        return nodeList.toString().hashCode();
+    }
+
+    TreeNode toTreeNode() {
+        TreeNode root = new TreeNode(val);
+        Stack<TreeNode> treeNodeStack = new Stack<>();
+        Stack<ExtendTree> extendTreeNode = new Stack<>();
+        treeNodeStack.push(root);
+        extendTreeNode.push(this);
+        while (!treeNodeStack.isEmpty()) {
+            TreeNode frontier = treeNodeStack.pop();
+            ExtendTree extendFrontier = extendTreeNode.pop();
+            if (extendFrontier.right != null) {
+                frontier.right = new TreeNode(extendFrontier.right.val);
+                treeNodeStack.push(frontier.right);
+                extendTreeNode.push(extendFrontier.right);
             }
+            if (extendFrontier.left != null) {
+                frontier.left = new TreeNode(extendFrontier.left.val);
+                treeNodeStack.push(frontier.left);
+                extendTreeNode.push(extendFrontier.left);
+            }
+
         }
         return root;
     }
 
-    private void constructTree(TreeNode root, int[] preorder, int preorderStart, int preorderEnd,
-                               int inorder[], int inorderStart, int inorderEnd){
-        if (preorderEnd - preorderStart < 1) return;
-        for (int i = inorderStart; i < inorderEnd; i++) {
-            if (inorder[i] == preorder[preorderStart]){
-                if (i != inorderStart) {
-                    root.left = new TreeNode(preorder[preorderStart + 1]);
-                    constructTree(root.left, preorder, preorderStart + 1, preorderStart + i - inorderStart, inorder,
-                            inorderStart, i);
-                }
-                if (i < inorderEnd - 1) {
-                    root.right = new TreeNode(preorder[preorderStart + i + 1 - inorderStart]);
-                    constructTree(root.right, preorder, preorderStart + i + 1 - inorderStart, preorderEnd, inorder,
-                            i + 1, inorderEnd);
-                }
-                break;
-            }
-        }
-    }
-
-    /**
-     * Given inorder and postorder traversal of a tree, construct the binary tree.
-     * @param inorder inorder traversal of a tree
-     * @param postorder postorder traversal of a tree
-     * @return the reconstruct tree
-     */
-    public TreeNode buildTree2(int[] inorder, int[] postorder) {
-        if (inorder == null || postorder == null || inorder.length != postorder.length || inorder.length == 0)
-            return null;
-        if (inorder.length == 1) return new TreeNode(inorder[0]);
-        int n = postorder.length;
-        TreeNode root = new TreeNode(postorder[n - 1]);
-        constructTree(root, inorder, new int[] {0, n}, postorder, new int[] {0, n});
-        return root;
-    }
-
-    private void constructTree(TreeNode root, int[] inorder, int[] inorderRange, int[] postOrder, int[] postOrderRange){
-        if (inorderRange[1] <= inorderRange[0]) return;
-        for (int i = inorderRange[0]; i < inorderRange[1]; i++) {
-            if (inorder[i] == root.val) {
-                if (i != inorderRange[1] - 1) {
-                    int[] newInorderRange = {i + 1, inorderRange[1]};
-                    int[] newPostorderRange = {postOrderRange[1] - (inorderRange[1] - i), postOrderRange[1] - 1};
-                    root.right = new TreeNode(postOrder[postOrderRange[1] - 2]);
-                    constructTree(root.right, inorder, newInorderRange, postOrder, newPostorderRange);
-                }
-                if (i > inorderRange[0]) {
-                    int[] newInorderRange = {inorderRange[0], i};
-                    int[] newPostOrderRange = {postOrderRange[0], postOrderRange[0] + i - inorderRange[0]};
-                    root.left = new TreeNode(postOrder[postOrderRange[0] + i - inorderRange[0] - 1]);
-                    constructTree(root.left, inorder, newInorderRange, postOrder, newPostOrderRange);
-                }
-                break;
-            }
-        }
+    @Override
+    public boolean equals(Object obj) {
+        return this.hashCode() == obj.hashCode();
     }
 }
