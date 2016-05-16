@@ -1,6 +1,8 @@
 package LeetCode;
 
-import java.util.Comparator;
+import net.datastructures.Tree;
+
+import java.util.*;
 
 /**
  * Created by warn on 4/5/2016.
@@ -260,5 +262,47 @@ public class TagDynamicProgramming {
             }
         }
         return output;
+    }
+
+    /**
+     * Given n, generate all structurally unique BST's (binary search trees) that store values 1...n.
+     * <p>
+     * For example,
+     * Given n = 3, your program should return all 5 unique BST's shown below.
+     * <p>
+     * 1         3     3      2      1
+     * \       /     /      / \      \
+     * 3     2     1      1   3      2
+     * /     /       \                 \
+     * 2     1         2                 3
+     * confused what "{1,#,2,3}" means? > read more on how binary tree is serialized on OJ.
+     * <p>
+     *
+     * @param n a tree with different tree node
+     * @return all possible of different binarysearch tree
+     */
+    public List<TreeNode> generateTrees(int n) {
+        return generateTreeNodes(1, n);
+    }
+
+    ArrayList<TreeNode> generateTreeNodes(int start, int max){
+        ArrayList<TreeNode> treeNodeList = new ArrayList<>();
+        ArrayList<TreeNode> leftTreeNodeList;
+        ArrayList<TreeNode> rightTreeNodeList;
+        for (int i = start; i <= max; i++) {
+            leftTreeNodeList = generateTreeNodes(start, i - 1);
+            rightTreeNodeList = generateTreeNodes(i + 1, max);
+            if (leftTreeNodeList.isEmpty()) leftTreeNodeList.add(null);
+            if (rightTreeNodeList.isEmpty()) rightTreeNodeList.add(null);
+            for (TreeNode left: leftTreeNodeList) {
+                for (TreeNode right: rightTreeNodeList) {
+                    TreeNode root = new TreeNode(i);
+                    root.left = left;
+                    root.right = right;
+                    treeNodeList.add(root);
+                }
+            }
+        }
+        return treeNodeList;
     }
 }
