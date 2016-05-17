@@ -388,19 +388,13 @@ public class TagMath {
      */
     public int mySqrt(int x) {
         if (x <= 1) return x;
-        int root = 1;
-        while (true) {
-            long f_x = root * root;
-            if (f_x > Integer.MAX_VALUE) {
-                root /= 2; continue;
-            }
-            if ((f_x + 2 * root >= x || f_x + 2 * root < 0) && f_x <= x) break;
-            int error = (int) f_x - x;
-            if (Math.abs(error) < 2 * root) {
-                error = (error < 0)? -1 : 1;
-            } else error /= 2 * root;
-            root = Math.min(Math.max(root - error, 1), 46340);
+        float root = 1;
+        float lastRoot = 0;
+        while ((int) (root - lastRoot) != 0) {
+            lastRoot = root;
+            root = 0.5f * root + x * 1.0f / (2.0f * root);
         }
-        return root;
+        int res = (int) root;
+        return res * res > x? res - 1: res;
     }
 }
