@@ -358,7 +358,7 @@ public class TagMath {
      * @return the array of the output number
      */
     public int[] plusOne(int[] digits) {
-        if (digits == null || digits.length == 0) return new int[] {1};
+        if (digits == null || digits.length == 0) return new int[]{1};
         int carry = 0;
         digits[digits.length - 1]++;
         for (int i = digits.length - 1; i >= 0; i--) {
@@ -376,5 +376,31 @@ public class TagMath {
             digits[0] = 1;
         }
         return digits;
+    }
+
+    /**
+     * implement int sqrt(int x).
+     * <p>
+     * Compute and return the square root of x.
+     *
+     * @param x an interger number
+     * @return the integer of this input number
+     */
+    public int mySqrt(int x) {
+        if (x <= 1) return x;
+        int root = 1;
+        while (true) {
+            long f_x = root * root;
+            if (f_x > Integer.MAX_VALUE) {
+                root /= 2; continue;
+            }
+            if ((f_x + 2 * root >= x || f_x + 2 * root < 0) && f_x <= x) break;
+            int error = (int) f_x - x;
+            if (Math.abs(error) < 2 * root) {
+                error = (error < 0)? -1 : 1;
+            } else error /= 2 * root;
+            root = Math.min(Math.max(root - error, 1), 46340);
+        }
+        return root;
     }
 }
