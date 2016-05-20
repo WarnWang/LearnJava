@@ -1,6 +1,11 @@
 package LeetCode;
 
+import net.datastructures.*;
+
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by warn on 16/3/2016.
@@ -849,5 +854,50 @@ public class TagArray {
             else if (matrix[midX][midY] > target) return searchMatrix(matrix, target, startIndex, midIndex);
             else return searchMatrix(matrix, target, midIndex + 1, endIndex);
         }
+    }
+
+    /**
+     * Given a set of distinct integers, nums, return all possible subsets.
+     * <p>
+     * Note:
+     * Elements in a subset must be in non-descending order.
+     * The solution set must not contain duplicate subsets.
+     * For example,
+     * If nums = [1,2,3], a solution is:
+     * <p>
+     * [
+     *   [3],
+     *   [1],
+     *   [2],
+     *   [1,2,3],
+     *   [1,3],
+     *   [2,3],
+     *   [1,2],
+     *   []
+     * ]
+     *
+     * @param nums a set of distinct integers
+     * @return return all possible subsets
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> subsetsList = new ArrayList<>();
+        subsetsList.add(Collections.emptyList());
+        if (nums != null && nums.length > 0) {
+            Arrays.sort(nums);
+            for (int i = 0, n=nums.length; i < n; i++) {
+                subsets(nums, subsetsList, i, new LinkedList<>(Collections.emptyList()));
+            }
+        }
+        return subsetsList;
+    }
+
+    private void subsets(int[] nums, List<List<Integer>> subsetsList, int startIndex, LinkedList<Integer> tempList) {
+        if (startIndex >= nums.length) return;
+        tempList.addLast(nums[startIndex]);
+        subsetsList.add(new ArrayList<>(tempList));
+        for (int i = startIndex + 1; i < nums.length; i++) {
+            subsets(nums, subsetsList, i, tempList);
+        }
+        tempList.removeLast();
     }
 }
