@@ -370,13 +370,13 @@ public class TagHashTable {
      * Given an array of integers, find if the array contains any duplicates. Your function should return true if any
      * value appears at least twice in the array, and it should return false if every element is distinct.
      *
-     * @param nums  an array of integers
+     * @param nums an array of integers
      * @return that array contains duplicate or not
      */
     public boolean containsDuplicate(int[] nums) {
         if (nums == null || nums.length < 1) return false;
         HashSet<Integer> numSet = new HashSet<>();
-        for (int num: nums) {
+        for (int num : nums) {
             if (numSet.contains(num)) return true;
             numSet.add(num);
         }
@@ -386,9 +386,34 @@ public class TagHashTable {
     public boolean containsDuplicateSort(int[] nums) {
         if (nums == null || nums.length < 1) return false;
         Arrays.sort(nums);
-        for (int i = 0, n =nums.length-1; i < n; i++) {
+        for (int i = 0, n = nums.length - 1; i < n; i++) {
             if (nums[i] == nums[i + 1]) return true;
         }
         return false;
+    }
+
+    /**
+     * Given two arrays, write a function to compute their intersection.
+     * <p>
+     * Example:
+     * Given nums1 = [1, 2, 2, 1], nums2 = [2, 2], return [2].
+     * <p>
+     * Note:
+     * Each element in the result must be unique.
+     * The result can be in any order.
+     *
+     * @param nums1 one array
+     * @param nums2 another array
+     * @return their intersection
+     */
+    public int[] intersection(int[] nums1, int[] nums2) {
+        HashSet<Integer> numInNums1 = new HashSet<>();
+        for (int num: nums1) numInNums1.add(num);
+        HashSet<Integer> intersections = new HashSet<>();
+        for (int num: nums2) if (numInNums1.contains(num)) intersections.add(num);
+        int[] interSection = new int[intersections.size()];
+        int i = 0;
+        for (int num: intersections) interSection[i++] = num;
+        return interSection;
     }
 }
