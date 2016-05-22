@@ -417,13 +417,27 @@ public class TagHashTable {
         return interSection;
     }
 
+    /**
+     * Given two arrays, write a function to compute their intersection.
+     * <p>
+     * Example:
+     * Given nums1 = [1, 2, 2, 1], nums2 = [2, 2], return [2, 2].
+     * <p>
+     * Note:
+     * Each element in the result should appear as many times as it shows in both arrays.
+     * The result can be in any order.
+     *
+     * @param nums1 one array
+     * @param nums2 another array
+     * @return their intersection
+     */
     public int[] intersectionTwoPointer(int[] nums1, int[] nums2) {
         if (nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0) return new int[0];
         ArrayList<Integer> interSection = new ArrayList<>();
         int i = 0, j = 0;
         Arrays.sort(nums1);
         Arrays.sort(nums2);
-        while (i < nums1.length && j< nums2.length) {
+        while (i < nums1.length && j < nums2.length) {
             if (nums1[i] < nums2[j]) i++;
             else if (nums1[i] > nums2[j]) j++;
             else {
