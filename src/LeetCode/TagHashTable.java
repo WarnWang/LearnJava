@@ -430,8 +430,6 @@ public class TagHashTable {
                 interSection.add(nums1[i]);
                 i++;
                 j++;
-                while (i < nums1.length && nums1[i] == nums1[i - 1]) i++;
-                while (j < nums2.length && nums2[j] == nums2[j - 1]) j++;
             }
         }
         int[] ints = new int[interSection.size()];
