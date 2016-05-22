@@ -408,12 +408,35 @@ public class TagHashTable {
      */
     public int[] intersection(int[] nums1, int[] nums2) {
         HashSet<Integer> numInNums1 = new HashSet<>();
-        for (int num: nums1) numInNums1.add(num);
+        for (int num : nums1) numInNums1.add(num);
         HashSet<Integer> intersections = new HashSet<>();
-        for (int num: nums2) if (numInNums1.contains(num)) intersections.add(num);
+        for (int num : nums2) if (numInNums1.contains(num)) intersections.add(num);
         int[] interSection = new int[intersections.size()];
         int i = 0;
-        for (int num: intersections) interSection[i++] = num;
+        for (int num : intersections) interSection[i++] = num;
         return interSection;
+    }
+
+    public int[] intersectionTwoPointer(int[] nums1, int[] nums2) {
+        if (nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0) return new int[0];
+        ArrayList<Integer> interSection = new ArrayList<>();
+        int i = 0, j = 0;
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        while (i < nums1.length && j< nums2.length) {
+            if (nums1[i] < nums2[j]) i++;
+            else if (nums1[i] > nums2[j]) j++;
+            else {
+                interSection.add(nums1[i]);
+                i++;
+                j++;
+                while (i < nums1.length && nums1[i] == nums1[i - 1]) i++;
+                while (j < nums2.length && nums2[j] == nums2[j - 1]) j++;
+            }
+        }
+        int[] ints = new int[interSection.size()];
+        j = 0;
+        for (int num : interSection) ints[j++] = num;
+        return ints;
     }
 }
