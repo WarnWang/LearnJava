@@ -1,6 +1,7 @@
 package LeetCode;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 
 /**
@@ -91,5 +92,39 @@ class MyLinkedListStack {
     // Return whether the stack is empty.
     public boolean empty() {
         return stack == null;
+    }
+}
+
+
+class MyArraylistStack {
+
+    private ArrayList<Integer> stack = new ArrayList<>();
+    private int index = 0;
+    private int size = 0;
+
+    // Push element x onto stack.
+    public void push(int x) {
+        if (index < size) {
+            stack.set(index, x);
+        } else {
+            stack.add(x);
+            size++;
+        }
+        index++;
+    }
+
+    // Removes the element on top of the stack.
+    public void pop() {
+        index--;
+    }
+
+    // Get the top element.
+    public int top() {
+        return stack.get(index - 1);
+    }
+
+    // Return whether the stack is empty.
+    public boolean empty() {
+        return index == 0;
     }
 }
