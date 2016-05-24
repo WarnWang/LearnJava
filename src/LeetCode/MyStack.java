@@ -54,3 +54,42 @@ public class MyStack {
         return index == 0;
     }
 }
+
+class MyLinkedListStack {
+
+    private class Node {
+        Node parent, child;
+        int val;
+        Node(int x) {
+            val = x;
+        }
+    }
+
+    private Node stack;
+
+    // Push element x onto stack.
+    public void push(int x) {
+        if (stack == null) stack = new Node(x);
+        else {
+            Node child = new Node(x);
+            stack.child = child;
+            child.parent = stack;
+            stack = child;
+        }
+    }
+
+    // Removes the element on top of the stack.
+    public void pop() {
+        stack = stack.parent;
+    }
+
+    // Get the top element.
+    public int top() {
+        return stack.val;
+    }
+
+    // Return whether the stack is empty.
+    public boolean empty() {
+        return stack == null;
+    }
+}
