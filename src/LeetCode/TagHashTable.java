@@ -451,4 +451,24 @@ public class TagHashTable {
         for (int num : interSection) ints[j++] = num;
         return ints;
     }
+
+    /**
+     * Given an array of integers and an integer k, find out whether there are two distinct indices i and j in the
+     * array such that nums[i] = nums[j] and the difference between i and j is at most k.
+     *
+     * @param nums an array of Integer
+     * @param k the biggest difference between two same number
+     * @return whether contains or not
+     */
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        if (nums == null || nums.length < 2 || k < 1) return false;
+        HashMap<Integer, Integer> indexMap = new HashMap<>();
+        for (int i = 0, n = nums.length; i < n; i++) {
+            if (indexMap.containsKey(nums[i])) {
+                if (i - indexMap.get(nums[i]) <= k) return true;
+                else indexMap.put(nums[i], i);
+            } else indexMap.put(nums[i], i);
+        }
+        return false;
+    }
 }
