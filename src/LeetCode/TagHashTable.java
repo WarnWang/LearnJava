@@ -457,7 +457,7 @@ public class TagHashTable {
      * array such that nums[i] = nums[j] and the difference between i and j is at most k.
      *
      * @param nums an array of Integer
-     * @param k the biggest difference between two same number
+     * @param k    the biggest difference between two same number
      * @return whether contains or not
      */
     public boolean containsNearbyDuplicate(int[] nums, int k) {
@@ -468,6 +468,30 @@ public class TagHashTable {
                 if (i - indexMap.get(nums[i]) <= k) return true;
                 else indexMap.put(nums[i], i);
             } else indexMap.put(nums[i], i);
+        }
+        return false;
+    }
+
+    /**
+     * Given an array of integers, find out whether there are two distinct indices i and j in the array such that the
+     * difference between nums[i] and nums[j] is at most t and the difference between i and j is at most k.
+     *
+     * @param nums an array of integers
+     * @param k    the most difference between two value
+     * @param t    the most difference between two indices
+     * @return has or not.
+     */
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        if (nums == null || nums.length < 2 || k < 1 || t < 0) return false;
+        TreeSet<Integer> set = new TreeSet<>();
+        for (int i = 0, n = nums.length; i < n; i++) {
+            int val = nums[i];
+            if (set.floor(val) != null && set.floor(val) + t >= val) return true;
+            else if (set.ceiling(val) != null && set.ceiling(val) - t <= val) return true;
+            else {
+                set.add(val);
+            }
+            if (i >= k) set.remove(nums[i - k]);
         }
         return false;
     }
