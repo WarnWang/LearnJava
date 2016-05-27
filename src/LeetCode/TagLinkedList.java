@@ -169,4 +169,39 @@ public class TagLinkedList {
         }
         return existsNode.get(head);
     }
+
+    /**
+     * Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the
+     * nodes of the first two lists.
+     *
+     * @param l1 one sorted linked lists
+     * @param l2 another sorted linked lists
+     * @return merge of the two list
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) return l2;
+        else if (l2 == null) return l1;
+        ListNode root, pointer;
+        if (l1.val > l2.val) {
+            root = new ListNode(l2.val);
+            l2 = l2.next;
+        } else {
+            root = new ListNode(l1.val);
+            l1 = l1.next;
+        }
+        pointer = root;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                pointer.next = new ListNode(l1.val);
+                l1 = l1.next;
+            } else {
+                pointer.next = new ListNode(l2.val);
+                l2 = l2.next;
+            }
+            pointer = pointer.next;
+        }
+        if (l1 != null) pointer.next = l1;
+        else pointer.next = l2;
+        return root;
+    }
 }
