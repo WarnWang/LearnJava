@@ -19,9 +19,7 @@ public class NestedIterator implements Iterator<Integer> {
     int index = 0;
 
     public NestedIterator(List<NestedInteger> nestedList) {
-        for (NestedInteger nestedInteger: nestedList) {
-            addIntegerFromNestedList(nestedInteger);
-        }
+        nestedList.forEach(this::addIntegerFromNestedList);
     }
 
     private void addIntegerFromNestedList(NestedInteger integer) {
