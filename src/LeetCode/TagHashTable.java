@@ -495,4 +495,35 @@ public class TagHashTable {
         }
         return false;
     }
+
+    /**
+     * Determine if a Sudoku is valid, according to: Sudoku Puzzles - The Rules.
+     * <p>
+     * The Sudoku board could be partially filled, where empty cells are filled with the character '.'.
+     *
+     * @param board a sudoku board
+     * @return this board is valid or not.
+     */
+    public boolean isValidSudoku(char[][] board) {
+        boolean[][] rowRule = new boolean[9][9];
+        boolean[][] colRule = new boolean[9][9];
+        boolean[][] cellRule = new boolean[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++){
+                char c = board[i][j];
+                if (c == '.') continue;
+                int cInt = c - '1';
+                if (rowRule[i][cInt]) return false;
+                else rowRule[i][cInt] = true;
+
+                if (colRule[j][cInt]) return false;
+                else colRule[j][cInt] = true;
+
+                int cellIndex = i / 3 * 3 + j / 3;
+                if (cellRule[cellIndex][cInt]) return false;
+                else cellRule[cellIndex][cInt] = true;
+            }
+        }
+        return true;
+    }
 }
