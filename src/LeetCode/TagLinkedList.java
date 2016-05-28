@@ -1,5 +1,7 @@
 package LeetCode;
 
+import net.datastructures.List;
+
 import java.util.HashMap;
 
 /**
@@ -202,6 +204,41 @@ public class TagLinkedList {
         }
         if (l1 != null) pointer.next = l1;
         else pointer.next = l2;
+        return root;
+    }
+
+    /**
+     * Sort a linked list using insertion sort.
+     *
+     * @param head a linked list
+     * @return the sorted linked list
+     */
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null) return null;
+        ListNode root = new ListNode(head.val);
+        head = head.next;
+        while (head != null) {
+            if (root.val > head.val) {
+                ListNode newRoot = new ListNode(head.val);
+                newRoot.next = root;
+                root = newRoot;
+            } else {
+                ListNode pointer = root;
+                while (true) {
+                    if (pointer.next == null) {
+                        pointer.next = new ListNode(head.val);
+                        break;
+                    } else if (pointer.next.val > head.val){
+                        ListNode temp = new ListNode(head.val);
+                        temp.next = pointer.next;
+                        pointer.next = temp;
+                        break;
+                    }
+                    pointer = pointer.next;
+                }
+            }
+            head = head.next;
+        }
         return root;
     }
 }
