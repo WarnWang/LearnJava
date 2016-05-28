@@ -20,20 +20,15 @@ public class NestedIterator implements Iterator<Integer> {
 
     public NestedIterator(List<NestedInteger> nestedList) {
         for (NestedInteger nestedInteger: nestedList) {
-            if (nestedInteger.isInteger()) integers.add(nestedInteger.getInteger());
-            else addIntegerFromNestedList(nestedInteger);
+            addIntegerFromNestedList(nestedInteger);
         }
     }
 
     private void addIntegerFromNestedList(NestedInteger integer) {
         if (integer.isInteger()) {
             integers.add(integer.getInteger());
-            return;
-        }
-        List<NestedInteger> nestedList = integer.getList();
-        for (NestedInteger nestedInteger: nestedList) {
-            if (nestedInteger.isInteger()) integers.add(nestedInteger.getInteger());
-            else addIntegerFromNestedList(nestedInteger);
+        } else {
+            integer.getList().forEach(this::addIntegerFromNestedList);
         }
     }
 
