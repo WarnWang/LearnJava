@@ -160,8 +160,8 @@ public class TagLinkedList {
             existsNode.put(pointer, new RandomListNode(pointer.label));
         }
 
-        for (RandomListNode pointer = head; pointer != null; pointer = pointer.next){
-            if (pointer.next != null){
+        for (RandomListNode pointer = head; pointer != null; pointer = pointer.next) {
+            if (pointer.next != null) {
                 existsNode.get(pointer).next = existsNode.get(pointer.next);
             }
 
@@ -228,7 +228,7 @@ public class TagLinkedList {
                     if (pointer.next == null) {
                         pointer.next = new ListNode(head.val);
                         break;
-                    } else if (pointer.next.val > head.val){
+                    } else if (pointer.next.val > head.val) {
                         ListNode temp = new ListNode(head.val);
                         temp.next = pointer.next;
                         pointer.next = temp;
@@ -238,6 +238,59 @@ public class TagLinkedList {
                 }
             }
             head = head.next;
+        }
+        return root;
+    }
+
+    /**
+     * You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order
+     * and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+     * Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+     * Output: 7 -> 0 -> 8
+     *
+     * @param l1 one linked list
+     * @param l2 another linked list
+     * @return the sum of the two
+     */
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode root, pointer;
+        int carry;
+        if (l1 == null) {
+            root = new ListNode(l2.val % 10);
+            l2 = l2.next;
+            carry = l2.val / 10;
+        } else if (l2 == null) {
+            root = new ListNode(l1.val % 10);
+            l1 = l1.next;
+            carry = l1.val / 10;
+        } else {
+            root = new ListNode((l1.val + l2.val) % 10);
+            carry = (l1.val + l2.val) / 10;
+            l1 = l1.next;
+            l2 = l2.next;
+        }
+        pointer = root;
+        while (l1 != null || l2 != null) {
+            if (l1 == null) {
+                pointer.next = new ListNode((l2.val + carry) % 10);
+                carry = (l2.val + carry) / 10;
+                l2 = l2.next;
+            } else if (l2 == null) {
+                pointer.next = new ListNode((l1.val + carry) % 10);
+                carry = (l1.val + carry) / 10;
+                l1 = l1.next;
+            } else {
+                pointer.next = new ListNode((l1.val + l2.val + carry) % 10);
+                carry = (l1.val + l2.val + carry) / 10;
+                l1 = l1.next;
+                l2 = l2.next;
+            }
+            pointer = pointer.next;
+        }
+        while (carry != 0) {
+            pointer.next = new ListNode(carry % 10);
+            carry /= 10;
+            pointer = pointer.next;
         }
         return root;
     }
