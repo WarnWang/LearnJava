@@ -369,4 +369,50 @@ public class TagString {
         }
         return a.reverse().toString();
     }
+
+    /**
+     * Given two numbers represented as strings, return multiplication of the numbers as a string.
+     *
+     * @param num1 one string
+     * @param num2 another string
+     * @return the multiply result
+     */
+    public String multiply(String num1, String num2) {
+        if (num1 == null || num2 == null) return null;
+        if (num1.equals("0") || num2.equals("0")) return "0";
+        char[] num1Char = num1.toCharArray(), num2Char = num2.toCharArray();
+        ArrayList<Integer> multiplyResult = new ArrayList<>();
+        int carry = 0;
+        int index;
+        for (int i = num1Char.length - 1; i >= 0; i--) {
+            int iNum = num1Char[i] - '0';
+            index = num1Char.length - 1 - i;
+            for (int j = num2Char.length - 1; j >= 0; j--) {
+                int cal = (num2Char[j] - '0') * iNum + carry;
+                if (multiplyResult.size() > index) {
+                    cal += multiplyResult.get(index);
+                    multiplyResult.set(index, cal % 10);
+                    carry = cal / 10;
+                } else {
+                    multiplyResult.add(cal % 10);
+                    carry = cal / 10;
+                }
+                index++;
+            }
+            while (carry != 0) {
+                if (multiplyResult.size() > index) {
+                    carry += multiplyResult.get(index);
+                    multiplyResult.set(index, carry % 10);
+                } else {
+                    multiplyResult.add(carry % 10);
+                }
+                carry /= 10;
+            }
+        }
+        StringBuilder result = new StringBuilder(multiplyResult.size());
+        for (int i = multiplyResult.size() - 1; i >= 0; i--) {
+            result.append(multiplyResult.get(i));
+        }
+        return result.toString();
+    }
 }
