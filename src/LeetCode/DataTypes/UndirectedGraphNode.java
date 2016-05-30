@@ -1,4 +1,4 @@
-package LeetCode;
+package LeetCode.DataTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,10 @@ import java.util.List;
  * This class will be used in the coming tag graph
  */
 public class UndirectedGraphNode {
-    int label;
-    List<UndirectedGraphNode> neighbors;
+    public int label;
+    public List<UndirectedGraphNode> neighbors;
 
-    UndirectedGraphNode(int x) {
+    public UndirectedGraphNode(int x) {
         label = x;
         neighbors = new ArrayList<UndirectedGraphNode>();
     }

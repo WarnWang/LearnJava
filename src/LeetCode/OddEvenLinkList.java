@@ -1,5 +1,7 @@
 package LeetCode;
 
+import LeetCode.DataTypes.ListNode;
+
 /**
  * Created by warn on 23/1/2016.
  */

@@ -1,4 +1,6 @@
-package LeetCode;
+package LeetCode.Algorithm;
+
+import LeetCode.DataTypes.UndirectedGraphNode;
 
 import java.util.*;
 

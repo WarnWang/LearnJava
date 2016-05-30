@@ -1,4 +1,4 @@
-package LeetCode.DesignPuzzles;
+package LeetCode.DataTypes;
 
 import java.util.List;
 

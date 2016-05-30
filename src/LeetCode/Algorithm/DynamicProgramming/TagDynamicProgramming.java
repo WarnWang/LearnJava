@@ -1,6 +1,6 @@
-package LeetCode;
+package LeetCode.Algorithm.DynamicProgramming;
 
-import net.datastructures.Tree;
+import LeetCode.DataTypes.TreeNode;
 
 import java.util.*;
 

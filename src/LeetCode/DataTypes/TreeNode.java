@@ -1,16 +1,17 @@
-package LeetCode;
+package LeetCode.DataTypes;
 
 import java.util.*;
 
 /**
  * Created by warn on 8/2/2016.
+ * TreeNode class, used in other problems
  */
 public class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
+    public int val;
+    public TreeNode left;
+    public TreeNode right;
 
-    TreeNode(int x) {
+    public TreeNode(int x) {
         val = x;
     }
 

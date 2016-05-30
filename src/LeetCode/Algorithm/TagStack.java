@@ -1,4 +1,4 @@
-package LeetCode;
+package LeetCode.Algorithm;
 
 /**
  * Created by warn on 17/4/2016.

@@ -1,15 +1,17 @@
-package LeetCode;
+package LeetCode.DataTypes;
 
 /**
  * Created by warn on 19/2/2016.
+ *
+ * A linked list type
  */
 
 
 public class ListNode {
-    int val;
-    ListNode next;
+    public int val;
+    public ListNode next;
 
-    ListNode(int x) {
+    public ListNode(int x) {
         val = x;
         next = null;
     }

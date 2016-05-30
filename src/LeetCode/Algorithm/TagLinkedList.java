@@ -1,6 +1,7 @@
-package LeetCode;
+package LeetCode.Algorithm;
 
-import net.datastructures.List;
+import LeetCode.DataTypes.ListNode;
+import LeetCode.RandomListNode;
 
 import java.util.HashMap;
 

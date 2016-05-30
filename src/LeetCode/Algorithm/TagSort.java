@@ -1,4 +1,6 @@
-package LeetCode;
+package LeetCode.Algorithm;
+
+import LeetCode.DataTypes.ListNode;
 
 import java.util.ArrayList;
 import java.util.Collections;

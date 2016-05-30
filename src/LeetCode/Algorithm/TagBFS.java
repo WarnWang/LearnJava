@@ -1,4 +1,6 @@
-package LeetCode;
+package LeetCode.Algorithm;
+
+import LeetCode.DataTypes.TreeNode;
 
 import java.util.*;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package LeetCode;
+package LeetCode.DesignPuzzles;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

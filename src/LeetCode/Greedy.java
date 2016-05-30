@@ -1,5 +1,7 @@
 package LeetCode;
 
+import LeetCode.Algorithm.TagMath;
+
 /**
  * Created by warn on 25/3/2016.
  * Use to store those questions with tag Greedy
