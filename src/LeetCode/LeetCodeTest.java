@@ -1,6 +1,7 @@
 package LeetCode;
 
 import LeetCode.Algorithm.*;
+import LeetCode.Algorithm.BinaryTree.TagTree;
 import LeetCode.Algorithm.DynamicProgramming.TagDynamicProgramming;
 import LeetCode.DataTypes.UndirectedGraphNode;
 
