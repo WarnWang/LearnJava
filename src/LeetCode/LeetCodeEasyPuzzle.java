@@ -1,6 +1,6 @@
 package LeetCode;
 
-import LeetCode.Algorithm.TagArray;
+import LeetCode.Algorithm.Array.TagArray;
 import LeetCode.DataTypes.ListNode;
 
 import java.util.Arrays;

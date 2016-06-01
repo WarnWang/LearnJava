@@ -1,4 +1,4 @@
-package LeetCode.Algorithm;
+package LeetCode.Algorithm.Array;
 
 import net.datastructures.*;
 
