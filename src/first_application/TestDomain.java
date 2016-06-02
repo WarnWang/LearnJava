@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class Test_Domain {
+public class TestDomain {
     public static void main(String[] args) {
         BufferedReader bReader = null;
         StringBuffer stringBuffer = new StringBuffer();
@@ -34,7 +34,7 @@ public class Test_Domain {
         }
 
         Document document = Jsoup.parse(stringBuffer.toString());
-        System.out.println(document.getElementById("__VIEWSTATE").val().toString());
+        System.out.println(document.getElementById("__VIEWSTATE").val());
     }
 
 }
