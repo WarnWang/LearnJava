@@ -19,14 +19,14 @@ public class Solution {
      * There exist two distinct solutions to the 4-queens puzzle:
      * <p>
      * [
-     *      [".Q..",  // Solution 1
-     *       "...Q",
-     *       "Q...",
-     *       "..Q."],
-     *      ["..Q.",  // Solution 2
-     *       "Q...",
-     *       "...Q",
-     *       ".Q.."]
+     * [".Q..",  // Solution 1
+     * "...Q",
+     * "Q...",
+     * "..Q."],
+     * ["..Q.",  // Solution 2
+     * "Q...",
+     * "...Q",
+     * ".Q.."]
      * ]
      *
      * @param n how many queues
@@ -35,14 +35,18 @@ public class Solution {
     public List<List<String>> solveNQueens(int n) {
         if (n <= 0) return null;
         List<List<String>> solutions = new ArrayList<>();
+
+        // represent the board, used to represent which position in the board is being attacked.
         boolean[][] isAttacked = new boolean[n][n];
+
+        // An array to mark that the Y position of each queen in every row.
         int[] queenYPosition = new int[n];
         solveNQueens(0, n, isAttacked, queenYPosition, solutions);
         return solutions;
     }
 
     private void solveNQueens(int index, int nQueens, boolean[][] isAttacked, int[] queenYPosition,
-                              List<List<String>> solutions){
+                              List<List<String>> solutions) {
         if (index == nQueens) solutions.add(generateSolutionFromQueenYPosition(queenYPosition, nQueens));
         else {
             ArrayList<int[]> changedBoard = new ArrayList<>();
@@ -51,14 +55,14 @@ public class Solution {
                     changedBoard.clear();
                     changeAttackList(isAttacked, index, i, nQueens, changedBoard);
                     queenYPosition[index] = i;
-                    solveNQueens(index+1, nQueens, isAttacked, queenYPosition, solutions);
+                    solveNQueens(index + 1, nQueens, isAttacked, queenYPosition, solutions);
                     recoverIsAttackedArray(isAttacked, changedBoard);
                 }
             }
         }
     }
 
-    private List<String> generateSolutionFromQueenYPosition(int[] queenYPosition, int nQueens){
+    private List<String> generateSolutionFromQueenYPosition(int[] queenYPosition, int nQueens) {
         ArrayList<String> solution = new ArrayList<>(nQueens);
         for (int i = 0; i < nQueens; i++) {
             StringBuilder row = new StringBuilder();
@@ -71,31 +75,32 @@ public class Solution {
         return solution;
     }
 
-    private void changeAttackList(boolean[][] isAttacked, int xPosition, int yPosition, int nQueens,
-                                  ArrayList<int[]> changedIndex) {
-        for (int i = xPosition + 1; i < nQueens; i++) {
-            if (!isAttacked[i][yPosition]) {
-                isAttacked[i][yPosition] = true;
-                changedIndex.add(new int[] {i, yPosition});
+    private void changeAttackList(boolean[][] isAttacked, int x, int y, int nQueens, ArrayList<int[]> changedIndex) {
+        // add all positions that being attacked below x, y to is attacked array, as I did this from top to bottom,
+        // there is no need to change values in the same and above row.
+        for (int i = x + 1; i < nQueens; i++) {
+            if (!isAttacked[i][y]) {
+                isAttacked[i][y] = true;
+                changedIndex.add(new int[]{i, y});
             }
         }
 
-        for (int i = xPosition + 1, j = yPosition + 1; i < nQueens && j < nQueens; i++, j++) {
+        for (int i = x + 1, j = y + 1; i < nQueens && j < nQueens; i++, j++) {
             if (!isAttacked[i][j]) {
                 isAttacked[i][j] = true;
-                changedIndex.add(new int[] {i, j});
+                changedIndex.add(new int[]{i, j});
             }
         }
 
-        for (int i = xPosition + 1, j = yPosition - 1; i < nQueens && j > -1; i++, j--) {
+        for (int i = x + 1, j = y - 1; i < nQueens && j > -1; i++, j--) {
             if (!isAttacked[i][j]) {
                 isAttacked[i][j] = true;
-                changedIndex.add(new int[] {i, j});
+                changedIndex.add(new int[]{i, j});
             }
         }
     }
 
     private void recoverIsAttackedArray(boolean[][] isAttacked, ArrayList<int[]> changedIndex) {
-        for (int[] changedPosition: changedIndex) isAttacked[changedPosition[0]][changedPosition[1]] = false;
+        for (int[] changedPosition : changedIndex) isAttacked[changedPosition[0]][changedPosition[1]] = false;
     }
 }
