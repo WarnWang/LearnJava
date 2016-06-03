@@ -1,6 +1,8 @@
 package LeetCode.Algorithm.DepthFirstSearch;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -102,5 +104,36 @@ public class Solution {
 
     private void recoverIsAttackedArray(boolean[][] isAttacked, ArrayList<int[]> changedIndex) {
         for (int[] changedPosition : changedIndex) isAttacked[changedPosition[0]][changedPosition[1]] = false;
+    }
+
+    // https://leetcode.com/discuss/102798/java-easy-to-understand-recursive-solution
+    public List<List<String>> solveNQueensBetterValidation(int n) {
+        if (n <= 0) return null;
+        List<List<String>> solutions = new ArrayList<>();
+        solveNQueensBetterValidation(0, n, new int[n], new LinkedList<>(), solutions);
+        return solutions;
+    }
+
+    private void solveNQueensBetterValidation(int row, int n, int[] colPosition, LinkedList<String> path,
+                                              List<List<String>> solutions) {
+        if (row == n) solutions.add(new ArrayList<>(path));
+        else {
+            for (int i = 0; i < n; i++) {
+                if (checkValid(row, i, colPosition)) {
+                    colPosition[row] = i;
+                    path.add(String.join("", Collections.nCopies(i, ".")) + 'Q'
+                            + String.join("", Collections.nCopies(n - i - 1, ".")));
+                    solveNQueensBetterValidation(row + 1, n, colPosition, path, solutions);
+                    path.removeLast();
+                }
+            }
+        }
+    }
+
+    private boolean checkValid(int row, int col, int[] colPosition) {
+        for (int i = 0; i < row; i++) {
+            if (colPosition[i] == col || Math.abs(colPosition[i] - col) == row - i) return false;
+        }
+        return true;
     }
 }
