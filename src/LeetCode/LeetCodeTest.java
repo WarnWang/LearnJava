@@ -3,6 +3,7 @@ package LeetCode;
 import LeetCode.Algorithm.*;
 import LeetCode.Algorithm.Array.TagArray;
 import LeetCode.Algorithm.BinaryTree.TagTree;
+import LeetCode.Algorithm.DepthFirstSearch.TagDFS;
 import LeetCode.Algorithm.DynamicProgramming.TagDynamicProgramming;
 import LeetCode.DataTypes.UndirectedGraphNode;
 

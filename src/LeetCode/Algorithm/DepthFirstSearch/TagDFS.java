@@ -1,4 +1,4 @@
-package LeetCode.Algorithm;
+package LeetCode.Algorithm.DepthFirstSearch;
 
 import LeetCode.DataTypes.TreeNode;
 
