@@ -1,4 +1,4 @@
-package LeetCode.Algorithm;
+package LeetCode.Algorithm.Sort;
 
 import LeetCode.DataTypes.ListNode;
 
