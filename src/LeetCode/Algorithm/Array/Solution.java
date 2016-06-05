@@ -1,5 +1,9 @@
 package LeetCode.Algorithm.Array;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by warn on 1/6/2016.
  * Store solution to Array puzzles
@@ -46,5 +50,34 @@ public class Solution {
         if (start >= end) return 0;
         else if ((end - start) % 2 == 1) return nums[(start + end) / 2];
         else return (double) (nums[(start + end) / 2] + nums[(start + end) / 2 - 1]) / 2.0;
+    }
+
+    /**
+     * Given a sorted integer array without duplicates, return the summary of its ranges.
+     * <p>
+     * For example, given [0,1,2,4,5,7], return ["0->2","4->5","7"].
+     *
+     * @param nums a sorted integer array without duplicates
+     * @return return the summary of its ranges
+     */
+    public List<String> summaryRanges(int[] nums) {
+        ArrayList<String> rangeList = new ArrayList<>();
+        if (nums == null || nums.length == 0) return rangeList;
+        int start = nums[0];
+        boolean inRange = false;
+        for (int i = 0, n = nums.length; i < n; i++) {
+            if (inRange) {
+                if (i + 1 == n || nums[i + 1] != nums[i] + 1) {
+                    inRange = false;
+                    rangeList.add(start + "->" + nums[i]);
+                }
+            } else {
+                start = nums[i];
+                if (i + 1 == n || nums[i + 1] != nums[i] + 1) {
+                    rangeList.add(Integer.toString(nums[i]));
+                } else inRange = true;
+            }
+        }
+        return rangeList;
     }
 }
