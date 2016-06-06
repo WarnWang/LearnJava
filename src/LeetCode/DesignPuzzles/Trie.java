@@ -8,16 +8,16 @@ import java.util.HashMap;
  */
 class TrieNode {
     HashMap<Character, TrieNode> childNodeMap;
+    boolean isEnd;
     // Initialize your data structure here.
     public TrieNode() {
         childNodeMap = new HashMap<>();
+        isEnd = false;
     }
 }
 
 public class Trie {
     private TrieNode root;
-    private char stop = '\0';
-
     public Trie() {
         root = new TrieNode();
     }
@@ -25,7 +25,7 @@ public class Trie {
     // Inserts a word into the trie.
     public void insert(String word) {
         if (word == null) {
-            root.childNodeMap.put(stop, null);
+            root.isEnd = true;
             return;
         }
         char[] wordChar = word.toCharArray();
@@ -36,19 +36,19 @@ public class Trie {
             }
             pointer = pointer.childNodeMap.get(c);
         }
-        pointer.childNodeMap.put(stop, null);
+        pointer.isEnd = true;
     }
 
     // Returns if the word is in the trie.
     public boolean search(String word) {
-        if (word == null) return root.childNodeMap.containsKey(stop);
+        if (word == null) return root.isEnd;
         char[] wordChar = word.toCharArray();
         TrieNode pointer = root;
         for (char c: wordChar) {
             if (!pointer.childNodeMap.containsKey(c)) return false;
             pointer = pointer.childNodeMap.get(c);
         }
-        return pointer.childNodeMap.containsKey(stop);
+        return pointer.isEnd;
     }
 
     // Returns if there is any word in the trie
