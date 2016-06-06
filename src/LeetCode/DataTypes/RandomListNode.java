@@ -1,4 +1,4 @@
-package LeetCode;
+package LeetCode.DataTypes;
 
 /**
  * Created by warn on 11/5/2016.
@@ -8,10 +8,10 @@ package LeetCode;
  * the list or null.
  */
 public class RandomListNode {
-    int label;
-    RandomListNode next, random;
+    public int label;
+    public RandomListNode next, random;
 
-    RandomListNode(int x) {
+    public RandomListNode(int x) {
         this.label = x;
     }
 }

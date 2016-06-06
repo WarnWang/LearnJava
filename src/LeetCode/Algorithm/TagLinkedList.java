@@ -1,7 +1,7 @@
 package LeetCode.Algorithm;
 
 import LeetCode.DataTypes.ListNode;
-import LeetCode.RandomListNode;
+import LeetCode.DataTypes.RandomListNode;
 
 import java.util.HashMap;
 

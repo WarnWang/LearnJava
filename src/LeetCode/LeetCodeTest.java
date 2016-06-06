@@ -6,6 +6,7 @@ import LeetCode.Algorithm.BinaryTree.TagTree;
 import LeetCode.Algorithm.DepthFirstSearch.TagDFS;
 import LeetCode.Algorithm.DynamicProgramming.TagDynamicProgramming;
 import LeetCode.Algorithm.Sort.TagSort;
+import LeetCode.DataTypes.RandomListNode;
 import LeetCode.DataTypes.UndirectedGraphNode;
 
 import java.util.Arrays;
