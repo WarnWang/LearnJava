@@ -22,7 +22,7 @@ import java.util.HashMap;
  * search("b..") -> true
  */
 public class WordDictionary {
-    private Trie dictionary = new Trie();
+    TrieNode root = new TrieNode();
 
     public static void main(String args[]) {
         WordDictionary wordDictionary = new WordDictionary();
@@ -37,13 +37,34 @@ public class WordDictionary {
 
     // Adds a word into the data structure.
     public void addWord(String word) {
-        dictionary.addWord(word);
+        if (word == null) root.isEnd = true;
+        else {
+            TrieNode pointer = root;
+            for (int i = 0, n = word.length(); i < n; i++) {
+                char c = word.charAt(i);
+                if (!pointer.nodeHashMap.containsKey(c)) pointer.nodeHashMap.put(c, new TrieNode());
+                pointer = pointer.nodeHashMap.get(c);
+            }
+            pointer.isEnd = true;
+        }
     }
 
     // Returns if the word is in the data structure. A word could
     // contain the dot character '.' to represent any one letter.
     public boolean search(String word) {
-        return dictionary.searchRegex(word);
+        if (word == null || word.length() == 0) return root.isEnd;
+        else return searchRegex(word, 0, root);
+    }
+
+    boolean searchRegex(String word, int index, TrieNode node) {
+        if (index == word.length()) return node.isEnd;
+        char c = word.charAt(index);
+        if (c == '.') {
+            for (TrieNode pointer : node.nodeHashMap.values()) {
+                if (searchRegex(word, index + 1, pointer)) return true;
+            }
+            return false;
+        } else return node.nodeHashMap.containsKey(c) && searchRegex(word, index + 1, node.nodeHashMap.get(c));
     }
 
     class TrieNode {
@@ -53,43 +74,6 @@ public class WordDictionary {
         TrieNode() {
             nodeHashMap = new HashMap<>();
             isEnd = false;
-        }
-    }
-
-    private class Trie {
-        TrieNode root;
-
-        Trie() {
-            root = new TrieNode();
-        }
-
-        void addWord(String word) {
-            if (word == null) root.isEnd = true;
-            else {
-                TrieNode pointer = root;
-                for (int i = 0, n = word.length(); i < n; i++) {
-                    char c = word.charAt(i);
-                    if (!pointer.nodeHashMap.containsKey(c)) pointer.nodeHashMap.put(c, new TrieNode());
-                    pointer = pointer.nodeHashMap.get(c);
-                }
-                pointer.isEnd = true;
-            }
-        }
-
-        boolean searchRegex(String word) {
-            if (word == null || word.length() == 0) return root.isEnd;
-            else return searchRegex(word, 0, root);
-        }
-
-        boolean searchRegex(String word, int index, TrieNode node) {
-            if (index == word.length()) return node.isEnd;
-            char c = word.charAt(index);
-            if (c == '.') {
-                for (TrieNode pointer : node.nodeHashMap.values()) {
-                    if (searchRegex(word, index + 1, pointer)) return true;
-                }
-                return false;
-            } else return node.nodeHashMap.containsKey(c) && searchRegex(word, index + 1, node.nodeHashMap.get(c));
         }
     }
 }
