@@ -1,5 +1,7 @@
 package LeetCode.DesignPuzzles;
 
+import java.util.HashMap;
+
 /**
  * Created by warn on 7/6/2016.
  * Design a data structure that supports the following two operations:
@@ -44,69 +46,50 @@ public class WordDictionary {
         return dictionary.searchRegex(word);
     }
 
-    private class TrieNode {
-        char c;
+    class TrieNode {
         boolean isEnd;
-        TrieNode son, larger, smaller;
+        HashMap<Character, TrieNode> nodeHashMap;
 
-        TrieNode(char c) {
-            this.c = c;
+        TrieNode() {
+            nodeHashMap = new HashMap<>();
             isEnd = false;
         }
     }
 
     private class Trie {
         TrieNode root;
-        boolean hasEmptyString;
 
         Trie() {
-            hasEmptyString = false;
+            root = new TrieNode();
         }
 
         void addWord(String word) {
-            if (word == null || word.length() == 0) hasEmptyString = true;
+            if (word == null) root.isEnd = true;
             else {
-                root = addWord(word, 0, root);
+                TrieNode pointer = root;
+                for (int i = 0, n = word.length(); i < n; i++) {
+                    char c = word.charAt(i);
+                    if (!pointer.nodeHashMap.containsKey(c)) pointer.nodeHashMap.put(c, new TrieNode());
+                    pointer = pointer.nodeHashMap.get(c);
+                }
+                pointer.isEnd = true;
             }
-        }
-
-        private TrieNode addWord(String word, int index, TrieNode node) {
-            char c = word.charAt(index);
-            if (node == null) {
-                node = new TrieNode(c);
-            }
-            if (c > node.c) {
-                node.larger = addWord(word, index, node.larger);
-            } else if (c < node.c) {
-                node.smaller = addWord(word, index, node.smaller);
-            } else {
-                if (index + 1 == word.length()) node.isEnd = true;
-                else node.son = addWord(word, index + 1, node.son);
-            }
-            return node;
         }
 
         boolean searchRegex(String word) {
-            if (word == null || word.length() == 0) return hasEmptyString;
+            if (word == null || word.length() == 0) return root.isEnd;
             else return searchRegex(word, 0, root);
         }
 
         boolean searchRegex(String word, int index, TrieNode node) {
+            if (index == word.length()) return node.isEnd;
             char c = word.charAt(index);
-            if (node == null) return false;
-            if (c == node.c) {
-                if (index + 1 == word.length()) return node.isEnd;
-                else return searchRegex(word, index + 1, node.son);
-            } else if (c == '.') {
-                if (index + 1 == word.length()) {
-                    return (node.isEnd || searchRegex(word, index, node.larger)
-                            || searchRegex(word, index, node.smaller));
-                } else {
-                    return (searchRegex(word, index + 1, node.son) || searchRegex(word, index, node.larger)
-                            || searchRegex(word, index, node.smaller));
+            if (c == '.') {
+                for (TrieNode pointer : node.nodeHashMap.values()) {
+                    if (searchRegex(word, index + 1, pointer)) return true;
                 }
-            } else if (c > node.c) return searchRegex(word, index, node.larger);
-            else return searchRegex(word, index, node.smaller);
+                return false;
+            } else return node.nodeHashMap.containsKey(c) && searchRegex(word, index + 1, node.nodeHashMap.get(c));
         }
     }
 }
