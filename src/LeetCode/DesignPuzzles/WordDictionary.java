@@ -42,8 +42,9 @@ public class WordDictionary {
             TrieNode pointer = root;
             for (int i = 0, n = word.length(); i < n; i++) {
                 char c = word.charAt(i);
-                if (!pointer.nodeHashMap.containsKey(c)) pointer.nodeHashMap.put(c, new TrieNode());
-                pointer = pointer.nodeHashMap.get(c);
+                int index = c - 'a';
+                if (pointer.nodesArray[index] == null) pointer.nodesArray[index] = new TrieNode();
+                pointer = pointer.nodesArray[index];
             }
             pointer.isEnd = true;
         }
@@ -60,19 +61,18 @@ public class WordDictionary {
         if (index == word.length()) return node.isEnd;
         char c = word.charAt(index);
         if (c == '.') {
-            for (TrieNode pointer : node.nodeHashMap.values()) {
-                if (searchRegex(word, index + 1, pointer)) return true;
+            for (TrieNode pointer : node.nodesArray) {
+                if (pointer != null && searchRegex(word, index + 1, pointer)) return true;
             }
             return false;
-        } else return node.nodeHashMap.containsKey(c) && searchRegex(word, index + 1, node.nodeHashMap.get(c));
+        } else return node.nodesArray[c - 'a'] != null && searchRegex(word, index + 1, node.nodesArray[c - 'a']);
     }
 
     class TrieNode {
         boolean isEnd;
-        HashMap<Character, TrieNode> nodeHashMap;
+        TrieNode[] nodesArray = new TrieNode[26];
 
         TrieNode() {
-            nodeHashMap = new HashMap<>();
             isEnd = false;
         }
     }
