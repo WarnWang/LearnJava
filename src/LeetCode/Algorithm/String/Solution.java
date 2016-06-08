@@ -49,8 +49,26 @@ public class Solution {
         return reverseString.toString();
     }
 
+    public String reverseWords(String s) {
+        if (s == null || s.length() == 0) return "";
+        StringBuilder reversedString = new StringBuilder();
+        int lastNonSpaceIndex = -1;
+        for (int n = s.length(), i = n - 1; i > -1; i--) {
+            char c = s.charAt(i);
+            if (lastNonSpaceIndex == -1 && c != ' ') lastNonSpaceIndex = i + 1;
+            else if (c == ' ' && lastNonSpaceIndex != -1) {
+                reversedString.append(s.substring(i + 1, lastNonSpaceIndex));
+                reversedString.append(' ');
+                lastNonSpaceIndex = -1;
+            }
+        }
+        if (lastNonSpaceIndex != -1) reversedString.append(s.substring(0, lastNonSpaceIndex));
+        else if (reversedString.length() > 0) reversedString.deleteCharAt(reversedString.length() - 1);
+        return reversedString.toString();
+    }
+
     public static void main(String args[]) {
         Solution test = new Solution();
-        System.out.println(test.reverseWordsStack(" a") + "!");
+        System.out.println(test.reverseWords(" aqo kdn   ") + "!");
     }
 }
