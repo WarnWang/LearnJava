@@ -67,6 +67,18 @@ public class Solution {
         return reversedString.toString();
     }
 
+    public String reverseWordsSplitString(String s) {
+        if (s == null) return "";
+        String[] sArray = s.trim().split(" ");
+        if (sArray.length < 1) return "";
+        StringBuilder reversedString = new StringBuilder(sArray[sArray.length - 1]);
+        for (int i = sArray.length - 2; i > -1; i--) {
+            if (sArray[i].length() < 1) continue;
+            reversedString.append(' ').append(sArray[i]);
+        }
+        return reversedString.toString();
+    }
+
     public static void main(String args[]) {
         Solution test = new Solution();
         System.out.println(test.reverseWords(" aqo kdn   ") + "!");
