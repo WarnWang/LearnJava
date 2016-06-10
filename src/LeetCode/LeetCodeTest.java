@@ -3,6 +3,7 @@ package LeetCode;
 import LeetCode.Algorithm.*;
 import LeetCode.Algorithm.Array.TagArray;
 import LeetCode.Algorithm.BinaryTree.TagTree;
+import LeetCode.Algorithm.DepthFirstSearch.Solution;
 import LeetCode.Algorithm.DepthFirstSearch.TagDFS;
 import LeetCode.Algorithm.DynamicProgramming.TagDynamicProgramming;
 import LeetCode.Algorithm.Sort.TagSort;
@@ -18,13 +19,9 @@ import java.util.Arrays;
  */
 public class LeetCodeTest {
     private static void testDFS() {
-        TagDFS test;
-        test = new TagDFS();
-//        System.out.println(test.partition("baabc").toString());
-        int nCourse = 2;
-        int[][] prerequisites = {{1, 0}};
-        int[] result = test.findOrder(nCourse, prerequisites);
-        System.out.println(Arrays.toString(result));
+        Solution test;
+        test = new Solution();
+        System.out.println(test.partition("aab").toString());
     }
 
     private static void testMath() {
@@ -126,7 +123,7 @@ public class LeetCodeTest {
     public static void main(String[] args) {
         int runTime = 1;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < runTime; i++) testTree();
+        for (int i = 0; i < runTime; i++) testDFS();
         long runningTime = System.currentTimeMillis() - startTime;
         System.out.println("Running time is " + runningTime / runTime);
     }

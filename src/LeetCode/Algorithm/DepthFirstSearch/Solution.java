@@ -1,9 +1,6 @@
 package LeetCode.Algorithm.DepthFirstSearch;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by warn on 3/6/2016.
@@ -134,6 +131,66 @@ public class Solution {
         for (int i = 0; i < row; i++) {
             if (colPosition[i] == col || Math.abs(colPosition[i] - col) == row - i) return false;
         }
+        return true;
+    }
+
+    /**
+     * Given a string s, partition s such that every substring of the partition is a palindrome.
+     * <p>
+     * Return all possible palindrome partitioning of s.
+     * <p>
+     * For example, given s = "aab",
+     * Return
+     * <p>
+     * [
+     * ["aa","b"],
+     * ["a","a","b"]
+     * ]
+     *
+     * @param s a string
+     * @return all possible palindrome partitioning of s
+     */
+    private int[][] stringMap;
+    public List<List<String>> partition(String s) {
+        List<List<String>> partitionList = new ArrayList<>();
+        if (s == null || s.length() == 0) return partitionList;
+        stringMap = new int[s.length()][s.length()];
+        partition(s, 0, partitionList, new ArrayList<>());
+        return partitionList;
+    }
+
+    private void partition(String s, int startIndex, List<List<String>> partitions, List<String> path) {
+        if (startIndex >= s.length()) partitions.add(path);
+        for (int i = startIndex, n = s.length(); i < n; i++) {
+            if (isPalindrome(s, startIndex, i)) {
+                ArrayList<String> newPath = new ArrayList<>(path);
+                newPath.add(s.substring(startIndex, i + 1));
+                partition(s, i + 1, partitions, newPath);
+            }
+        }
+    }
+
+    private boolean isPalindrome(String s, int start, int end) {
+        if (start == end || stringMap[start][end] == 1) return true;
+        else if (stringMap[start][end] == -1) return false;
+        int i = start, j = end;
+        while (i < j) {
+            if (stringMap[i][j] == -1) {
+                stringMap[start][end] = -1;
+                return false;
+            } else if (stringMap[i][j] == 1) {
+                stringMap[start][end] = 1;
+                return true;
+            } else if (s.charAt(i) != s.charAt(j)) {
+                stringMap[i][j] = -1;
+                stringMap[start][end] = -1;
+                return false;
+            } else {
+                i++;
+                j--;
+            }
+        }
+        stringMap[start][end] = 1;
         return true;
     }
 }
