@@ -1,4 +1,4 @@
-package LeetCode.Algorithm;
+package LeetCode.Algorithm.BitManipulation;
 
 /**
  * Created by warn on 23/5/2016.
