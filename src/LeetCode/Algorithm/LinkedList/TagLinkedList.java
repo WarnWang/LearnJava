@@ -1,4 +1,4 @@
-package LeetCode.Algorithm;
+package LeetCode.Algorithm.LinkedList;
 
 import LeetCode.DataTypes.ListNode;
 import LeetCode.DataTypes.RandomListNode;
