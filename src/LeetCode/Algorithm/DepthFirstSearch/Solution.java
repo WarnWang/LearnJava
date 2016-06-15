@@ -9,6 +9,24 @@ import java.util.*;
 public class Solution {
 
     /**
+     * Given a string s, partition s such that every substring of the partition is a palindrome.
+     * <p>
+     * Return all possible palindrome partitioning of s.
+     * <p>
+     * For example, given s = "aab",
+     * Return
+     * <p>
+     * [
+     * ["aa","b"],
+     * ["a","a","b"]
+     * ]
+     *
+     * @param s a string
+     * @return all possible palindrome partitioning of s
+     */
+    private int[][] stringMap;
+
+    /**
      * The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each
      * other.
      * Given an integer n, return all distinct solutions to the n-queens puzzle.
@@ -134,23 +152,6 @@ public class Solution {
         return true;
     }
 
-    /**
-     * Given a string s, partition s such that every substring of the partition is a palindrome.
-     * <p>
-     * Return all possible palindrome partitioning of s.
-     * <p>
-     * For example, given s = "aab",
-     * Return
-     * <p>
-     * [
-     * ["aa","b"],
-     * ["a","a","b"]
-     * ]
-     *
-     * @param s a string
-     * @return all possible palindrome partitioning of s
-     */
-    private int[][] stringMap;
     public List<List<String>> partition(String s) {
         List<List<String>> partitionList = new ArrayList<>();
         if (s == null || s.length() == 0) return partitionList;
@@ -192,5 +193,66 @@ public class Solution {
         }
         stringMap[start][end] = 1;
         return true;
+    }
+
+    /**
+     * Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible
+     * results.
+     * <p>
+     * Note: The input string may contain letters other than the parentheses ( and ).
+     * <p>
+     * Examples:
+     * "()())()" -> ["()()()", "(())()"]
+     * "(a)())()" -> ["(a)()()", "(a())()"]
+     * ")(" -> [""]
+     *
+     * @param s a string of parentheses
+     * @return the minimum number of invalid parentheses
+     */
+    public List<String> removeInvalidParentheses(String s) {
+        maxLength = 0;
+        ArrayList<String> results = new ArrayList<>();
+        HashSet<String> temp = new HashSet<>();
+        temp.add("");
+        if (s != null && s.length() > 0) {
+            removeInvalidParentheses(s.toCharArray(), 0, new char[s.length()], 0, temp);
+        }
+        for (String str: temp) {
+            if (str.length() == maxLength) results.add(str);
+        }
+        return results;
+    }
+
+    private int maxLength;
+
+    private void removeInvalidParentheses(char[] s, int index, char[] path, int end, HashSet<String> result) {
+        if (end >= maxLength && isValidParentheses(path, end)) {
+            result.add(new String(path, 0, end));
+            maxLength = end;
+        }
+        if (index < s.length){
+            for (int i = index; i < s.length; i++) {
+                if (s.length - i + end < maxLength) return;
+                path[end] = s[i];
+                removeInvalidParentheses(s, i + 1, path, end + 1, result);
+            }
+        }
+    }
+
+    private boolean isValidParentheses(char[] path, int length) {
+        int n = 0;
+        for (int i = 0; i < length; i++) {
+            char c = path[i];
+            switch (c){
+                case '(':
+                    n++;
+                    break;
+                case ')':
+                    if (n < 1) return false;
+                    n--;
+                    break;
+            }
+        }
+        return n == 0;
     }
 }
