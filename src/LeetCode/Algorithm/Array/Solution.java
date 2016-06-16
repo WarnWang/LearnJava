@@ -1,7 +1,8 @@
 package LeetCode.Algorithm.Array;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -79,5 +80,39 @@ public class Solution {
             }
         }
         return rangeList;
+    }
+
+    /**
+     * Given numRows, generate the first numRows of Pascal's triangle.
+     * <p>
+     * For example, given numRows = 5,
+     * Return
+     * <p>
+     * [
+     * [1],
+     * [1,1],
+     * [1,2,1],
+     * [1,3,3,1],
+     * [1,4,6,4,1]
+     * ]
+     *
+     * @param numRows the list size
+     * @return a list of the pascal triangle
+     */
+    public List<List<Integer>> generate(int numRows) {
+        ArrayList<List<Integer>> pascalTriangle = new ArrayList<>(numRows);
+        if (numRows > 0)
+            pascalTriangle.add(Collections.singletonList(1));
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> lastRow = pascalTriangle.get(i - 1);
+            ArrayList<Integer> newRow = new ArrayList<>(i + 1);
+            newRow.add(1);
+            for (int j = 1; j < i; j++) {
+                newRow.add(lastRow.get(j - 1) + lastRow.get(j));
+            }
+            newRow.add(1);
+            pascalTriangle.add(newRow);
+        }
+        return pascalTriangle;
     }
 }
