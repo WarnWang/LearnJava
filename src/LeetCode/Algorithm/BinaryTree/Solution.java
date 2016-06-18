@@ -2,6 +2,10 @@ package LeetCode.Algorithm.BinaryTree;
 
 import LeetCode.DataTypes.TreeNode;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
 /**
  * Created by warn on 31/5/2016.
  * Store solution to complete binary tree
@@ -32,5 +36,36 @@ public class Solution {
         }
         if (rightDepth == leftDepth) return (2 << leftDepth) - 1;
         return 1 + countNodes(root.left) + countNodes(root.right);
+    }
+
+    /**
+     * Given a binary tree, return the preorder traversal of its nodes' values.
+     * <p>
+     * For example:
+     * Given binary tree {1,#,2,3},
+     * 1
+     * \
+     * 2
+     * /
+     * 3
+     * return [1,2,3].
+     *
+     * @param root a binary tree
+     * @return the pre-order traversal
+     */
+    public List<Integer> preorderTraversal(TreeNode root) {
+        ArrayList<Integer> preOrder = new ArrayList<>();
+        if (root != null) {
+            Stack<TreeNode> exploreStack = new Stack<>();
+            exploreStack.add(root);
+            while (!exploreStack.isEmpty()) {
+                TreeNode frontier = exploreStack.pop();
+                preOrder.add(frontier.val);
+
+                if (frontier.right != null) exploreStack.add(frontier.right);
+                if (frontier.left != null) exploreStack.add(frontier.left);
+            }
+        }
+        return preOrder;
     }
 }
