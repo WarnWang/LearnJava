@@ -1,7 +1,6 @@
 package LeetCode.Algorithm.Array;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -114,5 +113,42 @@ public class Solution {
             pascalTriangle.add(newRow);
         }
         return pascalTriangle;
+    }
+
+    /**
+     * Say you have an array for which the ith element is the price of a given stock on day i.
+     * <p>
+     * Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one
+     * and sell one share of the stock multiple times). However, you may not engage in multiple transactions at the
+     * same time (ie, you must sell the stock before you buy again).
+     *
+     * @param prices a price list
+     * @return max profit
+     */
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length < 2) return 0;
+        boolean isHold = false;
+        int holdPrice = 0;
+        int profit = 0;
+        for (int i = 1, n = prices.length; i < n; i++) {
+            int price = prices[i];
+            int lastPrice = prices[i - 1];
+            if (isHold) {
+                if (price < lastPrice) {
+                    profit += lastPrice - holdPrice;
+                    isHold = false;
+                }
+            } else {
+                if (price > lastPrice) {
+                    isHold = true;
+                    holdPrice = lastPrice;
+                }
+            }
+        }
+        if (isHold) {
+            if (prices[prices.length - 1] > holdPrice)
+                profit += prices[prices.length - 1] - holdPrice;
+        }
+        return profit;
     }
 }
