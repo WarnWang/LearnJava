@@ -49,4 +49,23 @@ public class Solution {
         }
         return traversal;
     }
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> traversal = new LinkedList<>();
+        if (root == null) return traversal;
+        ArrayList<TreeNode> levelNodes = new ArrayList<>();
+        levelNodes.add(root);
+        while (!levelNodes.isEmpty()) {
+            ArrayList<TreeNode> nextLevelNodes = new ArrayList<>();
+            ArrayList<Integer> currentLevel = new ArrayList<>();
+            for (TreeNode node : levelNodes) {
+                currentLevel.add(node.val);
+                if (node.left != null) nextLevelNodes.add(node.left);
+                if (node.right != null) nextLevelNodes.add(node.right);
+            }
+            traversal.add(currentLevel);
+            levelNodes = nextLevelNodes;
+        }
+        return traversal;
+    }
 }
