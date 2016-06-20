@@ -1,6 +1,7 @@
 package LeetCode.Algorithm.Array;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -150,5 +151,68 @@ public class Solution {
                 profit += prices[prices.length - 1] - holdPrice;
         }
         return profit;
+    }
+
+    /**
+     * According to the Wikipedia's article: "The Game of Life, also known simply as Life, is a cellular automaton
+     * devised by the British mathematician John Horton Conway in 1970."
+     * <p>
+     * Given a board with m by n cells, each cell has an initial state live (1) or dead (0). Each cell interacts with
+     * its eight neighbors (horizontal, vertical, diagonal) using the following four rules (taken from the above
+     * Wikipedia article):
+     * <p>
+     * Any live cell with fewer than two live neighbors dies, as if caused by under-population.
+     * Any live cell with two or three live neighbors lives on to the next generation.
+     * Any live cell with more than three live neighbors dies, as if by over-population..
+     * Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+     * Write a function to compute the next state (after one update) of the board given its current state.
+     * <p>
+     * Follow up:
+     * Could you solve it in-place? Remember that the board needs to be updated at the same time: You cannot update
+     * some cells first and then use their updated values to update other cells.
+     * In this question, we represent the board using a 2D array. In principle, the board is infinite, which would
+     * cause problems when the active area encroaches the border of the array. How would you address these problems?
+     *
+     * @param board a game board
+     */
+    public void gameOfLife(int[][] board) {
+        if (board == null || board.length == 0) return;
+        int height = board.length, width = board[0].length;
+        if (width == 0) return;
+        for (int i = 0; i < height; i++){
+            for (int j = 0; j < width; j++) {
+                int nearByLives = 0;
+                if (i > 0) {
+                    nearByLives += (board[i - 1][j] % 10);
+                    if (j > 0) nearByLives += (board[i - 1][j - 1] % 10);
+                    if (j < width - 1) nearByLives += board[i - 1][j + 1] % 10;
+                }
+                if (i < height - 1) {
+                    nearByLives += (board[i + 1][j] % 10);
+                    if (j > 0) nearByLives += (board[i + 1][j - 1] % 10);
+                    if (j < width - 1) nearByLives += board[i + 1][j + 1] % 10;
+                }
+                if (j > 0) nearByLives += (board[i][j - 1] % 10);
+                if (j < width - 1) nearByLives += board[i][j + 1] % 10;
+                board[i][j] += 10 * nearByLives;
+            }
+        }
+
+        for (int[] row: board)
+            System.out.println(Arrays.toString(row));
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int cell = board[i][j];
+                if (cell % 10 == 0) {
+                    if (cell == 30) board[i][j] = 1;
+                    else board[i][j] = 0;
+                } else {
+                    if (cell < 20) board[i][j] = 0;
+                    else if (cell < 40) board[i][j] = 1;
+                    else board[i][j] = 0;
+                }
+            }
+        }
     }
 }
