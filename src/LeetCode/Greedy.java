@@ -1,6 +1,6 @@
 package LeetCode;
 
-import LeetCode.Algorithm.TagMath;
+import LeetCode.Algorithm.Math.TagMath;
 
 /**
  * Created by warn on 25/3/2016.

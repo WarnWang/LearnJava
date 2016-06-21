@@ -6,6 +6,7 @@ import LeetCode.Algorithm.BinaryTree.TagTree;
 import LeetCode.Algorithm.DepthFirstSearch.Solution;
 import LeetCode.Algorithm.DynamicProgramming.TagDynamicProgramming;
 import LeetCode.Algorithm.LinkedList.TagLinkedList;
+import LeetCode.Algorithm.Math.TagMath;
 import LeetCode.Algorithm.Sort.TagSort;
 import LeetCode.DataTypes.RandomListNode;
 import LeetCode.DataTypes.UndirectedGraphNode;
