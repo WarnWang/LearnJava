@@ -179,7 +179,7 @@ public class Solution {
         if (board == null || board.length == 0) return;
         int height = board.length, width = board[0].length;
         if (width == 0) return;
-        for (int i = 0; i < height; i++){
+        for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 int nearByLives = 0;
                 if (i > 0) {
@@ -198,7 +198,7 @@ public class Solution {
             }
         }
 
-        for (int[] row: board)
+        for (int[] row : board)
             System.out.println(Arrays.toString(row));
 
         for (int i = 0; i < height; i++) {
@@ -213,6 +213,27 @@ public class Solution {
                     else board[i][j] = 0;
                 }
             }
+        }
+    }
+
+    // Suppose citations is already sorted
+    public int hIndex(int[] citations) {
+        if (citations == null || citations.length == 0) return 0;
+        return hIndex(citations, 0, citations.length);
+    }
+
+    public int hIndex(int[] citations, int start, int end) {
+        if (start >= end) return 0;
+        else if (end - start == 1) {
+            if (citations[start] >= citations.length - start) {
+                return citations.length - start;
+            } else return 0;
+        }
+        int middle = (start + end) / 2;
+        if (citations[middle] >= citations.length - middle) {
+            return Math.max(hIndex(citations, start, middle), citations.length - middle);
+        } else {
+            return hIndex(citations, middle + 1, end);
         }
     }
 }
