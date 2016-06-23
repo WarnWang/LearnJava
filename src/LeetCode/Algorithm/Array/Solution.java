@@ -249,7 +249,7 @@ public class Solution {
      * @param nums an array nums
      * @return the duplicate number
      */
-    public int findDuplicate(int[] nums) {
+    public int findDuplicateOnn(int[] nums) {
         for (int i = 0, n = nums.length; i < n - 1; i++) {
             int num = nums[i];
             for (int j = i + 1; j < n; j++) {
@@ -257,5 +257,24 @@ public class Solution {
             }
         }
         return 0;
+    }
+
+    public int findDuplicateOnlogn(int[] nums) {
+        int lowBound = 1;
+        int upBound = nums.length - 1;
+        int mid = (lowBound + upBound) / 2;
+        while (lowBound <= upBound) {
+            int smallNum = 0;
+            int midNum = 0;
+            for (int num: nums) {
+                if (num == mid) midNum++;
+                else if (num < mid) smallNum++;
+            }
+            if (midNum > 1) return mid;
+            else if (smallNum > (mid - 1)) upBound = mid - 1;
+            else lowBound = mid + 1;
+            mid = (upBound + lowBound) / 2;
+        }
+        return lowBound;
     }
 }
