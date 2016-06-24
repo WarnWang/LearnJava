@@ -266,7 +266,7 @@ public class Solution {
         while (lowBound <= upBound) {
             int smallNum = 0;
             int midNum = 0;
-            for (int num: nums) {
+            for (int num : nums) {
                 if (num == mid) midNum++;
                 else if (num < mid) smallNum++;
             }
@@ -276,5 +276,31 @@ public class Solution {
             mid = (upBound + lowBound) / 2;
         }
         return lowBound;
+    }
+
+    /**
+     * Given an unsorted integer array, find the first missing positive integer.
+     * <p>
+     * For example,
+     * Given [1,2,0] return 3,
+     * and [3,4,-1,1] return 2.
+     * <p>
+     * Your algorithm should run in O(n) time and uses constant space.
+     * https://leetcode.com/problems/first-missing-positive/
+     *
+     * @param nums an unsorted integer array
+     * @return the first missing positive integer
+     */
+    public int firstMissingPositive(int[] nums) {
+        if (nums == null || nums.length == 0) return 1;
+        boolean[] isExisted = new boolean[nums.length];
+        for (int num: nums) {
+            if (num > 0 && num <= nums.length) isExisted[num - 1] = true;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (!isExisted[i]) return i + 1;
+        }
+        return nums.length;
     }
 }
