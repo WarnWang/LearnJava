@@ -287,29 +287,30 @@ public class Solution {
     public int longestIncreasingPath(int[][] matrix) {
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
         int width = matrix[0].length, height = matrix.length;
-        int[][] pathLength = new int[height][width];
+        pathLength = new int[height][width];
         int maxLength = 0;
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (pathLength[i][j] == 0)
-                    maxLength = Math.max(findLongestIncreasingPath(matrix, width, height, i, j, pathLength), maxLength);
+                    maxLength = Math.max(findLongestIncreasingPath(matrix, width, height, i, j), maxLength);
             }
         }
         return maxLength;
     }
+    int[][] pathLength;
 
-    public int findLongestIncreasingPath(int[][] matrix, int width, int height, int x, int y, int[][] pathLength) {
+    public int findLongestIncreasingPath(int[][] matrix, int width, int height, int x, int y) {
         if (pathLength[x][y] > 0) return pathLength[x][y];
         int length = 1;
         int value = matrix[x][y];
         if (x > 0 && matrix[x - 1][y] > value)
-            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x - 1, y, pathLength));
+            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x - 1, y));
         if (y > 0 && matrix[x][y - 1] > value)
-            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x, y - 1, pathLength));
+            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x, y - 1));
         if (x < height - 1 && matrix[x + 1][y] > value)
-            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x + 1, y, pathLength));
+            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x + 1, y));
         if (y < width - 1 && matrix[x][y + 1] > value)
-            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x, y + 1, pathLength));
+            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x, y + 1));
         pathLength[x][y] = length;
         return length;
     }
