@@ -25,6 +25,7 @@ public class Solution {
      * @return all possible palindrome partitioning of s
      */
     private int[][] stringMap;
+    private int maxLength;
 
     /**
      * The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each
@@ -217,20 +218,18 @@ public class Solution {
         if (s != null && s.length() > 0) {
             removeInvalidParentheses(s.toCharArray(), 0, new char[s.length()], 0, temp);
         }
-        for (String str: temp) {
+        for (String str : temp) {
             if (str.length() == maxLength) results.add(str);
         }
         return results;
     }
-
-    private int maxLength;
 
     private void removeInvalidParentheses(char[] s, int index, char[] path, int end, HashSet<String> result) {
         if (end >= maxLength && isValidParentheses(path, end)) {
             result.add(new String(path, 0, end));
             maxLength = end;
         }
-        if (index < s.length){
+        if (index < s.length) {
             for (int i = index; i < s.length; i++) {
                 if (s.length - i + end < maxLength) return;
                 path[end] = s[i];
@@ -243,7 +242,7 @@ public class Solution {
         int n = 0;
         for (int i = 0; i < length; i++) {
             char c = path[i];
-            switch (c){
+            switch (c) {
                 case '(':
                     n++;
                     break;
@@ -254,5 +253,64 @@ public class Solution {
             }
         }
         return n == 0;
+    }
+
+    /**
+     * Given an integer matrix, find the length of the longest increasing path.
+     * <p>
+     * From each cell, you can either move to four directions: left, right, up or down. You may NOT move diagonally or
+     * move outside of the boundary (i.e. wrap-around is not allowed).
+     * <p>
+     * Example 1:
+     * <p>
+     * nums = [
+     * [9,9,4],
+     * [6,6,8],
+     * [2,1,1]
+     * ]
+     * Return 4
+     * The longest increasing path is [1, 2, 6, 9].
+     * <p>
+     * Example 2:
+     * <p>
+     * nums = [
+     * [3,4,5],
+     * [3,2,6],
+     * [2,2,1]
+     * ]
+     * Return 4
+     * The longest increasing path is [3, 4, 5, 6]. Moving diagonally is not allowed.
+     *
+     * @param matrix an game board
+     * @return the longist increasing path
+     */
+    public int longestIncreasingPath(int[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+        int width = matrix[0].length, height = matrix.length;
+        int[][] pathLength = new int[height][width];
+        int maxLength = 0;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (pathLength[i][j] == 0)
+                    maxLength = Math.max(findLongestIncreasingPath(matrix, width, height, i, j, pathLength), maxLength);
+            }
+        }
+        return maxLength;
+    }
+
+    public int findLongestIncreasingPath(int[][] matrix, int width, int height, int x, int y, int[][] pathLength) {
+        if (pathLength[x][y] > 0) return pathLength[x][y];
+        int length = 1;
+        int value = matrix[x][y];
+        if (x > 0 && matrix[x - 1][y] > value)
+            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x - 1, y, pathLength));
+        if (y > 0 && matrix[x][y - 1] > value)
+            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x, y - 1, pathLength));
+        if (x < height - 1 && matrix[x + 1][y] > value)
+            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x + 1, y, pathLength));
+        if (y < width - 1 && matrix[x][y + 1] > value)
+            length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x, y + 1, pathLength));
+        pathLength[x][y] = length;
+        return length;
     }
 }
