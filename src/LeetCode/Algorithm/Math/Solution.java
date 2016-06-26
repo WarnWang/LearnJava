@@ -1,10 +1,19 @@
 package LeetCode.Algorithm.Math;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Stack;
+
 /**
  * Created by warn on 21/6/2016.
  * Save function with tag math
  */
 public class Solution {
+
+    public static void main (String args[]) {
+        Solution test = new Solution();
+        test.canMeasureWater(2, 6, 1);
+    }
     /**
      * Given a non-negative integer n, count all numbers with unique digits, x, where 0 ≤ x < 10n.
      * <p>
@@ -29,5 +38,112 @@ public class Solution {
             num += current;
         }
         return num;
+    }
+
+    /**
+     * You are given two jugs with capacities x and y litres. There is an infinite amount of water supply available.
+     * You need to determine whether it is possible to measure exactly z litres using these two jugs.
+     * <p>
+     * If z liters of water is measurable, you must have z liters of water contained within one or both buckets by the
+     * end.
+     * <p>
+     * Operations allowed:
+     * <p>
+     * Fill any of the jugs completely with water.
+     * Empty any of the jugs.
+     * Pour water from one jug into another till the other jug is completely full or the first jug itself is empty.
+     * Example 1: (From the famous "Die Hard" example)
+     * <p>
+     * Input: x = 3, y = 5, z = 4
+     * Output: True
+     * Example 2:
+     * <p>
+     * Input: x = 2, y = 6, z = 5
+     * Output: False
+     *
+     * @param x the first jug size
+     * @param y the second jug size
+     * @param z measure exactly z litres
+     * @return possible or not
+     */
+    public boolean canMeasureWater(int x, int y, int z) {
+        if (z > x + y) return false;
+        HashSet<Integer> reachLitres = new HashSet<>();
+        reachLitres.add(x);
+        reachLitres.add(y);
+        reachLitres.add(x + y);
+        reachLitres.add(0);
+        HashSet<String> exploredState = new HashSet<>();
+        Stack<int []> stateStack = new Stack<>();
+        stateStack.push(new int[] {0, 0});
+        while (!stateStack.isEmpty()) {
+            int[] frontier = stateStack.pop();
+            if (exploredState.contains(Arrays.toString(frontier))) continue;
+            exploredState.add(Arrays.toString(frontier));
+
+            // pour water into jug 0
+            if (frontier[0] < x) {
+                int[] newState = {x, frontier[1]};
+                reachLitres.add(newState[0] + newState[1]);
+                if (!exploredState.contains(Arrays.toString(newState))) {
+                    stateStack.push(newState);
+                }
+            }
+
+            // pour water into jug 1
+            if (frontier[1] < y) {
+                int[] newState = {frontier[0], y};
+                reachLitres.add(newState[0] + newState[1]);
+                if (!exploredState.contains(Arrays.toString(newState))) {
+                    stateStack.push(newState);
+                }
+            }
+
+            // pour water out of jugs
+            if (frontier[0] > 0) {
+                int[] newState = {0, frontier[1]};
+                reachLitres.add(newState[0] + newState[1]);
+                if (!exploredState.contains(Arrays.toString(newState))) {
+                    stateStack.push(newState);
+                }
+            }
+
+            if (frontier[1] > 0) {
+                int[] newState = {frontier[0], 0};
+                reachLitres.add(newState[0] + newState[1]);
+                if (!exploredState.contains(Arrays.toString(newState))) {
+                    stateStack.push(newState);
+                }
+            }
+
+            // pour water from 0 to 1
+            if (frontier[0] > 0 && frontier[1] < y){
+                int maxSpace = y - frontier[1];
+                int[] newState;
+                if (maxSpace >= frontier[0]) newState = new int[] {0, frontier[0] + frontier[1]};
+                else newState = new int[] {frontier[0] - maxSpace, y};
+                reachLitres.add(newState[0]);
+                reachLitres.add(newState[1]);
+                reachLitres.add(newState[0] + newState[1]);
+                if (!exploredState.contains(Arrays.toString(newState))) {
+                    stateStack.push(newState);
+                }
+            }
+
+            if (frontier[0] < x && frontier[1] > 0){
+                int maxSpace = x - frontier[0];
+                int[] newState;
+                if (maxSpace >= frontier[1]) newState = new int[] {frontier[0] + frontier[1], 0};
+                else newState = new int[] {x, frontier[1] - maxSpace};
+                reachLitres.add(newState[0]);
+                reachLitres.add(newState[1]);
+                reachLitres.add(newState[0] + newState[1]);
+                if (!exploredState.contains(Arrays.toString(newState))) {
+                    stateStack.push(newState);
+                }
+            }
+            if (reachLitres.contains(z)) return true;
+        }
+        return false;
     }
 }
