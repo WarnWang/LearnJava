@@ -146,4 +146,22 @@ public class Solution {
         }
         return false;
     }
+
+    public boolean canMeasureWaterGCD(int x, int y, int z) {
+        if (x == z || y == z || z == x + y || z == 0) return true;
+        if (z > x + y) return false;
+        if (x == 0) return false;
+        if (y == 0) return false;
+        int a = Math.max(x, y);
+        int b = Math.min(x, y);
+        int r = a % b;
+        if (r == 0) return z % b == 0;
+        else return z % getGCD(r, b) == 0;
+    }
+
+    private int getGCD(int a, int b) {
+        if (a % b == 0) {
+            return b;
+        } else return getGCD(b, a % b);
+    }
 }
