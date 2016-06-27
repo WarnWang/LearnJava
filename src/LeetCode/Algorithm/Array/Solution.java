@@ -1,5 +1,7 @@
 package LeetCode.Algorithm.Array;
 
+import LeetCode.DataTypes.Interval;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -294,7 +296,7 @@ public class Solution {
     public int firstMissingPositive(int[] nums) {
         if (nums == null || nums.length == 0) return 1;
         boolean[] isExisted = new boolean[nums.length];
-        for (int num: nums) {
+        for (int num : nums) {
             if (num > 0 && num <= nums.length) isExisted[num - 1] = true;
         }
 
@@ -302,5 +304,48 @@ public class Solution {
             if (!isExisted[i]) return i + 1;
         }
         return nums.length;
+    }
+
+    /**
+     * Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary).
+     * <p>
+     * You may assume that the intervals were initially sorted according to their start times.
+     * <p>
+     * Example 1:
+     * Given intervals [1,3],[6,9], insert and merge [2,5] in as [1,5],[6,9].
+     * <p>
+     * Example 2:
+     * Given [1,2],[3,5],[6,7],[8,10],[12,16], insert and merge [4,9] in as [1,2],[3,10],[12,16].
+     * <p>
+     * This is because the new interval [4,9] overlaps with [3,5],[6,7],[8,10].
+     *
+     * @param intervals   a set of non-overlapping sorted intervals
+     * @param newInterval new interval that need to be added in to interval
+     * @return
+     */
+    public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+        ArrayList<Interval> newIntervals = new ArrayList<>();
+        int oldIndex = 0;
+        for (; oldIndex < intervals.size(); oldIndex++) {
+            Interval interval = intervals.get(oldIndex);
+            if (interval.end < newInterval.start) newIntervals.add(interval);
+            else break;
+        }
+        if (oldIndex == intervals.size()) newIntervals.add(newInterval);
+        else if (intervals.get(oldIndex).start > newInterval.end) {
+            newIntervals.add(newInterval);
+            for (; oldIndex < intervals.size(); oldIndex++) newIntervals.add(intervals.get(oldIndex));
+        }
+        else {
+            int start = Math.min(newInterval.start, intervals.get(oldIndex).start);
+            int end = newInterval.end;
+            for (;oldIndex < intervals.size(); oldIndex++) {
+                if (end >= intervals.get(oldIndex).start) end = Math.max(newInterval.end, intervals.get(oldIndex).end);
+                else break;
+            }
+            newIntervals.add(new Interval(start, end));
+            for (; oldIndex < intervals.size(); oldIndex++) newIntervals.add(intervals.get(oldIndex));
+        }
+        return newIntervals;
     }
 }
