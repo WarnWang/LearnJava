@@ -1,5 +1,7 @@
 package LeetCode.Algorithm.DepthFirstSearch;
 
+import LeetCode.DataTypes.TreeLinkNode;
+
 import java.util.*;
 
 /**
@@ -8,6 +10,7 @@ import java.util.*;
  */
 public class Solution {
 
+    int[][] pathLength;
     /**
      * Given a string s, partition s such that every substring of the partition is a palindrome.
      * <p>
@@ -297,7 +300,6 @@ public class Solution {
         }
         return maxLength;
     }
-    int[][] pathLength;
 
     public int findLongestIncreasingPath(int[][] matrix, int width, int height, int x, int y) {
         if (pathLength[x][y] > 0) return pathLength[x][y];
@@ -313,5 +315,40 @@ public class Solution {
             length = Math.max(length, 1 + findLongestIncreasingPath(matrix, width, height, x, y + 1));
         pathLength[x][y] = length;
         return length;
+    }
+
+    /**
+     * Given a binary tree
+     * <p>
+     * struct TreeLinkNode {
+     * TreeLinkNode *left;
+     * TreeLinkNode *right;
+     * TreeLinkNode *next;
+     * }
+     * Populate each next pointer to point to its next right node. If there is no next right node, the next pointer
+     * should be set to NULL.
+     * <p>
+     * Initially, all next pointers are set to NULL.
+     *
+     * @param root
+     */
+    public void connect(TreeLinkNode root) {
+        if (root == null || root.left == null) return;
+        else {
+            root.left.next = root.right;
+            connect(root.left, root.right);
+        }
+    }
+
+    public void connect(TreeLinkNode left, TreeLinkNode right) {
+        left.next = right;
+        if (left.left != null) {
+            left.left.next = left.right;
+            left.right.next = right.left;
+            right.left.next = right.right;
+            connect(left.left, left.right);
+            connect(left.right, right.left);
+            connect(right.left, right.right);
+        }
     }
 }
