@@ -68,4 +68,36 @@ public class Solution {
         }
         return traversal;
     }
+
+    /**
+     * Given a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
+     * <p>
+     * For example:
+     * Given the following binary tree,
+     * 1            <---
+     * /   \
+     * 2     3         <---
+     * \     \
+     * 5     4       <---
+     * You should return [1, 3, 4].
+     *
+     * @param root a binary tree
+     * @return the right side of the tree
+     */
+    public List<Integer> rightSideView(TreeNode root) {
+        ArrayList<Integer> rightSide = new ArrayList<>();
+        if (root == null) return rightSide;
+        ArrayList<TreeNode> nodes = new ArrayList<>();
+        nodes.add(root);
+        while (!nodes.isEmpty()) {
+            ArrayList<TreeNode> nextLevel = new ArrayList<>();
+            rightSide.add(nodes.get(nodes.size() - 1).val);
+            for (TreeNode point : nodes) {
+                if (point.left != null) nextLevel.add(point.left);
+                if (point.right != null) nextLevel.add(point.right);
+            }
+            nodes = nextLevel;
+        }
+        return rightSide;
+    }
 }
