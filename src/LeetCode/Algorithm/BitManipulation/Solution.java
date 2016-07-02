@@ -1,5 +1,7 @@
 package LeetCode.Algorithm.BitManipulation;
 
+import java.util.ArrayList;
+
 /**
  * Created by warn on 10/6/2016.
  * Solve puzzles of bit manipulation
@@ -37,5 +39,26 @@ public class Solution {
                 num += (1 << i);
         }
         return num;
+    }
+
+    /**
+     * Calculate the sum of two integers a and b, but you are not allowed to use the operator + and -.
+     * <p>
+     * Example:
+     * Given a = 1 and b = 2, return 3.
+     *
+     * @param a one integer
+     * @param b another integer
+     * @return the sum of these two integer
+     */
+    public int getSum(int a, int b) {
+        int sum = a ^ b;
+        int carry = a & b;
+        while (carry != 0) {
+            int newSum = sum ^ carry;
+            carry = sum & carry;
+            sum = newSum;
+        }
+        return sum;
     }
 }
