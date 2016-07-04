@@ -1,5 +1,7 @@
 package LeetCode.Algorithm.DynamicProgramming;
 
+import java.util.Arrays;
+
 /**
  * Created by warn on 30/5/2016.
  * Store some DP puzzles solution
@@ -93,5 +95,47 @@ public class Solution {
             maxProfit = Math.max(maxProfit, profit);
         }
         return maxProfit;
+    }
+
+    /**
+     * Given a string S and a string T, count the number of distinct subsequences of T in S.
+     * <p>
+     * A subsequence of a string is a new string which is formed from the original string by deleting some (can be none)
+     * of the characters without disturbing the relative positions of the remaining characters. (ie, "ACE" is a
+     * subsequence of "ABCDE" while "AEC" is not).
+     * <p>
+     * Here is an example:
+     * S = "rabbbit", T = "rabbit"
+     * <p>
+     * Return 3.
+     *
+     * @param s a new string
+     * @param t another string
+     * @return subsequence number
+     */
+    public int numDistinct(String s, String t) {
+        if (t == null || t.length() == 0) return 1;
+        if (s == null || s.length() < t.length()) return 0;
+        int nT = t.length(), nS = s.length();
+        int[][] count = new int[nS][nT];
+
+        char sT = t.charAt(0);
+        if (sT == s.charAt(0)) count[0][0] = 1;
+        for (int i = 1; i < nS; i++) {
+            char sC = s.charAt(i);
+            if (sC == sT) count[i][0] = 1 + count[i - 1][0];
+            else count[i][0] = count[i - 1][0];
+        }
+
+        for (int i = 1; i < nT; i++) {
+            sT = t.charAt(i);
+            for (int j = i; j < nS; j++) {
+                char sC = s.charAt(j);
+                if (sC == sT) count[j][i] = count[j][i - 1] + count[j - 1][i - 1];
+                else count[j][i] = count[j - 1][i];
+            }
+        }
+        for (int[] i: count) System.out.println(Arrays.toString(i));
+        return count[nS - 1][nT - 1];
     }
 }
