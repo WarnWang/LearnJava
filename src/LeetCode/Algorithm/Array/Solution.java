@@ -335,11 +335,10 @@ public class Solution {
         else if (intervals.get(oldIndex).start > newInterval.end) {
             newIntervals.add(newInterval);
             for (; oldIndex < intervals.size(); oldIndex++) newIntervals.add(intervals.get(oldIndex));
-        }
-        else {
+        } else {
             int start = Math.min(newInterval.start, intervals.get(oldIndex).start);
             int end = newInterval.end;
-            for (;oldIndex < intervals.size(); oldIndex++) {
+            for (; oldIndex < intervals.size(); oldIndex++) {
                 if (end >= intervals.get(oldIndex).start) end = Math.max(newInterval.end, intervals.get(oldIndex).end);
                 else break;
             }
@@ -347,5 +346,32 @@ public class Solution {
             for (; oldIndex < intervals.size(); oldIndex++) newIntervals.add(intervals.get(oldIndex));
         }
         return newIntervals;
+    }
+
+    /**
+     * Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). n vertical
+     * lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together
+     * with x-axis forms a container, such that the container contains the most water.
+     * <p>
+     * Note: You may not slant the container.
+     *
+     * @param height a list of height
+     * @return the max area.
+     */
+    public int maxArea(int[] height) {
+        int maxAreaSize = 0;
+        for (int i = 0, j = height.length - 1; i < j;){
+            if (height[i] < height[j]) {
+                int pre = height[i++];
+                maxAreaSize = Math.max(maxAreaSize, pre * (j - i));
+
+                while (j > i && height[i] <= pre) i++;
+            } else {
+                int pre = height[j--];
+                maxAreaSize = Math.max(maxAreaSize, pre * (j - i));
+                while (j > i && height[j] <= pre) j--;
+            }
+        }
+        return maxAreaSize;
     }
 }
