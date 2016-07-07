@@ -1,4 +1,4 @@
-package LeetCode.Algorithm;
+package LeetCode.Algorithm.Graph;
 
 import LeetCode.DataTypes.UndirectedGraphNode;
 
