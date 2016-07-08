@@ -351,4 +351,50 @@ public class Solution {
             connect(right.left, right.right);
         }
     }
+
+    /**
+     * Find all possible combinations of k numbers that add up to a number n, given that only numbers from 1 to 9 can
+     * be used and each combination should be a unique set of numbers.
+     * <p>
+     * <p>
+     * Example 1:
+     * <p>
+     * Input: k = 3, n = 7
+     * <p>
+     * Output:
+     * <p>
+     * [[1,2,4]]
+     * <p>
+     * Example 2:
+     * <p>
+     * Input: k = 3, n = 9
+     * <p>
+     * Output:
+     * <p>
+     * [[1,2,6], [1,3,5], [2,3,4]]
+     *
+     * @param k the number used in sum
+     * @param n target number
+     * @return all combinations
+     */
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> combinationList = new ArrayList<>();
+        if (k <= 0 || k > 9 || n <= 0 || n > 45) return combinationList;
+        combinationSum3(k, n, new Integer[k], combinationList, 0);
+        return combinationList;
+    }
+
+    private void combinationSum3(int k, int n, Integer[] path, List<List<Integer>> combinationList, int sum){
+        if (k == 0) {
+            if (sum == n) combinationList.add(new ArrayList<>(Arrays.asList(path)));
+        } else {
+            for (int i = (k == path.length)? 1 : path[path.length - k - 1] + 1; i <= 10 - k; i++) {
+                int newSum = sum + i;
+                if (newSum <= n) {
+                    path[path.length - k] = i;
+                    combinationSum3(k - 1, n, path, combinationList, newSum);
+                }
+            }
+        }
+    }
 }
