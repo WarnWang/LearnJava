@@ -10,10 +10,11 @@ import java.util.Stack;
  */
 public class Solution {
 
-    public static void main (String args[]) {
+    public static void main(String args[]) {
         Solution test = new Solution();
         test.canMeasureWater(2, 6, 1);
     }
+
     /**
      * Given a non-negative integer n, count all numbers with unique digits, x, where 0 ≤ x < 10n.
      * <p>
@@ -74,8 +75,8 @@ public class Solution {
         reachLitres.add(x + y);
         reachLitres.add(0);
         HashSet<String> exploredState = new HashSet<>();
-        Stack<int []> stateStack = new Stack<>();
-        stateStack.push(new int[] {0, 0});
+        Stack<int[]> stateStack = new Stack<>();
+        stateStack.push(new int[]{0, 0});
         while (!stateStack.isEmpty()) {
             int[] frontier = stateStack.pop();
             if (exploredState.contains(Arrays.toString(frontier))) continue;
@@ -117,11 +118,11 @@ public class Solution {
             }
 
             // pour water from 0 to 1
-            if (frontier[0] > 0 && frontier[1] < y){
+            if (frontier[0] > 0 && frontier[1] < y) {
                 int maxSpace = y - frontier[1];
                 int[] newState;
-                if (maxSpace >= frontier[0]) newState = new int[] {0, frontier[0] + frontier[1]};
-                else newState = new int[] {frontier[0] - maxSpace, y};
+                if (maxSpace >= frontier[0]) newState = new int[]{0, frontier[0] + frontier[1]};
+                else newState = new int[]{frontier[0] - maxSpace, y};
                 reachLitres.add(newState[0]);
                 reachLitres.add(newState[1]);
                 reachLitres.add(newState[0] + newState[1]);
@@ -130,11 +131,11 @@ public class Solution {
                 }
             }
 
-            if (frontier[0] < x && frontier[1] > 0){
+            if (frontier[0] < x && frontier[1] > 0) {
                 int maxSpace = x - frontier[0];
                 int[] newState;
-                if (maxSpace >= frontier[1]) newState = new int[] {frontier[0] + frontier[1], 0};
-                else newState = new int[] {x, frontier[1] - maxSpace};
+                if (maxSpace >= frontier[1]) newState = new int[]{frontier[0] + frontier[1], 0};
+                else newState = new int[]{x, frontier[1] - maxSpace};
                 reachLitres.add(newState[0]);
                 reachLitres.add(newState[1]);
                 reachLitres.add(newState[0] + newState[1]);
@@ -163,5 +164,28 @@ public class Solution {
         if (a % b == 0) {
             return b;
         } else return getGCD(b, a % b);
+    }
+
+    /**
+     * Reverse digits of an integer.
+     * <p>
+     * Example1: x = 123, return 321
+     * Example2: x = -123, return -321
+     *
+     * @param x an digits of the integer
+     * @return the inverse integer
+     */
+    public int reverse(int x) {
+        if (x == 0) return 0;
+        int maxCap = Integer.MAX_VALUE / 10;
+        int reverse = 0;
+        int multiplier = (x > 0) ? 1 : (-1);
+        for (;;) {
+            reverse = reverse * 10 + x % 10;
+            x /= 10;
+            if (x == 0) break;
+            if (reverse > maxCap || reverse < -maxCap) return 0;
+        }
+        return multiplier * reverse;
     }
 }
