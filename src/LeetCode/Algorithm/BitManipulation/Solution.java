@@ -1,7 +1,5 @@
 package LeetCode.Algorithm.BitManipulation;
 
-import java.util.ArrayList;
-
 /**
  * Created by warn on 10/6/2016.
  * Solve puzzles of bit manipulation
@@ -60,5 +58,26 @@ public class Solution {
             sum = newSum;
         }
         return sum;
+    }
+
+    /**
+     * Given an array of integers, every element appears three times except for one. Find that single one.
+     * https://discuss.leetcode.com/topic/2926/accepted-code-with-proper-explaination-does-anyone-have-a-better-idea/2
+     *
+     * @param nums an array of integers
+     * @return the only single number
+     */
+    public int singleNumber(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        else if (nums.length == 1) return nums[0];
+        int ones = 0, twos = 0;
+        for (int num : nums) {
+            twos |= (ones & num);
+            ones ^= num;
+            int commentMask = ~(ones & twos);
+            twos &= commentMask;
+            ones &= commentMask;
+        }
+        return ones;
     }
 }
