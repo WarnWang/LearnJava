@@ -1,6 +1,10 @@
 package LeetCode.Algorithm.DynamicProgramming;
 
+import sun.nio.cs.ext.MacHebrew;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by warn on 30/5/2016.
@@ -135,7 +139,46 @@ public class Solution {
                 else count[j][i] = count[j - 1][i];
             }
         }
-        for (int[] i: count) System.out.println(Arrays.toString(i));
+        for (int[] i : count) System.out.println(Arrays.toString(i));
         return count[nS - 1][nT - 1];
+    }
+
+    /**
+     * Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on
+     * the row below.
+     * <p>
+     * For example, given the following triangle
+     * [
+     * [2],
+     * [3,4],
+     * [6,5,7],
+     * [4,1,8,3]
+     * ]
+     * The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).
+     *
+     * @param triangle and list of triangle
+     * @return the minimum path
+     */
+    public int minimumTotal(List<List<Integer>> triangle) {
+        if (triangle == null || triangle.size() == 0) return 0;
+        int minPath = 0;
+        ArrayList<Integer> distance = new ArrayList<>(1);
+        distance.add(triangle.get(0).get(0));
+        minPath = distance.get(0);
+        for (int i = 1, n = triangle.size(); i < n; i++) {
+            minPath = Integer.MAX_VALUE;
+            ArrayList<Integer> currentRow = new ArrayList<>(triangle.get(i));
+            for (int j = 0, m = currentRow.size(); j < m; j++) {
+                int formerDistance;
+                if (j == 0) formerDistance = distance.get(0);
+                else if (j == m - 1) formerDistance = distance.get(j - 1);
+                else formerDistance = Math.min(distance.get(j - 1), distance.get(j));
+                int currentDistance = formerDistance + currentRow.get(j);
+                minPath = Math.min(currentDistance, minPath);
+                currentRow.set(j, currentDistance);
+            }
+            distance = currentRow;
+        }
+        return minPath;
     }
 }
