@@ -68,4 +68,56 @@ public class Solution {
         }
         return preOrder;
     }
+
+    /**
+     * Two elements of a binary search tree (BST) are swapped by mistake.
+     * <p>
+     * Recover the tree without changing its structure.
+     *
+     * @param root A binary search tree (BST) with some mistake
+     */
+    public void recoverTree(TreeNode root) {
+        if (root == null || recovered) return;
+        miniMum = null;
+        maxiMum = null;
+        findGreatest(root.left, false);
+        findGreatest(root.right, true);
+        if (miniMum != null && miniMum.val < root.val && maxiMum != null && maxiMum.val > root.val) {
+            int tmp = miniMum.val;
+            miniMum.val = maxiMum.val;
+            maxiMum.val = tmp;
+            recovered = true;
+        } else if (miniMum != null && miniMum.val < root.val) {
+            int tmp = miniMum.val;
+            miniMum.val = root.val;
+            root.val = tmp;
+            recovered = true;
+        } else if (maxiMum != null && maxiMum.val > root.val) {
+            int tmp = maxiMum.val;
+            maxiMum.val = root.val;
+            root.val = tmp;
+            recovered = true;
+        } else {
+            if (miniMum != null) System.out.println(miniMum.val);
+            if (maxiMum != null) System.out.println(maxiMum.val);
+            recoverTree(root.left);
+            recoverTree(root.right);
+        }
+    }
+
+    private boolean recovered = false;
+    private TreeNode miniMum;
+    private TreeNode maxiMum;
+
+    private void findGreatest(TreeNode root, boolean isMinimum){
+        if (root == null) return;
+        if (isMinimum) {
+            if (miniMum == null || miniMum.val > root.val) miniMum = root;
+            System.out.println(root.val);
+        } else {
+            if (maxiMum == null || maxiMum.val < root.val) maxiMum = root;
+        }
+        findGreatest(root.left, isMinimum);
+        findGreatest(root.right, isMinimum);
+    }
 }
