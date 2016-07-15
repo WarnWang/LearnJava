@@ -2,7 +2,6 @@ package LeetCode.Algorithm.LinkedList;
 
 import LeetCode.DataTypes.ListNode;
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -115,14 +114,14 @@ public class Solution {
      * For k = 3, you should return: 3->2->1->4->5
      *
      * @param head a linked list
-     * @param k the group size
+     * @param k    the group size
      * @return reverse k group linked list
      */
     public ListNode reverseKGroup(ListNode head, int k) {
         if (k <= 1) return head;
         if (head == null || head.next == null) return head;
         int groupIndex = 0;
-        ListNode newList = null, newListTail = null, currentHead=head;
+        ListNode newList = null, newListTail = null, currentHead = head;
         for (ListNode pointer = head; pointer != null; pointer = pointer.next) {
             groupIndex++;
             if (groupIndex == k) {
@@ -154,6 +153,29 @@ public class Solution {
         }
         ListNode temp = new ListNode(tail.val);
         temp.next = newHead;
-        return new ListNode[] {newHead, newTail};
+        return new ListNode[]{newHead, newTail};
+    }
+
+    /**
+     * Given a sorted linked list, delete all duplicates such that each element appear only once.
+     * <p>
+     * For example,
+     * Given 1->1->2, return 1->2.
+     * Given 1->1->2->3->3, return 1->2->3.
+     *
+     * @param head a sorted linked list,
+     * @return delete all duplicates
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) return null;
+        ListNode pointer = head;
+        while (pointer.next != null) {
+            if (pointer.val != pointer.next.val) {
+                pointer = pointer.next;
+            } else {
+                pointer.next = pointer.next.next;
+            }
+        }
+        return head;
     }
 }
