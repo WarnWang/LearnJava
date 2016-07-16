@@ -180,12 +180,65 @@ public class Solution {
         int maxCap = Integer.MAX_VALUE / 10;
         int reverse = 0;
         int multiplier = (x > 0) ? 1 : (-1);
-        for (;;) {
+        for (; ; ) {
             reverse = reverse * 10 + x % 10;
             x /= 10;
             if (x == 0) break;
             if (reverse > maxCap || reverse < -maxCap) return 0;
         }
         return multiplier * reverse;
+    }
+
+    /**
+     * Divide two integers without using multiplication, division and mod operator.
+     * <p>
+     * If it is overflow, return MAX_INT.
+     *
+     * @param dividend dividend
+     * @param divisor divisor
+     * @return divide result
+     */
+    public int divide(int dividend, int divisor) {
+        if (divisor == 0 || (dividend == Integer.MIN_VALUE && divisor == -1)) return Integer.MAX_VALUE;
+        else if (dividend == 0) return 0;
+        else if (dividend == divisor) return 1;
+        else if (divisor == Integer.MIN_VALUE) return 0;
+        else if (dividend + divisor == 0) return -1;
+        int result = 0;
+        if (dividend != Integer.MIN_VALUE) {
+            int absDividend = Math.abs(dividend), absDivisor = Math.abs(divisor);
+            if (absDividend < absDivisor) return 0;
+            int reminder = 0;
+            int maxLength = Integer.toBinaryString(absDividend).length();
+            for (int i = maxLength - 1; i >= 0; i--) {
+                reminder = (reminder << 1) +  ((absDividend >> i) & 1);
+                if (reminder >= absDivisor) {
+                    result = (result << 1) + 1;
+                    reminder -= absDivisor;
+                } else result <<= 1;
+            }
+            if ((dividend < 0 && 0 < divisor) || (divisor < 0 && dividend > 0)) result = -result;
+        } else {
+            int absDivisor = Math.abs(divisor);
+            int reminder = 0;
+            for (int i = 31; i >= 1; i--) {
+                reminder = (reminder << 1) +  ((dividend >> i) & 1);
+                if (reminder >= absDivisor) {
+                    result = (result << 1) + 1;
+                    reminder -= absDivisor;
+                } else result <<= 1;
+            }
+            if (result == 0) result = 1;
+            else {
+                reminder <<= 1;
+                result <<= 1;
+                if (reminder >= absDivisor) {
+                    result++;
+                }
+            }
+            if (0 < divisor) result = -result;
+
+        }
+        return result;
     }
 }
