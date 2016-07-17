@@ -1,5 +1,8 @@
 package LeetCode.Algorithm.BitManipulation;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 /**
  * Created by warn on 10/6/2016.
  * Solve puzzles of bit manipulation
@@ -109,16 +112,20 @@ public class Solution {
         if (words != null && words.length > 1) {
             int n = words.length;
             int mask[] = new int[n];
+            int[] length = new int[n];
             for (int i = 0; i < n; i++) {
-                for (char c : words[i].toCharArray()) {
+                char[] word = words[i].toCharArray();
+                length[i] = word.length;
+                for (char c : word) {
                     mask[i] |= 1 << (c - 'a');
                 }
             }
 
             for (int i = 0; i < n; i++) {
                 for (int j = i + 1; j < n; j++) {
-                    if ((mask[i] & mask[j]) == 0)
-                        maxLengthProduct = Math.max(maxLengthProduct, words[i].length() * words[j].length());
+                    if ((mask[i] & mask[j]) == 0) {
+                        maxLengthProduct = Math.max(maxLengthProduct, length[i] * length[j]);
+                    }
                 }
             }
         }
