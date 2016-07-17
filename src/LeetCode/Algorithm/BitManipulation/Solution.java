@@ -67,7 +67,7 @@ public class Solution {
      * @param nums an array of integers
      * @return the only single number
      */
-    public int singleNumber(int[] nums) {
+    public int singleNumber2(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         else if (nums.length == 1) return nums[0];
         int ones = 0, twos = 0;
@@ -79,5 +79,57 @@ public class Solution {
             ones &= commentMask;
         }
         return ones;
+    }
+
+    /**
+     * Given a string array words, find the maximum value of length(word[i]) * length(word[j]) where the two words do
+     * not share common letters. You may assume that each word will contain only lower case letters. If no such two
+     * words exist, return 0.
+     * <p>
+     * Example 1:
+     * Given ["abcw", "baz", "foo", "bar", "xtfn", "abcdef"]
+     * Return 16
+     * The two words can be "abcw", "xtfn".
+     * <p>
+     * Example 2:
+     * Given ["a", "ab", "abc", "d", "cd", "bcd", "abcd"]
+     * Return 4
+     * The two words can be "ab", "cd".
+     * <p>
+     * Example 3:
+     * Given ["a", "aa", "aaa", "aaaa"]
+     * Return 0
+     * No such pair of words.
+     *
+     * @param words a list of words
+     * @return the max length product
+     */
+    public int maxProduct(String[] words) {
+        int maxLengthProduct = 0;
+        if (words != null && words.length > 1) {
+            int n = words.length;
+            boolean[][] charMatrix = new boolean[n][26];
+            for (int i = 0; i < n; i++) {
+                char[] word = words[i].toCharArray();
+                for (char c : word)
+                    charMatrix[i][c - 'a'] = true;
+            }
+
+            for (int i = 0; i < n - 1; i++) {
+                char[] word1 = words[i].toCharArray();
+                int n1 = word1.length;
+                for (int j = i + 1; j < n; j++) {
+                    boolean hasSameChar = false;
+                    for (char c : word1) {
+                        hasSameChar = charMatrix[j][c - 'a'];
+                        if (hasSameChar) break;
+                    }
+                    if (hasSameChar) continue;
+                    int n2 = words[j].length();
+                    maxLengthProduct = Math.max(n1 * n2, maxLengthProduct);
+                }
+            }
+        }
+        return maxLengthProduct;
     }
 }
