@@ -108,25 +108,17 @@ public class Solution {
         int maxLengthProduct = 0;
         if (words != null && words.length > 1) {
             int n = words.length;
-            boolean[][] charMatrix = new boolean[n][26];
+            int mask[] = new int[n];
             for (int i = 0; i < n; i++) {
-                char[] word = words[i].toCharArray();
-                for (char c : word)
-                    charMatrix[i][c - 'a'] = true;
+                for (char c : words[i].toCharArray()) {
+                    mask[i] |= 1 << (c - 'a');
+                }
             }
 
-            for (int i = 0; i < n - 1; i++) {
-                char[] word1 = words[i].toCharArray();
-                int n1 = word1.length;
+            for (int i = 0; i < n; i++) {
                 for (int j = i + 1; j < n; j++) {
-                    boolean hasSameChar = false;
-                    for (char c : word1) {
-                        hasSameChar = charMatrix[j][c - 'a'];
-                        if (hasSameChar) break;
-                    }
-                    if (hasSameChar) continue;
-                    int n2 = words[j].length();
-                    maxLengthProduct = Math.max(n1 * n2, maxLengthProduct);
+                    if ((mask[i] & mask[j]) == 0)
+                        maxLengthProduct = Math.max(maxLengthProduct, words[i].length() * words[j].length());
                 }
             }
         }
