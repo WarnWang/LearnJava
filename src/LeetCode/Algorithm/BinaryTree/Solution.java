@@ -3,6 +3,7 @@ package LeetCode.Algorithm.BinaryTree;
 import LeetCode.DataTypes.TreeNode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -11,6 +12,10 @@ import java.util.Stack;
  * Store solution to complete binary tree
  */
 public class Solution {
+
+    private boolean recovered = false;
+    private TreeNode miniMum;
+    private TreeNode maxiMum;
 
     /**
      * Given a complete binary tree, count the number of nodes.
@@ -105,11 +110,7 @@ public class Solution {
         }
     }
 
-    private boolean recovered = false;
-    private TreeNode miniMum;
-    private TreeNode maxiMum;
-
-    private void findGreatest(TreeNode root, boolean isMinimum){
+    private void findGreatest(TreeNode root, boolean isMinimum) {
         if (root == null) return;
         if (isMinimum) {
             if (miniMum == null || miniMum.val > root.val) miniMum = root;
@@ -119,5 +120,69 @@ public class Solution {
         }
         findGreatest(root.left, isMinimum);
         findGreatest(root.right, isMinimum);
+    }
+
+    /**
+     * Given a binary tree, determine if it is a valid binary search tree (BST).
+     * <p>
+     * Assume a BST is defined as follows:
+     * <p>
+     * The left subtree of a node contains only nodes with keys less than the node's key.
+     * The right subtree of a node contains only nodes with keys greater than the node's key.
+     * Both the left and right subtrees must also be binary search trees.
+     * Example 1:
+     * 2
+     * / \
+     * 1   3
+     * Binary tree [2,1,3], return true.
+     * Example 2:
+     * 1
+     * / \
+     * 2   3
+     * Binary tree [1,2,3], return false.
+     *
+     * @param root a root binary tree
+     * @return whether it is a valid BST
+     */
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) return true;
+        isValid = true;
+        if (root.left == null && root.right == null) return true;
+        else if (root.left == null) {
+            int[] rightRange = getBSTNode(root.right);
+            if (rightRange[0] <= root.val) isValid = false;
+        } else if (root.right == null) {
+            int[] leftRange = getBSTNode(root.left);
+            if (leftRange[1] >= root.val) isValid = false;
+        } else {
+            int[] rightRange = getBSTNode(root.right);
+            int[] leftRange = getBSTNode(root.left);
+            System.out.println(Arrays.toString(rightRange));
+            System.out.println(Arrays.toString(leftRange));
+            if (rightRange[0] <= root.val || leftRange[1] >= root.val) isValid = false;
+        }
+        return isValid;
+    }
+
+    private boolean isValid;
+
+    private int[] getBSTNode(TreeNode root) {
+        if (!isValid) return new int[] {0, 0};
+        if (root.left != null && root.right != null) {
+            int[] leftRange = getBSTNode(root.left);
+            int[] rightRange = getBSTNode(root.right);
+            if (leftRange[1] >= root.val || rightRange[0] <= root.val) isValid = false;
+            return new int[]{leftRange[0], rightRange[1]};
+        } else if (root.left != null) {
+            int[] leftRange = getBSTNode(root.left);
+            if (leftRange[1] >= root.val) isValid = false;
+            return new int[] {leftRange[0], root.val};
+        }
+        else if (root.right != null) {
+            int[] rightRange = getBSTNode(root.right);
+            if (rightRange[0] <= root.val) isValid = false;
+            return new int[] {root.val, rightRange[1]};
+        }
+        else return new int[] {root.val, root.val};
     }
 }
