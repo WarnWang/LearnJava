@@ -2,6 +2,7 @@ package LeetCode.Algorithm.LinkedList;
 
 import LeetCode.DataTypes.ListNode;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -177,5 +178,27 @@ public class Solution {
             }
         }
         return head;
+    }
+
+    /**
+     * Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+     * reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+     * <p>
+     * You must do this in-place without altering the nodes' values.
+     * <p>
+     * For example,
+     * Given {1,2,3,4}, reorder it to {1,4,2,3}.
+     *
+     * @param head a singly linked list
+     */
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null || head.next.next == null) return;
+        ArrayList<ListNode> nodes = new ArrayList<>();
+        for (ListNode pointer=head; pointer != null; pointer = pointer.next) nodes.add(pointer);
+        for (int i = 0, j = nodes.size() - 1; i < j - 1; i++, j--) {
+            nodes.get(j).next = nodes.get(i).next;
+            nodes.get(i).next = nodes.get(j);
+            nodes.get(j - 1).next = null;
+        }
     }
 }
