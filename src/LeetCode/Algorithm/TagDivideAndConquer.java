@@ -1,7 +1,5 @@
 package LeetCode.Algorithm;
 
-import net.datastructures.*;
-
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
