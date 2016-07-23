@@ -1,12 +1,17 @@
 package LeetCode.Algorithm.String;
 
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by warn on 8/6/2016.
  * Solution to puzzles with tag string
  */
 public class Solution {
+    public static void main(String args[]) {
+        Solution test = new Solution();
+        System.out.println(test.reverseWords(" aqo kdn   ") + "!");
+    }
+
     /**
      * Given an input string, reverse the string word by word.
      * <p>
@@ -79,8 +84,67 @@ public class Solution {
         return reversedString.toString();
     }
 
-    public static void main(String args[]) {
-        Solution test = new Solution();
-        System.out.println(test.reverseWords(" aqo kdn   ") + "!");
+    /**
+     * Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest
+     * transformation sequence from beginWord to endWord, such that:
+     * <p>
+     * Only one letter can be changed at a time
+     * Each intermediate word must exist in the word list
+     * For example,
+     * <p>
+     * Given:
+     * beginWord = "hit"
+     * endWord = "cog"
+     * wordList = ["hot","dot","dog","lot","log"]
+     * As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+     * return its length 5.
+     * <p>
+     * Note:
+     * Return 0 if there is no such transformation sequence.
+     * All words have the same length.
+     * All words contain only lowercase alphabetic characters.
+     *
+     * @param beginWord beginning word
+     * @param endWord   end word
+     * @param wordList  a word list
+     * @return the maximum length of the transformation
+     */
+    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
+        if (beginWord == null || endWord == null || beginWord.length() != endWord.length() ||
+                !wordList.contains(beginWord) || !wordList.contains(endWord)) return 0;
+        if (beginWord.equals(endWord)) return 1;
+        HashSet<String> beginSet = new HashSet<>(Collections.singletonList(beginWord));
+        HashSet<String> endSet = new HashSet<>(Collections.singletonList(endWord));
+        HashSet<String> visited = new HashSet<>();
+        int len = 1;
+
+        while (!beginSet.isEmpty() && !endSet.isEmpty()) {
+            if (beginSet.size() > endSet.size()) {
+                HashSet<String> tmp = beginSet;
+                beginSet = endSet;
+                endSet = tmp;
+            }
+
+            HashSet<String> nextBeginSet = new HashSet<>();
+            for (String word : beginSet) {
+                char[] wordArray = word.toCharArray();
+                visited.add(word);
+                for (int i = 0, n = wordArray.length; i < n; i++) {
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        char ori = wordArray[i];
+                        wordArray[i] = c;
+                        String newWord = new String(wordArray);
+                        if (wordList.contains(newWord)) {
+                            if (endSet.contains(newWord)) return len + 1;
+                            if (!visited.contains(newWord)) nextBeginSet.add(newWord);
+                        }
+                        wordArray[i] = ori;
+                    }
+                }
+            }
+            beginSet = nextBeginSet;
+            len++;
+        }
+        return 0;
     }
 }
