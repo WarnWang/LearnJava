@@ -1,6 +1,6 @@
 package LeetCode;
 
-import LeetCode.Algorithm.TagHashTable;
+import LeetCode.Algorithm.HashTable.TagHashTable;
 
 import java.util.*;
 
