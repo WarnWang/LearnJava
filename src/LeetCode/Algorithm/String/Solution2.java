@@ -67,8 +67,13 @@ public class Solution2 {
 
     public int lengthOfLastWordCharOperation(String s) {
         if (s == null || s.length() == 0) return 0;
-        for (int i = s.length() - 1; i >= 0; i--) {
-
+        int index = s.length() - 1;
+        while (index >= 0 && s.charAt(index) == ' ') index--;
+        int count = 0;
+        for (int i = index; i >= 0; i--) {
+            if (s.charAt(i) == ' ') break;
+            count++;
         }
+        return count;
     }
 }
