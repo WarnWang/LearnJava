@@ -57,12 +57,14 @@ public class Solution2 {
      */
     public int lengthOfLastWordRegex(String s) {
         if (s == null || s.length() == 0) return 0;
+
+        // Reverse string so as to find the last word
         String reverseString = new StringBuilder(s).reverse().toString();
         Pattern r = Pattern.compile("(\\S+)");
         Matcher m = r.matcher(reverseString);
-        if (m.find()) {
-            return m.group().length();
-        } else return 0;
+        
+        if (m.find()) return m.group().length();
+        else return 0;
     }
 
     public int lengthOfLastWordCharOperation(String s) {
