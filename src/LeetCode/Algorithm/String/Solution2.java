@@ -1,5 +1,8 @@
 package LeetCode.Algorithm.String;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by warn on 24/7/2016.
  * Store solution to string questions
@@ -19,7 +22,7 @@ public class Solution2 {
         StringBuilder sayString = new StringBuilder();
         char last = 'a';
         int count = 0;
-        for (char c: numCharArray) {
+        for (char c : numCharArray) {
             if (c != last) {
                 if (count > 0) {
                     sayString.append(count);
@@ -27,12 +30,45 @@ public class Solution2 {
                 }
                 last = c;
                 count = 1;
-            } count++;
+            }
+            count++;
         }
         if (count > 0) {
             sayString.append(count);
             sayString.append(last);
         }
         return sayString.toString();
+    }
+
+    /**
+     * Given a string s consists of upper/lower-case alphabets and empty space characters ' ', return the length of
+     * last word in the string.
+     * <p>
+     * If the last word does not exist, return 0.
+     * <p>
+     * Note: A word is defined as a character sequence consists of non-space characters only.
+     * <p>
+     * For example,
+     * Given s = "Hello World",
+     * return 5.
+     *
+     * @param s a string s
+     * @return last word length
+     */
+    public int lengthOfLastWordRegex(String s) {
+        if (s == null || s.length() == 0) return 0;
+        String reverseString = new StringBuilder(s).reverse().toString();
+        Pattern r = Pattern.compile("(\\S+)");
+        Matcher m = r.matcher(reverseString);
+        if (m.find()) {
+            return m.group().length();
+        } else return 0;
+    }
+
+    public int lengthOfLastWordCharOperation(String s) {
+        if (s == null || s.length() == 0) return 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+
+        }
     }
 }
