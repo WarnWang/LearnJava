@@ -9,6 +9,7 @@ import java.util.*;
 public class BackTracking {
     boolean findPath;
     private HashSet<String> contains;
+    private int combinationNum = 0;
 
     public List<List<Integer>> combine(int n, int k) {
         List<List<Integer>> combinations = new ArrayList<>();
@@ -128,6 +129,51 @@ public class BackTracking {
                     findGrayCodeArray(path, used, index + 1, n);
                     used[newInteger] = false;
                 }
+            }
+        }
+    }
+
+    /**
+     * This way will TLE
+     * Given an integer array with all positive numbers and no duplicates, find the number of possible combinations
+     * that add up to a positive integer target.
+     * <p>
+     * Example:
+     * <p>
+     * nums = [1, 2, 3]
+     * target = 4
+     * <p>
+     * The possible combination ways are:
+     * (1, 1, 1, 1)
+     * (1, 1, 2)
+     * (1, 2, 1)
+     * (1, 3)
+     * (2, 1, 1)
+     * (2, 2)
+     * (3, 1)
+     * <p>
+     * Note that different sequences are counted as different combinations.
+     * <p>
+     * Therefore the output is 7.
+     *
+     * @param nums   an integer array with all positive numbers and no duplicates
+     * @param target a positive integer target
+     * @return the number of different combinations
+     */
+    public int combinationSum4(int[] nums, int target) {
+        combinationNum = 0;
+        Arrays.sort(nums);
+        getCombinationSum(nums, target);
+        return combinationNum;
+    }
+
+    private void getCombinationSum(int[] nums, int target) {
+        if (target <= 0) return;
+        for (int num : nums) {
+            if (num > target) break;
+            else if (num == target) combinationNum++;
+            else {
+                getCombinationSum(nums, target - num);
             }
         }
     }
