@@ -2,9 +2,7 @@ package LeetCode.Algorithm.BreadthFirstSearch;
 
 import LeetCode.DataTypes.TreeNode;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by warn on 9/6/2016.
@@ -99,5 +97,22 @@ public class Solution {
             nodes = nextLevel;
         }
         return rightSide;
+    }
+
+    /**
+     * Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence
+     * of one or more dictionary words.
+     * <p>
+     * For example, given
+     * s = "leetcode",
+     * dict = ["leet", "code"].
+     * <p>
+     * Return true because "leetcode" can be segmented as "leet code".
+     *
+     * @param s        a string s
+     * @param wordDict a dictionary of words dict
+     * @return if s can be segmented into a space-separated sequence of one or more dictionary words
+     */
+    public boolean wordBreak(String s, Set<String> wordDict) {
     }
 }

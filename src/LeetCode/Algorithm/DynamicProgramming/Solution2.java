@@ -1,5 +1,6 @@
 package LeetCode.Algorithm.DynamicProgramming;
 
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -57,7 +58,7 @@ public class Solution2 {
      * <p>
      * Return true because "leetcode" can be segmented as "leet code".
      *
-     * @param s a string s
+     * @param s        a string s
      * @param wordDict a dictionary of words dict
      * @return if s can be segmented into a space-separated sequence of one or more dictionary words
      */
@@ -66,17 +67,22 @@ public class Solution2 {
         else if (wordDict == null || wordDict.size() == 0) return false;
         int n = s.length();
         boolean[] isInDict = new boolean[n];
+        int[] wordLength = new int[wordDict.size()];
+        int index = 0;
+        for (String str : wordDict) wordLength[index++] = str.length();
         for (int i = 0; i < n; i++) {
             if (wordDict.contains(s.substring(0, i + 1))) isInDict[i] = true;
             else {
-                for (int j = i; j >= 1; j--) {
-                    if (isInDict[j - 1] && wordDict.contains(s.substring(j, i + 1))) {
+                for (int j : wordLength) {
+                    if (i - j < 0) continue;
+                    if (isInDict[j - 1] && wordDict.contains(s.substring(i - j, i + 1))) {
                         isInDict[i] = true;
                         break;
                     }
                 }
             }
         }
+        System.out.println(Arrays.toString(isInDict));
         return isInDict[n - 1];
     }
 }
