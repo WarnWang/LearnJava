@@ -114,5 +114,31 @@ public class Solution {
      * @return if s can be segmented into a space-separated sequence of one or more dictionary words
      */
     public boolean wordBreak(String s, Set<String> wordDict) {
+        if (s == null || s.length() == 0) return true;
+        else if (wordDict == null || wordDict.size() == 0) return false;
+        int n = s.length();
+        char[] sArray = s.toCharArray();
+        int[] wordLengthArray = new int[wordDict.size()];
+        int index = 0;
+        for (String str: wordDict) wordLengthArray[index++] = str.length();
+        ArrayList<Integer> queryQueue = new ArrayList<>(Collections.singletonList(0));
+        boolean[] isVisited = new boolean[n];
+        while (!queryQueue.isEmpty()) {
+            ArrayList<Integer> tempQueue = new ArrayList<>();
+            for (int start : queryQueue) {
+                for (int wordLength : wordLengthArray) {
+                    if (wordLength + start > n) continue;
+                    if (wordDict.contains(new String(sArray, start, wordLength))) {
+                        if (start + wordLength == n) return true;
+                        else if (!isVisited[start + wordLength]) {
+                            isVisited[start + wordLength] = true;
+                            tempQueue.add(start + wordLength);
+                        }
+                    }
+                }
+            }
+            queryQueue = tempQueue;
+        }
+        return false;
     }
 }
