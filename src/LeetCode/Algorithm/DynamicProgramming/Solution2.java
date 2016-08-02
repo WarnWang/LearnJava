@@ -1,5 +1,7 @@
 package LeetCode.Algorithm.DynamicProgramming;
 
+import java.util.Set;
+
 /**
  * Created by warn on 31/7/2016.
  * <p>
@@ -43,5 +45,38 @@ public class Solution2 {
             }
         }
         return combinationNum[target];
+    }
+
+    /**
+     * Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence
+     * of one or more dictionary words.
+     * <p>
+     * For example, given
+     * s = "leetcode",
+     * dict = ["leet", "code"].
+     * <p>
+     * Return true because "leetcode" can be segmented as "leet code".
+     *
+     * @param s a string s
+     * @param wordDict a dictionary of words dict
+     * @return if s can be segmented into a space-separated sequence of one or more dictionary words
+     */
+    public boolean wordBreak(String s, Set<String> wordDict) {
+        if (s == null || s.length() == 0) return true;
+        else if (wordDict == null || wordDict.size() == 0) return false;
+        int n = s.length();
+        boolean[] isInDict = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            if (wordDict.contains(s.substring(0, i + 1))) isInDict[i] = true;
+            else {
+                for (int j = i; j >= 1; j--) {
+                    if (isInDict[j - 1] && wordDict.contains(s.substring(j, i + 1))) {
+                        isInDict[i] = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return isInDict[n - 1];
     }
 }
