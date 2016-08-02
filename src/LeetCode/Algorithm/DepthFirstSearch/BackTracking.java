@@ -10,6 +10,7 @@ public class BackTracking {
     boolean findPath;
     private HashSet<String> contains;
     private int combinationNum = 0;
+    private boolean isWordBreak;
 
     public List<List<Integer>> combine(int n, int k) {
         List<List<Integer>> combinations = new ArrayList<>();
@@ -175,6 +176,40 @@ public class BackTracking {
             else {
                 getCombinationSum(nums, target - num);
             }
+        }
+    }
+
+    /**
+     * Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated
+     * sequence of one or more dictionary words.
+     * <p>
+     * For example, given
+     * s = "leetcode",
+     * dict = ["leet", "code"].
+     * <p>
+     * Return true because "leetcode" can be segmented as "leet code".
+     *
+     * @param s        a string s
+     * @param wordDict a word dict
+     * @return check if s can be segmented into a space-separated sequence of one or more dictionary words
+     */
+    public boolean wordBreak(String s, Set<String> wordDict) {
+        if (s == null || s.length() == 0) return true;
+        isWordBreak = false;
+        wordBreak(s.toCharArray(), wordDict, 0);
+        return isWordBreak;
+    }
+
+    private void wordBreak(char[] chars, Set<String> wordDict, int index) {
+        if (isWordBreak) return;
+        else if (index == chars.length) isWordBreak = true;
+        for (int i = index + 1, n = chars.length; i < n; i++) {
+            String s = new String(chars, index, i - index);
+            System.out.println(s);
+            if (wordDict.contains(s)) {
+                wordBreak(chars, wordDict, i + 1);
+            }
+            if (isWordBreak) break;
         }
     }
 }
