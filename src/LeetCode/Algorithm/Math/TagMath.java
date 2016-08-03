@@ -395,6 +395,23 @@ public class TagMath {
             root = 0.5f * root + x * 1.0f / (2.0f * root);
         }
         int res = (int) root;
-        return res * res > x? res - 1: res;
+        return res * res > x ? res - 1 : res;
+    }
+
+    /**
+     * Given an integer n, return the number of trailing zeroes in n!.
+     * <p>
+     * Note: Your solution should be in logarithmic time complexity.
+     *
+     * @param n an integer
+     * @return number of trailing zeros
+     */
+    public int trailingZeroes(int n) {
+        int numOf5 = 0;
+
+        for (int i = n / 5; i > 0; i /= 5) {
+            numOf5 += i;
+        }
+        return numOf5;
     }
 }
