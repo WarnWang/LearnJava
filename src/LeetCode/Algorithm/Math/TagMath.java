@@ -430,7 +430,11 @@ public class TagMath {
 
     public double myPowIterative(double x, int n) {
         if (n == 0) return 1;
-        else if (n < 0) return 1.0f / myPow(x, -n);
+        else if (n < 0) return 1.0 / myPow(x, -n);
+        else if (n == Integer.MIN_VALUE) {
+            if (x > 1.0) return 0;
+            else return 1.0 / x / myPow(x, -(n + 1));
+        }
         double pow = 1.0;
         while (n > 1) {
             if ((n & 1) == 1) pow *= x;
