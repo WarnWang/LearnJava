@@ -414,4 +414,29 @@ public class TagMath {
         }
         return numOf5;
     }
+
+    /**
+     * Implement pow(x, n).
+     * @param x an double
+     * @param n an integer
+     * @return the result of pow(x, n)
+     */
+    public double myPow(double x, int n) {
+        if (x > 0) return Math.exp(Math.log(x) * n);
+        else if (x == 0) return 0;
+        else if (n % 2 == 0) return Math.exp(Math.log(Math.abs(x)) * n);
+        else return -Math.exp(Math.log(Math.abs(x)) * n);
+    }
+
+    public double myPowIterative(double x, int n) {
+        if (n == 0) return 1;
+        else if (n < 0) return 1.0f / myPow(x, -n);
+        double pow = 1.0;
+        while (n > 1) {
+            if ((n & 1) == 1) pow *= x;
+            x *= x;
+            n >>= 1;
+        }
+        return pow * x;
+    }
 }
