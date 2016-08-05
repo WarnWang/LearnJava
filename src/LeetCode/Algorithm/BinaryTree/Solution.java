@@ -175,7 +175,6 @@ public class Solution {
             if (frontier.left != null) treeNodeStack.add(frontier.left);
             if (frontier.right != null) treeNodeStack.add(frontier.right);
         }
-//        Collections.reverse(postOrder);
         return postOrder;
     }
 
