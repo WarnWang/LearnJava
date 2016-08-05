@@ -2,10 +2,7 @@ package LeetCode.Algorithm.BinaryTree;
 
 import LeetCode.DataTypes.TreeNode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by warn on 31/5/2016.
@@ -42,37 +39,6 @@ public class Solution {
         }
         if (rightDepth == leftDepth) return (2 << leftDepth) - 1;
         return 1 + countNodes(root.left) + countNodes(root.right);
-    }
-
-    /**
-     * Given a binary tree, return the preorder traversal of its nodes' values.
-     * <p>
-     * For example:
-     * Given binary tree {1,#,2,3},
-     * 1
-     * \
-     * 2
-     * /
-     * 3
-     * return [1,2,3].
-     *
-     * @param root a binary tree
-     * @return the pre-order traversal
-     */
-    public List<Integer> preorderTraversal(TreeNode root) {
-        ArrayList<Integer> preOrder = new ArrayList<>();
-        if (root != null) {
-            Stack<TreeNode> exploreStack = new Stack<>();
-            exploreStack.add(root);
-            while (!exploreStack.isEmpty()) {
-                TreeNode frontier = exploreStack.pop();
-                preOrder.add(frontier.val);
-
-                if (frontier.right != null) exploreStack.add(frontier.right);
-                if (frontier.left != null) exploreStack.add(frontier.left);
-            }
-        }
-        return preOrder;
     }
 
     /**
@@ -199,18 +165,48 @@ public class Solution {
      * @return the postorder of binary tree
      */
     public List<Integer> postorderTraversal(TreeNode root) {
-        Stack<Integer> postOrder = new Stack<>();
+        LinkedList<Integer> postOrder = new LinkedList<>();
         if (root == null) return postOrder;
         Stack<TreeNode> treeNodeStack = new Stack<>();
         treeNodeStack.add(root);
         while (!treeNodeStack.isEmpty()) {
             TreeNode frontier = treeNodeStack.pop();
-            postOrder.add(frontier.val);
+            postOrder.addFirst(frontier.val);
             if (frontier.left != null) treeNodeStack.add(frontier.left);
             if (frontier.right != null) treeNodeStack.add(frontier.right);
         }
-        ArrayList<Integer> postOrderList = new ArrayList<>();
-        while (!postOrder.isEmpty()) postOrderList.add(postOrder.pop());
-        return postOrderList;
+//        Collections.reverse(postOrder);
+        return postOrder;
+    }
+
+    /**
+     * Given a binary tree, return the preorder traversal of its nodes' values.
+     * <p>
+     * For example:
+     * Given binary tree {1,#,2,3},
+     * 1
+     * \
+     * 2
+     * /
+     * 3
+     * return [1,2,3].
+     *
+     * @param root a binary tree
+     * @return the pre-order traversal
+     */
+    public List<Integer> preorderTraversal(TreeNode root) {
+        ArrayList<Integer> preOrder = new ArrayList<>();
+        if (root != null) {
+            Stack<TreeNode> exploreStack = new Stack<>();
+            exploreStack.add(root);
+            while (!exploreStack.isEmpty()) {
+                TreeNode frontier = exploreStack.pop();
+                preOrder.add(frontier.val);
+
+                if (frontier.right != null) exploreStack.add(frontier.right);
+                if (frontier.left != null) exploreStack.add(frontier.left);
+            }
+        }
+        return preOrder;
     }
 }
