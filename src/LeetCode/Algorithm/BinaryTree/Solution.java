@@ -16,6 +16,7 @@ public class Solution {
     private boolean recovered = false;
     private TreeNode miniMum;
     private TreeNode maxiMum;
+    private boolean isValid;
 
     /**
      * Given a complete binary tree, count the number of nodes.
@@ -164,10 +165,8 @@ public class Solution {
         return isValid;
     }
 
-    private boolean isValid;
-
     private int[] getBSTNode(TreeNode root) {
-        if (!isValid) return new int[] {0, 0};
+        if (!isValid) return new int[]{0, 0};
         if (root.left != null && root.right != null) {
             int[] leftRange = getBSTNode(root.left);
             int[] rightRange = getBSTNode(root.right);
@@ -176,13 +175,42 @@ public class Solution {
         } else if (root.left != null) {
             int[] leftRange = getBSTNode(root.left);
             if (leftRange[1] >= root.val) isValid = false;
-            return new int[] {leftRange[0], root.val};
-        }
-        else if (root.right != null) {
+            return new int[]{leftRange[0], root.val};
+        } else if (root.right != null) {
             int[] rightRange = getBSTNode(root.right);
             if (rightRange[0] <= root.val) isValid = false;
-            return new int[] {root.val, rightRange[1]};
+            return new int[]{root.val, rightRange[1]};
+        } else return new int[]{root.val, root.val};
+    }
+
+    /**
+     * Given a binary tree, return the postorder traversal of its nodes' values.
+     * <p>
+     * For example:
+     * Given binary tree {1,#,2,3},
+     * 1
+     * \
+     * 2
+     * /
+     * 3
+     * return [3,2,1].
+     *
+     * @param root a binary tree
+     * @return the postorder of binary tree
+     */
+    public List<Integer> postorderTraversal(TreeNode root) {
+        Stack<Integer> postOrder = new Stack<>();
+        if (root == null) return postOrder;
+        Stack<TreeNode> treeNodeStack = new Stack<>();
+        treeNodeStack.add(root);
+        while (!treeNodeStack.isEmpty()) {
+            TreeNode frontier = treeNodeStack.pop();
+            postOrder.add(frontier.val);
+            if (frontier.left != null) treeNodeStack.add(frontier.left);
+            if (frontier.right != null) treeNodeStack.add(frontier.right);
         }
-        else return new int[] {root.val, root.val};
+        ArrayList<Integer> postOrderList = new ArrayList<>();
+        while (!postOrder.isEmpty()) postOrderList.add(postOrder.pop());
+        return postOrderList;
     }
 }
