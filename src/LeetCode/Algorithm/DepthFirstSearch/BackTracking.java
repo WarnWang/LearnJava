@@ -212,4 +212,45 @@ public class BackTracking {
             if (isWordBreak) break;
         }
     }
+
+    /**
+     * Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+     * <p>
+     * For example, given n = 3, a solution set is:
+     * <p>
+     * [
+     * "((()))",
+     * "(()())",
+     * "(())()",
+     * "()(())",
+     * "()()()"
+     * ]
+     *
+     * @param n n pairs of parentheses
+     * @return a solution set
+     */
+    public List<String> generateParenthesis(int n) {
+        ArrayList<String> pareList = new ArrayList<>();
+        if (n <= 0) return pareList;
+        generateParenthesis(0, new char[n * 2], 0, pareList);
+        return pareList;
+    }
+
+    private void generateParenthesis(int nLeft, char[] path, int index, ArrayList<String> result) {
+        if (index == path.length && nLeft == 0) result.add(new String(path));
+        else if (index < path.length) {
+            if (nLeft == 0) {
+                path[index] = '(';
+                generateParenthesis(1, path, index + 1, result);
+            } else if (index + nLeft == path.length){
+                path[index] = ')';
+                generateParenthesis(nLeft - 1, path, index + 1, result);
+            } else if (index + nLeft < path.length) {
+                path[index] = ')';
+                generateParenthesis(nLeft - 1, path, index + 1, result);
+                path[index] = '(';
+                generateParenthesis(nLeft + 1, path, index + 1, result);
+            }
+        }
+    }
 }
