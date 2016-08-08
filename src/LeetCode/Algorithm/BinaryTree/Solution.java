@@ -208,4 +208,26 @@ public class Solution {
         }
         return preOrder;
     }
+
+    /**
+     * Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
+     * @param nums an sorted list
+     * @return a height balanced BST
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums == null) return null;
+        return sortedArrayToBST(nums, 0, nums.length);
+    }
+
+    private TreeNode sortedArrayToBST(int[] nums, int start, int end) {
+        if (start >= end) return null;
+        else if (end - start == 1) return new TreeNode(nums[start]);
+        else {
+            int middle = (start + end) / 2;
+            TreeNode root = new TreeNode(nums[middle]);
+            root.left = sortedArrayToBST(nums, start, middle);
+            root.right = sortedArrayToBST(nums, middle + 1, end);
+            return root;
+        }
+    }
 }
