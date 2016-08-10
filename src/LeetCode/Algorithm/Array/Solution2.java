@@ -43,4 +43,29 @@ public class Solution2 {
         }
         return pascalTriangle;
     }
+
+    /**
+     * Given an index k, return the kth row of the Pascal's triangle.
+     * <p>
+     * For example, given k = 3,
+     * Return [1,3,3,1].
+     *
+     * @param rowIndex the kth row
+     * @return the kth
+     */
+    public List<Integer> getRow(int rowIndex) {
+        if (rowIndex <= 0) return Collections.emptyList();
+        Integer[] row = new Integer[rowIndex + 1];
+        row[0] = 1;
+        for (int i = 0; i <= rowIndex; i++) {
+            int middle = i / 2;
+            for (int j = middle; j > 0; j--) {
+                row[j] = row[j] + row[j - 1];
+            }
+            for (int j = middle + 1; j <= i; j++) {
+                row[j] = row[i - j];
+            }
+        }
+        return Arrays.asList(row);
+    }
 }
