@@ -60,7 +60,7 @@ public class Solution2 {
         for (int i = 0; i <= rowIndex; i++) {
             int middle = i / 2;
             for (int j = middle; j > 0; j--) {
-                row[j] = row[j] + row[j - 1];
+                row[j] += row[j - 1];
             }
             for (int j = middle + 1; j <= i; j++) {
                 row[j] = row[i - j];
