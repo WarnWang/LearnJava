@@ -1,5 +1,6 @@
 package LeetCode.Algorithm.DynamicProgramming;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -84,5 +85,39 @@ public class Solution2 {
         }
         System.out.println(Arrays.toString(isInDict));
         return isInDict[n - 1];
+    }
+
+    /**
+     * Say you have an array for which the ith element is the price of a given stock on day i.
+     * <p>
+     * Design an algorithm to find the maximum profit. You may complete at most k transactions.
+     * <p>
+     * Note:
+     * You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+     *
+     * @param k      maximum transaction times
+     * @param prices stock price list
+     * @return the max profit
+     */
+    public int maxProfit(int k, int[] prices) {
+        if (prices == null || prices.length < 2 || k <= 0) return 0;
+        int n = prices.length;
+        if (k >= n / 2) {
+            int maxProfitNum = 0;
+            for (int i = 1; i < n; i++) {
+                if (prices[i] > prices[i - 1]) maxProfitNum += prices[i] - prices[i - 1];
+            }
+            return maxProfitNum;
+        }
+
+        int[][] dp = new int[k + 1][n];
+        for (int i = 1; i <= k; i++) {
+            int localMax = -prices[0];
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = Math.max(dp[i][j - 1], prices[j] + localMax);
+                localMax = Math.max(localMax, dp[i - 1][j] - prices[j]);
+            }
+        }
+        return dp[k][n - 1];
     }
 }
