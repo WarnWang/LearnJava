@@ -1,5 +1,7 @@
 package LeetCode.Algorithm.Search;
 
+import java.util.ArrayList;
+
 /**
  * Created by warn on 16/7/2016.
  * Store solutions to question with tag binary search
@@ -64,5 +66,67 @@ public class BinarySearch {
             else start = middle;
         }
         return false;
+    }
+
+    /**
+     * Given a n x n matrix where each of the rows and columns are sorted in ascending order, find the kth smallest
+     * element in the matrix.
+     * <p>
+     * Note that it is the kth smallest element in the sorted order, not the kth distinct element.
+     * <p>
+     * Example:
+     * <p>
+     * matrix = [
+     * [ 1,  5,  9],
+     * [10, 11, 13],
+     * [12, 13, 15]
+     * ],
+     * k = 8,
+     * <p>
+     * return 13.
+     *
+     * @param matrix a n x n matrix
+     * @param k      the kth smallest element in the sorted order
+     * @return the kth smallest element in the sorted order
+     */
+    public int kthSmallest(int[][] matrix, int k) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+        if (k == 1) return matrix[0][0];
+        int width = matrix.length;
+        int height = matrix[0].length;
+        if (k == width * height) return matrix[width - 1][height - 1];
+        return findKthSmallest(matrix, matrix[width - 1][height - 1], matrix[0][0], k);
+    }
+
+    private int findKthSmallest(int[][] matrix, int high, int low, int k) {
+        int middle = high / 2 + low / 2;
+        ArrayList<Integer> smaller = new ArrayList<>();
+        ArrayList<Integer> larger = new ArrayList<>();
+        int nEqual = 0;
+        for (int[] row : matrix) {
+            for (int cell : row) {
+                if (cell > middle) larger.add(cell);
+                else if (cell == middle) nEqual++;
+                else smaller.add(cell);
+            }
+        }
+        if (smaller.size() >= k) return findKthSmallest(smaller, k);
+        else if (smaller.size() + nEqual >= k) return middle;
+        else return findKthSmallest(larger, k - smaller.size() - nEqual);
+    }
+
+    private int findKthSmallest(ArrayList<Integer> integerList, int k) {
+        ArrayList<Integer> smaller = new ArrayList<>();
+        ArrayList<Integer> larger = new ArrayList<>();
+        int nEquals = 0;
+        int n = integerList.get(integerList.size() / 2);
+        for (int i : integerList) {
+            if (i > n) larger.add(i);
+            else if (i < n) smaller.add(i);
+            else nEquals++;
+        }
+        if (smaller.size() >= k) return findKthSmallest(smaller, k);
+        else if (smaller.size() + nEquals >= k) return n;
+        else return findKthSmallest(larger, k - nEquals - smaller.size());
     }
 }
