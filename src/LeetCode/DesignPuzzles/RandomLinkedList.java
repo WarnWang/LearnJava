@@ -19,13 +19,13 @@ import java.util.Random;
  * ListNode head = new ListNode(1);
  * head.next = new ListNode(2);
  * head.next.next = new ListNode(3);
- * Solution solution = new Solution(head);
+ * RandomLinkedList solution = new RandomLinkedList(head);
  * <p>
  * // getRandom() should return either 1, 2, or 3 randomly. Each element should have equal probability of returning.
  * solution.getRandom();
  * 154ms
  */
-public class Solution {
+public class RandomLinkedList {
 
     private int nodeNum = 0;
     private ListNode root;
@@ -34,7 +34,7 @@ public class Solution {
      * @param head The linked list's head.
      *             Note that the head is guaranteed to be not null, so it contains at least one node.
      */
-    public Solution(ListNode head) {
+    public RandomLinkedList(ListNode head) {
         for (ListNode i = head; i != null; i = i.next) nodeNum++;
         root = head;
     }

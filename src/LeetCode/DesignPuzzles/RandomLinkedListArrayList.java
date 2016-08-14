@@ -26,7 +26,7 @@ import java.util.Random;
  * solution.getRandom();
  * 143 ms
  */
-public class SolutionArrayList {
+public class RandomLinkedListArrayList {
 
     private ArrayList<Integer> nodeList;
     private Random random;
@@ -35,7 +35,7 @@ public class SolutionArrayList {
      * @param head The linked list's head.
      *             Note that the head is guaranteed to be not null, so it contains at least one node.
      */
-    public SolutionArrayList(ListNode head) {
+    public RandomLinkedListArrayList(ListNode head) {
         nodeList = new ArrayList<>();
         for (ListNode i = head; i != null; i = i.next) {
             nodeList.add(i.val);
