@@ -168,4 +168,23 @@ public class Solution2 {
 
         return Math.max(minimalHealth[0][0], 1);
     }
+
+    /**
+     * You are climbing a stair case. It takes n steps to reach to the top.
+     * <p>
+     * Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+     *
+     * @param n climb time
+     * @return climb times
+     */
+    public int climbStairs(int n) {
+        if (n < 1) return 0;
+        int[] climbTimes = new int[Math.max(n, 2)];
+        climbTimes[0] = 1;
+        climbTimes[1] = 2;
+
+        for (int i = 2; i < n; i++)
+            climbTimes[i] = climbTimes[i - 1] + climbTimes[i - 2];
+        return climbTimes[n - 1];
+    }
 }
