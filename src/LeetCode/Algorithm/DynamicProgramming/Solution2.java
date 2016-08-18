@@ -187,4 +187,41 @@ public class Solution2 {
             climbTimes[i] = climbTimes[i - 1] + climbTimes[i - 2];
         return climbTimes[n - 1];
     }
+
+    /**
+     * A message containing letters from A-Z is being encoded to numbers using the following mapping:
+     * <p>
+     * 'A' -> 1
+     * 'B' -> 2
+     * ...
+     * 'Z' -> 26
+     * Given an encoded message containing digits, determine the total number of ways to decode it.
+     * <p>
+     * For example,
+     * Given encoded message "12", it could be decoded as "AB" (1 2) or "L" (12).
+     * <p>
+     * The number of ways decoding "12" is 2.
+     * <p>
+     * Subscribe to see which companies asked this question
+     *
+     * @param s a string contains all number
+     * @return the decode ways number
+     */
+    public int numDecodings(String s) {
+        if (s == null || s.length() == 0 || s.charAt(0) == '0') return 0;
+        int n = s.length();
+        if (n == 1) return 1;
+        int[] decodeNums = new int[Math.max(n, 2)];
+        decodeNums[0] = 1;
+        if (Integer.parseInt(s.substring(0, 2)) <= 26 && s.charAt(1) != '0') decodeNums[1] = 2;
+        else if (Integer.parseInt(s.substring(0, 2)) <= 26 || s.charAt(1) != '0') decodeNums[1] = 1;
+        else return 0;
+        for (int i = 2; i < n; i++) {
+            if (s.charAt(i) != '0') decodeNums[i] = decodeNums[i - 1];
+            int two = Integer.parseInt(s.substring(i - 1, i + 1));
+            if (two < 27 && two > 9) decodeNums[i] += decodeNums[i - 2];
+            if (decodeNums[i] == 0) return 0;
+        }
+        return decodeNums[n - 1];
+    }
 }
