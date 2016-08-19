@@ -9,6 +9,9 @@ import java.util.*;
  * Solution to breadth first search puzzles
  */
 public class Solution {
+
+    private boolean connect;
+
     /**
      * Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
      * <p>
@@ -120,7 +123,7 @@ public class Solution {
         char[] sArray = s.toCharArray();
         int[] wordLengthArray = new int[wordDict.size()];
         int index = 0;
-        for (String str: wordDict) wordLengthArray[index++] = str.length();
+        for (String str : wordDict) wordLengthArray[index++] = str.length();
         ArrayList<Integer> queryQueue = new ArrayList<>(Collections.singletonList(0));
         boolean[] isVisited = new boolean[n];
         while (!queryQueue.isEmpty()) {
@@ -140,5 +143,102 @@ public class Solution {
             queryQueue = tempQueue;
         }
         return false;
+    }
+
+    /**
+     * Given two words (beginWord and endWord), and a dictionary's word list, find all shortest transformation
+     * sequence(s) from beginWord to endWord, such that:
+     * <p>
+     * Only one letter can be changed at a time
+     * Each intermediate word must exist in the word list
+     * For example,
+     * <p>
+     * Given:
+     * beginWord = "hit"
+     * endWord = "cog"
+     * wordList = ["hot","dot","dog","lot","log"]
+     * Return
+     * [
+     * ["hit","hot","dot","dog","cog"],
+     * ["hit","hot","lot","log","cog"]
+     * ]
+     * Note:
+     * All words have the same length.
+     * All words contain only lowercase alphabetic characters.
+     *
+     * @param beginWord beginning word
+     * @param endWord   ending word
+     * @param wordList  possible intermediate word
+     * @return a word path
+     */
+    public List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
+        List<List<String>> ladderList = new ArrayList<>();
+        if (wordList == null || beginWord == null || endWord == null || beginWord.length() == 0 ||
+                endWord.length() == 0 || wordList.size() == 0 || beginWord.length() != endWord.length() ||
+                !wordList.contains(beginWord) || !wordList.contains(endWord))
+            return ladderList;
+        HashMap<String, List<String>> wordMap = new HashMap<>();
+        connect = false;
+        findShortestPathDistance(new HashSet<>(Collections.singletonList(beginWord)),
+                new HashSet<>(Collections.singletonList(endWord)), wordList, wordMap, true);
+        if (connect) {
+            getShortestPath(new ArrayList<>(Collections.singletonList(beginWord)), wordMap, ladderList, beginWord,
+                    endWord);
+        }
+        return ladderList;
+    }
+
+    private void findShortestPathDistance(Set<String> firstSet, Set<String> secondSet, Set<String> wordList,
+                                          HashMap<String, List<String>> wordMap, boolean forward) {
+        if (firstSet.size() > secondSet.size()) {
+            findShortestPathDistance(secondSet, firstSet, wordList, wordMap, !forward);
+            return;
+        }
+
+        wordList.removeAll(firstSet);
+        wordList.removeAll(secondSet);
+        HashSet<String> thirdSet = new HashSet<>();
+        for (String word : firstSet) {
+            char[] wordArray = word.toCharArray();
+            for (int i = 0, n = wordArray.length; i < n; i++) {
+                for (char c = 'a'; c <= 'z'; c++) {
+                    if (c == wordArray[i]) continue;
+                    char tmp = wordArray[i];
+                    wordArray[i] = c;
+                    String newString = new String(wordArray);
+                    if (secondSet.contains(newString)) {
+                        connect = true;
+
+                        String key = (forward) ? word : newString;
+                        String value = (forward) ? newString : word;
+                        if (wordMap.containsKey(key)) wordMap.get(key).add(value);
+                        else wordMap.put(key, new ArrayList<>(Collections.singletonList(value)));
+                    } else if (wordList.contains(newString)){
+                        thirdSet.add(newString);
+                        String key = (forward) ? word : newString;
+                        String value = (forward) ? newString : word;
+                        if (wordMap.containsKey(key)) wordMap.get(key).add(value);
+                        else wordMap.put(key, new ArrayList<>(Collections.singletonList(value)));
+                    }
+
+                    wordArray[i] = tmp;
+                }
+            }
+        }
+        if (!connect && !thirdSet.isEmpty()) {
+            findShortestPathDistance(thirdSet, secondSet, wordList, wordMap, forward);
+        }
+    }
+
+    private void getShortestPath(List<String> path, HashMap<String, List<String>> wordMap,
+                                 List<List<String>> ladderList, String start, String end) {
+        if (start.equals(end)) ladderList.add(new ArrayList<>(path));
+        else if (wordMap.containsKey(start)){
+            for (String nextWord : wordMap.get(start)) {
+                path.add(nextWord);
+                getShortestPath(path, wordMap, ladderList, nextWord, end);
+                path.remove(path.size() - 1);
+            }
+        }
     }
 }
