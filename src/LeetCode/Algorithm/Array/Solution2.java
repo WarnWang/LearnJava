@@ -1,9 +1,6 @@
 package LeetCode.Algorithm.Array;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by warn on 9/8/2016.
@@ -67,5 +64,31 @@ public class Solution2 {
             }
         }
         return Arrays.asList(row);
+    }
+
+    /**
+     * Given an array of non-negative integers, you are initially positioned at the first index of the array.
+     * <p>
+     * Each element in the array represents your maximum jump length at that position.
+     * <p>
+     * Determine if you are able to reach the last index.
+     * <p>
+     * For example:
+     * A = [2,3,1,1,4], return true.
+     * <p>
+     * A = [3,2,1,0,4], return false.
+     *
+     * @param nums an array of non-negative integers represent maximum jump length
+     * @return whether you can reach the last index or not.
+     */
+    public boolean canJump(int[] nums) {
+        if (nums == null || nums.length < 2) return true;
+        int n = nums.length;
+        int minimal = n - 1;
+        for (int i = n - 2; i >= 0; i--) {
+            int jumpSteps = nums[i];
+            if (jumpSteps + i >= minimal) minimal = i;
+        }
+        return minimal == 0;
     }
 }
