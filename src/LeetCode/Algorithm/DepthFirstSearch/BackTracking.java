@@ -280,7 +280,7 @@ public class BackTracking {
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         List<List<Integer>> combinationList = new ArrayList<>();
         if (candidates == null || candidates.length == 0) return combinationList;
-//        Arrays.sort(candidates);
+        Arrays.sort(candidates);
         existingList = new HashSet<>();
         backtrackingSearchCombinations(candidates, 0, target, new ArrayList<>(), combinationList);
         return combinationList;
@@ -296,7 +296,7 @@ public class BackTracking {
         } else if (target < 0 || candidateIndex == candidates.length) {
             for (int i = candidateIndex; i < candidates.length; i++) {
                 int candidate = candidates[i];
-//                if (candidate > target) break;
+                if (candidate > target) break;
                 path.add(candidate);
                 backtrackingSearchCombinations(candidates, i + 1, target - candidate, path, result);
                 path.remove(path.size() - 1);
