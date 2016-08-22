@@ -11,6 +11,7 @@ public class BackTracking {
     private HashSet<String> contains;
     private int combinationNum = 0;
     private boolean isWordBreak;
+    private HashSet<String> existingList;
 
     public List<List<Integer>> combine(int n, int k) {
         List<List<Integer>> combinations = new ArrayList<>();
@@ -242,7 +243,7 @@ public class BackTracking {
             if (nLeft == 0) {
                 path[index] = '(';
                 generateParenthesis(1, path, index + 1, result);
-            } else if (index + nLeft == path.length){
+            } else if (index + nLeft == path.length) {
                 path[index] = ')';
                 generateParenthesis(nLeft - 1, path, index + 1, result);
             } else if (index + nLeft < path.length) {
@@ -250,6 +251,55 @@ public class BackTracking {
                 generateParenthesis(nLeft - 1, path, index + 1, result);
                 path[index] = '(';
                 generateParenthesis(nLeft + 1, path, index + 1, result);
+            }
+        }
+    }
+
+    /**
+     * Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the
+     * candidate numbers sums to T.
+     * <p>
+     * Each number in C may only be used once in the combination.
+     * <p>
+     * Note:
+     * All numbers (including target) will be positive integers.
+     * The solution set must not contain duplicate combinations.
+     * For example, given candidate set [10, 1, 2, 7, 6, 1, 5] and target 8,
+     * A solution set is:
+     * [
+     * [1, 7],
+     * [1, 2, 5],
+     * [2, 6],
+     * [1, 1, 6]
+     * ]
+     *
+     * @param candidates a list of
+     * @param target     target number
+     * @return the list of combinations
+     */
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> combinationList = new ArrayList<>();
+        if (candidates == null || candidates.length == 0) return combinationList;
+//        Arrays.sort(candidates);
+        existingList = new HashSet<>();
+        backtrackingSearchCombinations(candidates, 0, target, new ArrayList<>(), combinationList);
+        return combinationList;
+    }
+
+    private void backtrackingSearchCombinations(int[] candidates, int candidateIndex, int target,
+                                                ArrayList<Integer> path, List<List<Integer>> result) {
+        if (target == 0) {
+            if (!existingList.contains(path.toString())) {
+                result.add(new ArrayList<>(path));
+                existingList.add(path.toString());
+            }
+        } else if (target < 0 || candidateIndex == candidates.length) {
+            for (int i = candidateIndex; i < candidates.length; i++) {
+                int candidate = candidates[i];
+//                if (candidate > target) break;
+                path.add(candidate);
+                backtrackingSearchCombinations(candidates, i + 1, target - candidate, path, result);
+                path.remove(path.size() - 1);
             }
         }
     }
