@@ -1,5 +1,8 @@
 package LeetCode.Algorithm.String;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,7 +65,7 @@ public class Solution2 {
         String reverseString = new StringBuilder(s).reverse().toString();
         Pattern r = Pattern.compile("(\\S+)");
         Matcher m = r.matcher(reverseString);
-        
+
         if (m.find()) return m.group().length();
         else return 0;
     }
@@ -77,5 +80,56 @@ public class Solution2 {
             count++;
         }
         return count;
+    }
+
+    /**
+     * You are given a string, s, and a list of words, words, that are all of the same length. Find all starting
+     * indices of substring(s) in s that is a concatenation of each word in words exactly once and without any
+     * intervening characters.
+     * <p>
+     * For example, given:
+     * s: "barfoothefoobarman"
+     * words: ["foo", "bar"]
+     * <p>
+     * You should return the indices: [0,9].
+     * (order does not matter).
+     *
+     * @param s     a string
+     * @param words a word list
+     * @return the index of substring that is a concatenation of each word
+     */
+    public List<Integer> findSubstring(String s, String[] words) {
+        List<Integer> startIndexList = new ArrayList<>();
+        if (s == null || s.length() == 0 || words == null || words.length == 0) return startIndexList;
+        HashMap<String, Integer> containsWord = new HashMap<>();
+        for (String word : words)
+            if (containsWord.containsKey(word)) containsWord.put(word, containsWord.get(word) + 1);
+            else containsWord.put(word, 1);
+        char[] chars = s.toCharArray();
+        int wordLength = words[0].length();
+        for (int i = 0, n = chars.length - wordLength * words.length + 1; i < n; i++) {
+            String newString = new String(chars, i, wordLength);
+            if (containsWord.containsKey(newString)) {
+                HashMap<String, Integer> contains = new HashMap<>(containsWord);
+                int value = containsWord.get(newString);
+                if (value == 1) contains.remove(newString);
+                else contains.put(newString, value - 1);
+                if (contains.isEmpty()) startIndexList.add(i);
+                else
+                    for (int j = i + wordLength, m = chars.length - wordLength + 1; j < m; j += wordLength) {
+                        String subString = new String(chars, j, wordLength);
+                        if (!contains.containsKey(subString)) break;
+                        int nSub = contains.get(subString);
+                        if (nSub == 1) {
+                            contains.remove(subString);
+                            if (contains.isEmpty()) {
+                                startIndexList.add(i);
+                                break;
+                            }
+                        } else contains.put(subString, nSub - 1);
+                    }
+            }
+        }
+        return startIndexList;
     }
 }
