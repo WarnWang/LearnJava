@@ -1,8 +1,5 @@
 package LeetCode.Algorithm.BitManipulation;
 
-import java.util.Arrays;
-import java.util.Comparator;
-
 /**
  * Created by warn on 10/6/2016.
  * Solve puzzles of bit manipulation
@@ -130,5 +127,34 @@ public class Solution {
             }
         }
         return maxLengthProduct;
+    }
+
+    /**
+     * Given an array of numbers nums, in which exactly two elements appear only once and all the other elements appear
+     * exactly twice. Find the two elements that appear only once.
+     * <p>
+     * For example:
+     * <p>
+     * Given nums = [1, 2, 1, 3, 2, 5], return [3, 5].
+     * <p>
+     * Note:
+     * The order of the result is not important. So in the above example, [5, 3] is also correct.
+     * Your algorithm should run in linear runtime complexity. Could you implement it using only constant space
+     * complexity?
+     *
+     * @param nums an array of numbers nums
+     * @return two elements that appear only once.
+     */
+    public int[] singleNumber3(int[] nums) {
+        if (nums.length == 2) return nums;
+        int[] result = new int[2];
+        int ones = 0;
+        for (int num : nums) ones ^= num;
+
+        int last = ones & (~(ones - 1));
+        for (int num : nums)
+            if ((num & last) == last) result[1] ^= num;
+            else result[0] ^= num;
+        return result;
     }
 }
