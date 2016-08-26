@@ -92,4 +92,48 @@ public class Solution2 {
         }
         return n;
     }
+
+    /**
+     * QuestionEditorial Solution  My Submissions
+     * Total Accepted: 51892 Total Submissions: 419161 Difficulty: Hard
+     * Validate if a given string is numeric.
+     * <p>
+     * Some examples:
+     * "0" => true
+     * " 0.1 " => true
+     * "abc" => false
+     * "1 a" => false
+     * "2e10" => true
+     * Note: It is intended for the problem statement to be ambiguous. You should gather all requirements up front
+     * before implementing one.
+     *
+     * @param s a string s
+     * @return whether this string is a number or not
+     */
+    public boolean isNumber(String s) {
+        if (s == null || s.length() == 0) return false;
+        s = s.trim();
+        if (s.length() == 0) return false;
+        char[] chars;
+        if (s.startsWith("-") || s.startsWith("+")) chars = s.substring(1).toCharArray();
+        else chars = s.toCharArray();
+        boolean containE = false, containPoint = false, containsDigit = false;
+        if ((chars.length == 1 && !Character.isDigit(chars[0])) || !(Character.isDigit(chars[0]) || chars[0] == '.')
+                || !(Character.isDigit(chars[chars.length - 1]) || chars[chars.length - 1] == '.'))
+            return false;
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+            if (c == 'e') {
+                if (containE || !containsDigit || i == chars.length - 1) return false;
+                if (chars[i + 1] == '+' || chars[i + 1] == '-') i++;
+                containE = true;
+                containPoint = true;
+            } else if (c == '.') {
+                if (containPoint) return false;
+                containPoint = true;
+            } else if (!Character.isDigit(c)) return false;
+            else containsDigit = true;
+        }
+        return containsDigit;
+    }
 }
