@@ -1,6 +1,11 @@
 package LeetCode.Algorithm.Array;
 
-import java.util.*;
+import LeetCode.DataTypes.Interval;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by warn on 9/8/2016.
@@ -90,5 +95,40 @@ public class Solution2 {
             if (jumpSteps + i >= minimal) minimal = i;
         }
         return minimal == 0;
+    }
+
+    /**
+     * Given a collection of intervals, merge all overlapping intervals.
+     * <p>
+     * For example,
+     * Given [1,3],[2,6],[8,10],[15,18],
+     * return [1,6],[8,10],[15,18].
+     *
+     * @param intervals a collection of intervals
+     * @return merge all overlapping intervals
+     */
+    public List<Interval> merge(List<Interval> intervals) {
+        List<Interval> merged = new ArrayList<>();
+        if (intervals == null || intervals.size() == 0) return merged;
+        int n = intervals.size();
+        int[] lowBound = new int[n], upBound = new int[n];
+        for (int i = 0; i < n; i++) {
+            Interval interval = intervals.get(i);
+            lowBound[i] = interval.start;
+            upBound[i] = interval.end;
+        }
+        Arrays.sort(lowBound);
+        Arrays.sort(upBound);
+        merged.add(new Interval(lowBound[0], upBound[0]));
+
+        for (int i = 1, index = 0; i < n; i++) {
+            Interval lastInterval = merged.get(index);
+            if (lastInterval.end >= lowBound[i]) merged.get(index).end = upBound[i];
+            else {
+                merged.add(new Interval(lowBound[i], upBound[i]));
+                index++;
+            }
+        }
+        return merged;
     }
 }
