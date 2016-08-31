@@ -129,4 +129,42 @@ public class BinarySearch {
         else if (smaller.size() + nEquals >= k) return n;
         else return findKthSmallest(larger, k - nEquals - smaller.size());
     }
+
+    /**
+     * Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+     * <p>
+     * (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+     * <p>
+     * You are given a target value to search. If found in the array return its index, otherwise return -1.
+     * <p>
+     * You may assume no duplicate exists in the array.
+     *
+     * @param nums   a rotated sorted array
+     * @param target target value
+     * @return the index about the target
+     */
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        return binarySearchRotatedArray(nums, target, 0, nums.length - 1);
+    }
+
+    public int binarySearchRotatedArray(int[] nums, int target, int start, int end) {
+        if (start > end) return -1;
+        int startNum = nums[start];
+        int endNum = nums[end];
+        if (startNum == target) return start;
+        else if (endNum == target) return end;
+        int middle = (start + end) / 2;
+        int middleNum = nums[middle];
+        if (middleNum == target) return middle;
+        else if (target < middleNum && target > startNum)
+            return binarySearchRotatedArray(nums, target, start + 1, middle - 1);
+        else if (target < endNum && target < middleNum || target > middleNum && target < endNum)
+            return binarySearchRotatedArray(nums, target, middle + 1, end - 1);
+        else {
+            int index = binarySearchRotatedArray(nums, target, middle + 1, end - 1);
+            if (index == -1) index = binarySearchRotatedArray(nums, target, start + 1, middle - 1);
+            return index;
+        }
+    }
 }
