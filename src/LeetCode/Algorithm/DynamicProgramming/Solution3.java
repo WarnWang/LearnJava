@@ -54,7 +54,7 @@ public class Solution3 {
         for (int i = 0; i < n; i++) {
             char c = s.charAt(i);
             if (c == '(') left++;
-            else if (c == ')' && left > 0){
+            else if (c == ')' && left > 0) {
                 validLength[i] = validLength[i - 1] + 2;
                 if (validLength[i] < i) validLength[i] += validLength[i - validLength[i]];
                 left--;
@@ -62,5 +62,38 @@ public class Solution3 {
             }
         }
         return maxLength;
+    }
+
+    /**
+     * Given a string s, partition s such that every substring of the partition is a palindrome.
+     * <p>
+     * Return the minimum cuts needed for a palindrome partitioning of s.
+     * <p>
+     * For example, given s = "aab",
+     * Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
+     *
+     * @param s a string s
+     * @return the minimal partition num
+     */
+    public int minCut(String s) {
+        if (s == null || s.length() < 2) return 0;
+        char[] chars = s.toCharArray();
+        int n = chars.length;
+        boolean[][] isPalindrome = new boolean[n][n];
+        int[] minCut = new int[n];
+        for (int i = 1; i < n; i++) {
+            int min = i;
+            for (int j = 0; j <= i; j++) {
+                if (chars[j] == chars[i]) {
+                    if (j > i - 2 || isPalindrome[j + 1][i - 1]) {
+                        isPalindrome[j][i] = true;
+                        if (j == 0) min = 0;
+                        else min = Math.min(min, minCut[j - 1] + 1);
+                    }
+                }
+            }
+            minCut[i] = min;
+        }
+        return minCut[n - 1];
     }
 }
