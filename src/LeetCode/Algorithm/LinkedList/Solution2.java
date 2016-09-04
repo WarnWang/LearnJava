@@ -38,4 +38,38 @@ public class Solution2 {
         }
         return head;
     }
+
+    /**
+     * Given a list, rotate the list to the right by k places, where k is non-negative.
+     * <p>
+     * For example:
+     * Given 1->2->3->4->5->NULL and k = 2,
+     * return 4->5->1->2->3->NULL.
+     *
+     * @param head a linked list
+     * @param k    how many times should be rotated
+     * @return the rotated list node
+     */
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null || k == 0) return head;
+        ListNode end = head.next;
+        int n = 2;
+        while (end.next != null) {
+            end = end.next;
+            n++;
+        }
+        k %= n;
+        if (k != 0) {
+            ListNode pointer = head;
+            while (n > k + 1) {
+                pointer = pointer.next;
+                n--;
+            }
+            ListNode temp = pointer.next;
+            pointer.next = null;
+            end.next = head;
+            head = temp;
+        }
+        return head;
+    }
 }
