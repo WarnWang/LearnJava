@@ -3,6 +3,8 @@ package LeetCode.DesignPuzzles;
 import LeetCode.DataTypes.Interval;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -23,57 +25,41 @@ public class SummaryRanges {
      * Initialize your data structure here.
      */
 
-    private ArrayList<Integer> numberRecord;
+    private ArrayList<Interval> intervalList;
+    private HashSet<Integer> existNum;
 
     public SummaryRanges() {
-        numberRecord = new ArrayList<>();
+        intervalList = new ArrayList<>();
+        existNum = new HashSet<>();
     }
 
     public void addNum(int val) {
-        addNum(val, 0, numberRecord.size());
-    }
-
-    private void addNum(int val, int startIndex, int endIndex) {
-        if (numberRecord.isEmpty()) numberRecord.add(val);
-        else if (startIndex == endIndex - 1) {
-            if (numberRecord.get(startIndex) > val) numberRecord.add(startIndex, val);
-            else if (numberRecord.get(startIndex) < val) numberRecord.add(startIndex + 1, val);
-        } else {
-            int start = numberRecord.get(startIndex);
-            int end = numberRecord.get(endIndex - 1);
-            if (start > val) {
-                numberRecord.add(startIndex, val);
-                return;
-            } else if (end < val) {
-                numberRecord.add(endIndex, val);
-                return;
-            }
-            int middleIndex = (startIndex + endIndex) / 2;
-            int middle = numberRecord.get(middleIndex);
-            if (start == val || end == val || middle == val) return;
-            if (middle > val) addNum(val, startIndex, middleIndex);
-            else addNum(val, middleIndex, endIndex);
+        if (!existNum.contains(val)) {
+            intervalList.add(new Interval(val, val));
+            existNum.add(val);
         }
     }
 
     public List<Interval> getIntervals() {
         ArrayList<Interval> result = new ArrayList<>();
-        if (numberRecord.isEmpty()) return result;
-        Interval temp = new Interval();
-        temp.start = numberRecord.get(0);
-        for (int i = 1, n = numberRecord.size(); i < n; i++) {
-            if (numberRecord.get(i) - numberRecord.get(i - 1) == 1) {
-                temp.end = numberRecord.get(i);
+        if (intervalList.isEmpty()) return result;
+
+        Collections.sort(intervalList, (o1, o2) -> o1.start - o2.start);
+
+        int currentStart = intervalList.get(0).start;
+        int currentEnd = intervalList.get(0).end;
+
+        for (int i = 1, n = intervalList.size(); i < n; i++) {
+            if (currentEnd + 1 == intervalList.get(i).start) {
+                currentEnd = intervalList.get(i).end;
             } else {
-                if (temp.end == 0 && temp.start != 0) temp.end = temp.start;
-                result.add(temp);
-                temp = new Interval();
-                temp.start = numberRecord.get(i);
+                result.add(new Interval(currentStart, currentEnd));
+                currentEnd = intervalList.get(i).end;
+                currentStart = intervalList.get(i).start;
             }
         }
-        System.out.println(numberRecord.toString());
-        if (temp.end == 0 && temp.start != 0) temp.end = temp.start;
-        result.add(temp);
+        result.add(new Interval(currentStart, currentEnd));
+        intervalList = result;
         return result;
     }
 }
