@@ -303,4 +303,45 @@ public class BackTracking {
             }
         }
     }
+
+    /**
+     * Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+     * <p>
+     * For example:
+     * Given "25525511135",
+     * <p>
+     * return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
+     *
+     * @param s a string containing only digits
+     * @return all possible valid IP address combinations
+     */
+    public List<String> restoreIpAddresses(String s) {
+        ArrayList<String> result = new ArrayList<>();
+        if (s == null || s.length() < 4) return result;
+        restoreIpAddresses(s.toCharArray(), 0, result, new int[4], 0);
+        return result;
+    }
+
+    private void restoreIpAddresses(char[] chars, int charIndex, ArrayList<String> result, int[] path, int pathIndex) {
+        if (charIndex == chars.length) {
+            if (pathIndex == 4) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < 3; i++) {
+                    stringBuilder.append(path[i]);
+                    stringBuilder.append('.');
+                }
+                stringBuilder.append(path[3]);
+                result.add(stringBuilder.toString());
+            }
+        } else if (pathIndex <= 3) {
+            int currentNum = 0;
+            for (int i = charIndex, max = chars.length - 3 + pathIndex; i < max; i++) {
+                currentNum = currentNum * 10 + chars[i] - '0';
+                if (currentNum > 255) break;
+                path[pathIndex] = currentNum;
+                restoreIpAddresses(chars, i + 1, result, path, pathIndex + 1);
+                if (currentNum == 0) break;
+            }
+        }
+    }
 }
