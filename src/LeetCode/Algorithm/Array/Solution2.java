@@ -131,4 +131,37 @@ public class Solution2 {
         }
         return merged;
     }
+
+    /**
+     * Say you have an array for which the ith element is the price of a given stock on day i.
+     * <p>
+     * Design an algorithm to find the maximum profit. You may complete at most two transactions.
+     * <p>
+     * Note:
+     * You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+     *
+     * @param prices an array for which the ith element is the price of a given stock on day i
+     * @return the maximum profit
+     */
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length < 2) return 0;
+        int n = prices.length;
+        int[] formerMax = new int[n], laterMax = new int[n];
+        int first = prices[0], last = prices[n - 1];
+        for (int i = 1; i < n; i++) {
+            int current = prices[i];
+            formerMax[i] = Math.max(formerMax[i - 1], current - first);
+            if (current < first) first = current;
+            current = prices[n - i - 1];
+            laterMax[n - i - 1] = Math.max(laterMax[n - i], last - current);
+            if (last < current) last = current;
+        }
+        System.out.println(Arrays.toString(formerMax));
+        System.out.println(Arrays.toString(laterMax));
+        int maximum = laterMax[0];
+        for (int i = 0; i < n; i++) {
+            maximum = Math.max(formerMax[i] + laterMax[i], maximum);
+        }
+        return maximum;
+    }
 }
