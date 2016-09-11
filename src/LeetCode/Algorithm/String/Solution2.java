@@ -341,4 +341,43 @@ public class Solution2 {
         }
         return longestLength;
     }
+
+    /**
+     *  Given  an  arbitrary  ransom  note  string  and  another  string  containing  letters from  all  the  magazines,  write  a  
+     * function  that  will  return  true  if  the  ransom  note  can  be  constructed  from  the  magazines ;  otherwise,  it  will
+     *  return  false.
+     * <p>
+     * Each  letter  in  the  magazine  string  can  only  be  used  once  in  your  ransom  note.
+     * <p>
+     * Note:
+     * You may assume that both strings contain only lowercase letters.
+     * <p>
+     * canConstruct("a", "b") -> false
+     * canConstruct("aa", "ab") -> false
+     * canConstruct("aa", "aab") -> true
+     *
+     * @param ransomNote a random note
+     * @param magazine a magazine
+     * @return whether the  ransom  note  can  be  constructed  from  the  magazines.
+     */
+    public boolean canConstruct(String ransomNote, String magazine) {
+        if (ransomNote == null || ransomNote.length() == 0) return true;
+        if (magazine == null || magazine.length() == 0 || magazine.length() < ransomNote.length()) return false;
+        char[] rArray = ransomNote.toCharArray();
+        char[] mArray = magazine.toCharArray();
+        HashMap<Character, Integer> charCount = new HashMap<>();
+        for (char c : mArray) {
+            if (charCount.containsKey(c)) charCount.put(c, charCount.get(c) + 1);
+            else charCount.put(c, 1);
+        }
+
+        for (char c : rArray) {
+            if (charCount.containsKey(c)) {
+                int value = charCount.get(c);
+                if (value == 1) charCount.remove(c);
+                else charCount.put(c, value - 1);
+            } else return false;
+        }
+        return true;
+    }
 }
