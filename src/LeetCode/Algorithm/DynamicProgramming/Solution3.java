@@ -1,5 +1,9 @@
 package LeetCode.Algorithm.DynamicProgramming;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by warn on 28/8/2016.
  * Store some DP puzzles solution
@@ -95,5 +99,52 @@ public class Solution3 {
             minCut[i] = min;
         }
         return minCut[n - 1];
+    }
+
+    /**
+     * Given a set of distinct positive integers, find the largest subset such that every pair (Si, Sj) of elements in
+     * this subset satisfies: Si % Sj = 0 or Sj % Si = 0.
+     * <p>
+     * If there are multiple solutions, return any subset is fine.
+     * <p>
+     * Example 1:
+     * <p>
+     * nums: [1,2,3]
+     * <p>
+     * Result: [1,2] (of course, [1,3] will also be ok)
+     * Example 2:
+     * <p>
+     * nums: [1,2,4,8]
+     * <p>
+     * Result: [1,2,4,8]
+     *
+     * @param nums a list of number
+     * @return the largest divisible subset
+     */
+    public List<Integer> largestDivisibleSubset(int[] nums) {
+        List<Integer> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) return result;
+        int n = nums.length;
+        Arrays.sort(nums);
+        int[] count = new int[n], parent = new int[n];
+        int maxIdx = 0;
+        count[0] = 1;
+        parent[0] = -1;
+        for (int i = 1; i < n; i++) {
+            parent[i] = -1;
+            count[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (nums[i] % nums[j] == 0 && count[j] + 1 > count[i]) {
+                    parent[i] = j;
+                    count[i] = count[j] + 1;
+                }
+            }
+            if (count[maxIdx] < count[i]) maxIdx = i;
+        }
+
+        for (; maxIdx != -1; maxIdx = parent[maxIdx]) {
+            result.add(nums[maxIdx]);
+        }
+        return result;
     }
 }
