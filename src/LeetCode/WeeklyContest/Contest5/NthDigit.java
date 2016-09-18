@@ -27,6 +27,20 @@ package LeetCode.WeeklyContest.Contest5;
  */
 public class NthDigit {
     public int findNthDigit(int n) {
-
+        int level = 9;
+        int nNum = 1;
+        int currentDigitNum = level * nNum;
+        int targetDigit = n;
+        while (targetDigit > currentDigitNum) {
+            targetDigit -= currentDigitNum;
+            level *= 10;
+            nNum++;
+            currentDigitNum = level * nNum;
+            if (nNum == 10) break;
+        }
+        int reminder = (targetDigit - 1) % nNum;
+        System.out.println(reminder);
+        int base = (int) Math.pow(10, nNum - 1) + (targetDigit - 1) / nNum;
+        return Integer.toString(base).charAt(reminder) - '0';
     }
 }
