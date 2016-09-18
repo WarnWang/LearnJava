@@ -1,4 +1,4 @@
-package LeetCode;
+package LeetCode.Other;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;

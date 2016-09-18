@@ -1,4 +1,4 @@
-package LeetCode;
+package LeetCode.Other;
 
 import LeetCode.Algorithm.Math.TagMath;
 

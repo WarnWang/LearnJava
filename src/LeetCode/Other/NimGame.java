@@ -1,4 +1,4 @@
-package LeetCode;
+package LeetCode.Other;
 
 /**
  * Created by warn on 8/2/2016.
