@@ -1,9 +1,9 @@
 package LeetCode.Other;
 
-import LeetCode.Algorithm.*;
 import LeetCode.Algorithm.Array.TagArray;
 import LeetCode.Algorithm.BinaryTree.TagTree;
 import LeetCode.Algorithm.DepthFirstSearch.Solution;
+import LeetCode.Algorithm.DivideAndConquer.TagDivideAndConquer;
 import LeetCode.Algorithm.DynamicProgramming.TagDynamicProgramming;
 import LeetCode.Algorithm.Graph.TagGraph;
 import LeetCode.Algorithm.LinkedList.TagLinkedList;
