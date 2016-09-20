@@ -211,6 +211,7 @@ public class Solution {
 
     /**
      * Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
+     *
      * @param nums an sorted list
      * @return a height balanced BST
      */
@@ -230,4 +231,41 @@ public class Solution {
             return root;
         }
     }
+
+    /**
+     * Given a binary search tree, write a function kthSmallest to find the kth smallest element in it.
+     * <p>
+     * Note:
+     * You may assume k is always valid, 1 ≤ k ≤ BST's total elements.
+     *
+     * @param root a binary search tree
+     * @param k the kth smallest element
+     * @return the value of kth smallest element
+     */
+    public int kthSmallest(TreeNode root, int k) {
+        if (root == null) return 0;
+        kTh = k;
+        int result = findKthSmallest(root.left);
+        if (kTh == 0) return result;
+        else if (kTh == 1) return root.val;
+        else {
+            kTh--;
+            return findKthSmallest(root.right);
+        }
+    }
+
+    private int findKthSmallest(TreeNode root) {
+        if (root == null) return -1;
+        int result = findKthSmallest(root.left);
+        if (kTh == 0) return result;
+        else if (kTh == 1) {
+            kTh--;
+            return root.val;
+        } else {
+            kTh--;
+            return findKthSmallest(root.right);
+        }
+    }
+
+    private int kTh;
 }
