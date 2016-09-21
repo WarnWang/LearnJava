@@ -1,5 +1,7 @@
 package LeetCode.WeeklyContest.Contest5;
 
+import java.util.Arrays;
+
 /**
  * Created by warn on 18/9/2016.
  * Given a non-negative integer num represented as a string, remove k digits from the number so that the new number is
@@ -29,20 +31,42 @@ public class RemoveKDigits {
     public String removeKdigits(String num, int k) {
         if (k == 0) return num;
         else if (num == null || num.length() == 0 || num.length() == k) return "0";
-        String result = num;
-        for (int i = 0; i < k; i++) {
-            String nextResult = result.substring(1);
-            int n = result.length();
-            for (int j = 1; j < n - 1; j++) {
-                String newString = result.substring(0, j) + result.substring(j + 1, n);
-                if (newString.compareTo(nextResult) < 0) nextResult = newString;
+        int n = num.length();
+        char[] newNum = new char[n - k];
+        int index = 0;
+        newNum[0] = num.charAt(0);
+        for (int i = 1; i < n; i++) {
+            char c = num.charAt(i);
+            char d = newNum[index];
+            if (d <= c) {
+                if (index < newNum.length) {
+                    newNum[++index] = c;
+                } else k--;
+            } else {
+                for (int j = index; j >= 0; j--) {
+                    if (newNum[j] <= c || k == 0) {
+                        newNum[j + 1] = c;
+                        index = j + 1;
+                        break;
+                    } else if (j == 0) {
+                        newNum[j] = c;
+                        index = 0;
+                        k--;
+                    } else k--;
+                }
             }
-            String newString = result.substring(0, n - 1);
-            if (newString.compareTo(nextResult) < 0) nextResult = newString;
-            result = nextResult;
+            System.out.println(Arrays.toString(newNum));
         }
-        if (result.startsWith("0")) result = result.substring(1);
-        if (result.isEmpty()) return "0";
-        else return result;
+        int offset = 0;
+        int count = newNum.length;
+        for (char c : newNum) {
+            if (c == '0') {
+                offset++;
+                count--;
+            } else break;
+        }
+        String minNum = new String(newNum, offset, count);
+        if (minNum.isEmpty()) return "0";
+        else return minNum;
     }
 }
