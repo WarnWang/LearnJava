@@ -10,6 +10,7 @@ public class BinarySearch {
 
     public static void main(String[] args) {
         BinarySearch test = new BinarySearch();
+        test.searchRange(new int[]{0, 0, 1, 1, 1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6, 6, 8, 10, 10}, 4);
     }
 
     int guess(int num) {
@@ -165,6 +166,79 @@ public class BinarySearch {
             int index = binarySearchRotatedArray(nums, target, middle + 1, end - 1);
             if (index == -1) index = binarySearchRotatedArray(nums, target, start + 1, middle - 1);
             return index;
+        }
+    }
+
+    /**
+     * Given a sorted array of integers, find the starting and ending position of a given target value.
+     * <p>
+     * Your algorithm's runtime complexity must be in the order of O(log n).
+     * <p>
+     * If the target is not found in the array, return [-1, -1].
+     * <p>
+     * For example,
+     * Given [5, 7, 7, 8, 8, 10] and target value 8,
+     * return [3, 4].
+     *
+     * @param nums   a sorted array of integers
+     * @param target a given target value
+     * @return the position of target value
+     */
+    public int[] searchRange(int[] nums, int target) {
+        int[] range = new int[2];
+        range[0] = -1;
+        range[1] = -1;
+        if (nums != null) searchRange(nums, target, range, 0, nums.length);
+        return range;
+    }
+
+    private void searchRange(int[] nums, int target, int[] range, int start, int end) {
+        if (start >= end) return;
+        if (nums[start] == target) {
+            range[0] = start;
+            range[1] = findSamePositionFromStart(nums, target, start + 1, end);
+            if (range[1] == -1) range[1] = start;
+        } else if (nums[end - 1] == target) {
+            range[1] = end - 1;
+            range[0] = findSamePositionFromEnd(nums, target, start, end - 1);
+            if (range[0] == -1) range[0] = range[1];
+        } else {
+            int mid = (start + end) / 2;
+            if (nums[mid] > target) searchRange(nums, target, range, start, mid);
+            else if (nums[mid] < target) searchRange(nums, target, range, mid + 1, end);
+            else {
+                range[0] = findSamePositionFromEnd(nums, target, start, mid + 1);
+                range[1] = findSamePositionFromStart(nums, target, mid, end);
+            }
+        }
+    }
+
+    private int findSamePositionFromStart(int[] nums, int target, int start, int end) {
+        if (start >= end || nums[start] != target) return -1;
+
+        int mid = (start + end) / 2;
+        if (nums[mid] == target) {
+            int result = findSamePositionFromStart(nums, target, mid + 1, end);
+            if (result == -1) return mid;
+            else return result;
+        } else {
+            int result = findSamePositionFromStart(nums, target, start + 1, mid);
+            if (result == -1) return start;
+            else return result;
+        }
+    }
+
+    private int findSamePositionFromEnd(int[] nums, int target, int start, int end) {
+        if (start >= end || nums[end - 1] != target) return -1;
+        int mid = (start + end) / 2;
+        if (nums[mid] == target) {
+            int result = findSamePositionFromEnd(nums, target, start, mid);
+            if (result == -1) return mid;
+            else return result;
+        } else {
+            int result = findSamePositionFromEnd(nums, target, mid + 1, end - 1);
+            if (result == -1) return end - 1;
+            else return result;
         }
     }
 }
