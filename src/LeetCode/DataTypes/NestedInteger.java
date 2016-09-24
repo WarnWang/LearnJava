@@ -6,6 +6,7 @@ import java.util.List;
  * Created by warn on 28/5/2016.
  */
 public interface NestedInteger {
+
     //Returns true if this NestedInteger holds a single integer, rather than a nested list
     public boolean isInteger();
 
@@ -16,4 +17,10 @@ public interface NestedInteger {
     //Returns the nested list that this NestedInteger holds, if it holds a nested list
     //Returns null if this NestedInteger holds a single integer
     public List<NestedInteger> getList();
+
+    // Set this NestedInteger to hold a single integer.
+    public void setInteger(int value);
+
+    // Set this NestedInteger to hold a nested list and adds a nested integer to it.
+    public void add(NestedInteger ni);
 }

@@ -1,10 +1,17 @@
 package LeetCode.Algorithm.Stack;
 
+import LeetCode.DataTypes.NestedInteger;
+
+import java.util.Stack;
+import java.util.zip.Inflater;
+
 /**
  * Created by warn on 2/6/2016.
  * Store solution to tag stack
  */
 public class Solution {
+    private int i;
+
     /**
      * Given an absolute path for a file (Unix-style), simplify it.
      * <p>
@@ -80,8 +87,6 @@ public class Solution {
         }
         return newString.toString();
     }
-
-    private int i;
 
     private String decodeString(String s, int repeatTimes, int startIndex) {
 

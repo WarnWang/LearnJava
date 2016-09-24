@@ -241,4 +241,37 @@ public class BinarySearch {
             else return result;
         }
     }
+
+    /**
+     * You are a product manager and currently leading a team to develop a new product. Unfortunately, the latest
+     * version of your product fails the quality check. Since each version is developed based on the previous version,
+     * all the versions after a bad version are also bad.
+     * <p>
+     * Suppose you have n versions [1, 2, ..., n] and you want to find out the first bad one, which causes all the
+     * following ones to be bad.
+     * <p>
+     * You are given an API bool isBadVersion(version) which will return whether version is bad. Implement a function
+     * to find the first bad version. You should minimize the number of calls to the API.
+     *
+     * @param n current total version number
+     * @return the latest version
+     */
+    public int firstBadVersion(int n) {
+        if (isBadVersion(1)) return 1;
+        int low = 2;
+        int high = n;
+        int mid = low + (high - low) / 2;
+        while (low < high) {
+            mid = low + (high - low) / 2;
+            if (isBadVersion(mid)) high = mid;
+            else low = mid + 1;
+        }
+        if (low == high) return low;
+        return mid;
+    }
+
+
+    private boolean isBadVersion(int version) {
+        return version % 2 == 0;
+    }
 }
