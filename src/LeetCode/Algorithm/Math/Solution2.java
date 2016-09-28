@@ -137,4 +137,56 @@ public class Solution2 {
         }
         return containsDigit;
     }
+
+    /**
+     * The set [1,2,3,…,n] contains a total of n! unique permutations.
+     * <p>
+     * By listing and labeling all of the permutations in order,
+     * We get the following sequence (ie, for n = 3):
+     * <p>
+     * "123"
+     * "132"
+     * "213"
+     * "231"
+     * "312"
+     * "321"
+     * Given n and k, return the kth permutation sequence.
+     * <p>
+     * Note: Given n will be between 1 and 9 inclusive.
+     *
+     * @param n a total of n! unique permutations
+     * @param k the index of the sequence
+     * @return the kth permutation sequence
+     */
+    public String getPermutation(int n, int k) {
+        char[] result = new char[n];
+        ArrayList<Character> remain = new ArrayList<>();
+        for (char c = '1', i = 0; i < n; i++, c++) {
+            remain.add(c);
+        }
+
+        int[] permutationSequence = new int[n];
+        permutationSequence[0] = 1;
+        for (int i = 1; i < n; i++) {
+            permutationSequence[i] = permutationSequence[i - 1] * (i);
+        }
+        int i = 0;
+        for (; i < n - 1; i++) {
+            int permutationsNum = permutationSequence[n - i - 1];
+            int charIndex;
+            if (k == 0) charIndex = 0;
+            else if (k % permutationsNum == 0) {
+                charIndex = k / permutationsNum - 1;
+                k -= charIndex * permutationsNum;
+            } else {
+                charIndex = k / permutationsNum;
+                k -= charIndex * permutationsNum;
+            }
+
+            result[i] = remain.get(charIndex);
+            remain.remove(charIndex);
+        }
+        result[i] = remain.get(0);
+        return new String(result);
+    }
 }
