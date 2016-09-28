@@ -1,5 +1,6 @@
 package LeetCode.Algorithm.Math;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**

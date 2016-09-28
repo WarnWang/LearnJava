@@ -344,4 +344,57 @@ public class BackTracking {
             }
         }
     }
+
+
+
+    /**
+     * The set [1,2,3,…,n] contains a total of n! unique permutations.
+     * <p>
+     * By listing and labeling all of the permutations in order,
+     * We get the following sequence (ie, for n = 3):
+     * <p>
+     * "123"
+     * "132"
+     * "213"
+     * "231"
+     * "312"
+     * "321"
+     * Given n and k, return the kth permutation sequence.
+     * <p>
+     * Note: Given n will be between 1 and 9 inclusive.
+     *
+     * @param n a total of n! unique permutations
+     * @param k the index of the sequence
+     * @return the kth permutation sequence
+     */
+    public String getPermutation(int n, int k) {
+        permutationIndex = k;
+        ArrayList<Character> remain = new ArrayList<>();
+        for (char c = '1', i = 0; i < n; i++, c++) {
+            remain.add(c);
+        }
+        char[] result = new char[n];
+        getPermutation(remain, result, 0);
+        return kThSequence;
+    }
+
+    private void getPermutation(ArrayList<Character> remains, char[] path, int index) {
+        if (permutationIndex > 0) {
+            if (remains.isEmpty()) {
+                permutationIndex--;
+                if (permutationIndex == 0) kThSequence = new String(path);
+            } else {
+                for (int i = 0, n = remains.size(); i < n; i++){
+                    char c = remains.get(i);
+                    remains.remove(i);
+                    path[index] = c;
+                    getPermutation(remains, path, index + 1);
+                    remains.add(i, c);
+                }
+            }
+        }
+    }
+
+    private int permutationIndex;
+    private String kThSequence;
 }
