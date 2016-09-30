@@ -186,4 +186,52 @@ public class Solution3 {
         }
         return false;
     }
+
+    /**
+     * Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each
+     * operation is counted as 1 step.)
+     * <p>
+     * You have the following 3 operations permitted on a word:
+     * <p>
+     * a) Insert a character
+     * b) Delete a character
+     * c) Replace a character
+     *
+     * @param word1 word 1
+     * @param word2 word 2
+     * @return the minimum number of steps required to convert word1 to word2
+     */
+    public int minDistance(String word1, String word2) {
+        int n1, n2;
+        if (word1 == null) n1 = 0;
+        else n1 = word1.length();
+        if (word2 == null) n2 = 0;
+        else n2 = word2.length();
+        if (n1 == 0) return n2;
+        else if (n2 == 0) return n1;
+
+        minimalDistanceInfo = new int[n1][n2];
+
+        minDistance(word1, word2, 0, 0, n1, n2);
+
+        return minimalDistanceInfo[0][0];
+    }
+
+    private int[][] minimalDistanceInfo;
+
+    private int minDistance(String word1, String word2, int index1, int index2, int n1, int n2) {
+
+        if (index1 == n1) return n2 - index2;
+        else if (index2 == n2) return n1 - index1;
+        else if (minimalDistanceInfo[index1][index2] > 0) return minimalDistanceInfo[index1][index2];
+        else if (word1.charAt(index1) == word2.charAt(index2))
+            minimalDistanceInfo[index1][index2] = minDistance(word1, word2, index1 + 1, index2 + 1, n1, n2);
+        else {
+            int minimalDistance = 1 + minDistance(word1, word2, index1 + 1, index2, n1, n2);
+            minimalDistance = Math.min(minimalDistance, 1 + minDistance(word1, word2, index1 + 1, index2 + 1, n1, n2));
+            minimalDistance = Math.min(minimalDistance, 1 + minDistance(word1, word2, index1, index2 + 1, n1, n2));
+            minimalDistanceInfo[index1][index2] = minimalDistance;
+        }
+        return minimalDistanceInfo[index1][index2];
+    }
 }
