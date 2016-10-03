@@ -14,6 +14,7 @@ public class Solution {
     private TreeNode miniMum;
     private TreeNode maxiMum;
     private boolean isValid;
+    private int kTh;
 
     /**
      * Given a complete binary tree, count the number of nodes.
@@ -239,7 +240,7 @@ public class Solution {
      * You may assume k is always valid, 1 ≤ k ≤ BST's total elements.
      *
      * @param root a binary search tree
-     * @param k the kth smallest element
+     * @param k    the kth smallest element
      * @return the value of kth smallest element
      */
     public int kthSmallest(TreeNode root, int k) {
@@ -267,5 +268,19 @@ public class Solution {
         }
     }
 
-    private int kTh;
+    /**
+     * Find the sum of all left leaves in a given binary tree
+     *
+     * @param root a binary tree
+     * @return the sum of all left leaves
+     */
+    public int sumOfLeftLeaves(TreeNode root) {
+        return sumOfLeftLeaves(root, false);
+    }
+
+    private int sumOfLeftLeaves(TreeNode root, boolean isLeft){
+        if (root == null) return 0;
+        if (root.right == null && root.left == null) {if (isLeft) return root.val; else return 0;}
+        else return sumOfLeftLeaves(root.left, true) + sumOfLeftLeaves(root.right,false);
+    }
 }
