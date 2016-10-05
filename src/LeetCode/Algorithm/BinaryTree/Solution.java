@@ -278,9 +278,56 @@ public class Solution {
         return sumOfLeftLeaves(root, false);
     }
 
-    private int sumOfLeftLeaves(TreeNode root, boolean isLeft){
+    private int sumOfLeftLeaves(TreeNode root, boolean isLeft) {
         if (root == null) return 0;
-        if (root.right == null && root.left == null) {if (isLeft) return root.val; else return 0;}
-        else return sumOfLeftLeaves(root.left, true) + sumOfLeftLeaves(root.right,false);
+        if (root.right == null && root.left == null) {
+            if (isLeft) return root.val;
+            else return 0;
+        } else return sumOfLeftLeaves(root.left, true) + sumOfLeftLeaves(root.right, false);
+    }
+
+    /**
+     * Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.
+     * <p>
+     * An example is the root-to-leaf path 1->2->3 which represents the number 123.
+     * <p>
+     * Find the total sum of all root-to-leaf numbers.
+     * <p>
+     * For example,
+     * <p>
+     * 1
+     * / \
+     * 2   3
+     * The root-to-leaf path 1->2 represents the number 12.
+     * The root-to-leaf path 1->3 represents the number 13.
+     * <p>
+     * Return the sum = 12 + 13 = 25.
+     *
+     * @param root a binary tree
+     * @return the sum of root to leaf number
+     */
+    public int sumNumbers(TreeNode root) {
+        if (root == null) return 0;
+
+        return sumNumbers(root, new ArrayList<>(), 0);
+    }
+
+    private int sumNumbers(TreeNode root, ArrayList<Integer> pathList, int index) {
+        if (root == null) return 0;
+        else if (root.left == null && root.right == null) {
+            int num = 0;
+            for (int i = 0; i < index; i++) {
+                num *= 10;
+                num += pathList.get(i);
+            }
+            num *= 10;
+            num += root.val;
+            return num;
+        } else {
+            pathList.add(index, root.val);
+            if (root.left == null) return sumNumbers(root.right, pathList, index + 1);
+            else if (root.right == null) return sumNumbers(root.left, pathList, index + 1);
+            else return sumNumbers(root.left, pathList, index + 1) + sumNumbers(root.right, pathList, index + 1);
+        }
     }
 }
