@@ -2,6 +2,7 @@ package LeetCode.Algorithm.String;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -343,7 +344,7 @@ public class Solution2 {
     }
 
     /**
-     *  Given  an  arbitrary  ransom  note  string  and  another  string  containing  letters from  all  the  magazines,  write  a  
+     *  Given  an  arbitrary  ransom  note  string  and  another  string  containing  letters from  all  the  magazines,  write  a
      * function  that  will  return  true  if  the  ransom  note  can  be  constructed  from  the  magazines ;  otherwise,  it  will
      *  return  false.
      * <p>
@@ -357,7 +358,7 @@ public class Solution2 {
      * canConstruct("aa", "aab") -> true
      *
      * @param ransomNote a random note
-     * @param magazine a magazine
+     * @param magazine   a magazine
      * @return whether the  ransom  note  can  be  constructed  from  the  magazines.
      */
     public boolean canConstruct(String ransomNote, String magazine) {
@@ -380,4 +381,60 @@ public class Solution2 {
         }
         return true;
     }
+
+    /**
+     * Find the length of the longest substring T of a given string (consists of lowercase letters only) such that
+     * every character in T appears no less than k times.
+     * <p>
+     * Example 1:
+     * <p>
+     * Input:
+     * s = "aaabb", k = 3
+     * <p>
+     * Output:
+     * 3
+     * <p>
+     * The longest substring is "aaa", as 'a' is repeated 3 times.
+     * Example 2:
+     * <p>
+     * Input:
+     * s = "ababbc", k = 2
+     * <p>
+     * Output:
+     * 5
+     * <p>
+     * The longest substring is "ababb", as 'a' is repeated 2 times and 'b' is repeated 3 times.
+     *
+     * @param s an input string
+     * @param k the least character length
+     * @return the size of all substring
+     */
+    public int longestSubstring(String s, int k) {
+        if (s == null || s.length() < k) return 0;
+        return getLongestSubstring(s.toCharArray(), k, 0, s.length());
+    }
+
+    private int getLongestSubstring(char[] s, int k, int start, int end) {
+        if (end - start < k) return 0;
+        int[] charCount = new int[26];
+        HashSet<Character> noNeedChar = new HashSet<>();
+        for (int i = start; i < end; i++) {
+            int index = s[i] - 'a';
+            if (charCount[index] == 0) noNeedChar.add(s[i]);
+            charCount[index]++;
+            if (charCount[index] == k) noNeedChar.remove(s[i]);
+        }
+        if (noNeedChar.isEmpty()) return end - start;
+        int cur = start;
+        int maxLength = 0;
+        for (int i = start; i < end; i++) {
+            if (noNeedChar.contains(s[i])) {
+                maxLength = Math.max(maxLength, getLongestSubstring(s, k, cur, i));
+                cur = i + 1;
+            }
+        }
+        maxLength = Math.max(maxLength, getLongestSubstring(s, k, cur, end));
+        return maxLength;
+    }
+
 }
