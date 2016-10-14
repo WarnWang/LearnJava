@@ -437,4 +437,42 @@ public class Solution2 {
         return maxLength;
     }
 
+    /**
+     * The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to
+     * display this pattern in a fixed font for better legibility)
+     * <p>
+     * P   A   H   N
+     * A P L S I I G
+     * Y   I   R
+     * And then read line by line: "PAHNAPLSIIGYIR"
+     * Write the code that will take a string and make this conversion given a number of rows:
+     * <p>
+     * string convert(string text, int nRows);
+     * convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
+     *
+     * @param s       a input string
+     * @param numRows rows number
+     * @return converted string
+     */
+    public String convert(String s, int numRows) {
+        if (s == null || s.length() == 0) return "";
+        else if (numRows == 1 || numRows >= s.length()) return s;
+
+        char[] result = new char[s.length()];
+        int blockSize = numRows - 2 + numRows;
+
+        int index = 0;
+        for (int i = 0; i < numRows; i++) {
+            for (int j = i; j < result.length; j += blockSize) {
+                result[index++] = s.charAt(j);
+                if (i > 0 && i < numRows - 1) {
+                    int newJ = j + blockSize - i * 2;
+                    if (newJ < result.length)
+                        result[index++] = s.charAt(newJ);
+                }
+            }
+        }
+
+        return new String(result);
+    }
 }
