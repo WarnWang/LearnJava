@@ -225,7 +225,7 @@ public class Solution2 {
 
         int[][] spiralMatrix = new int[n][n];
 
-        int[][] directionMatrix = new int[][] {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int[][] directionMatrix = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
         for (int i = 0, m = n * n, x = 0, y = 0, direction = 0; i < m; i++) {
             spiralMatrix[x][y] = i + 1;
@@ -243,5 +243,34 @@ public class Solution2 {
             }
         }
         return spiralMatrix;
+    }
+
+    /**
+     * Given an array of integers that is already sorted in ascending order, find two numbers such that they add up to
+     * a specific target number.
+     * <p>
+     * The function twoSum should return indices of the two numbers such that they add up to the target, where index1
+     * must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+     * <p>
+     * You may assume that each input would have exactly one solution.
+     * <p>
+     * Input: numbers={2, 7, 11, 15}, target=9
+     * Output: index1=1, index2=2
+     *
+     * @param numbers an array of integers
+     * @param target target value
+     * @return result index
+     */
+    public int[] twoSum(int[] numbers, int target) {
+        int[] result = new int[2];
+        for (int i = 0, n = numbers.length; i < n; i++) {
+            result[0] = i + 1;
+            int resultIndex = Arrays.binarySearch(numbers, i + 1, n, target - numbers[i]);
+            if (resultIndex > 0) {
+                result[1] = resultIndex + 1;
+                break;
+            }
+        }
+        return result;
     }
 }
