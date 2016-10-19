@@ -1,6 +1,7 @@
 package LeetCode.Algorithm.Search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by warn on 16/7/2016.
@@ -146,26 +147,30 @@ public class BinarySearch {
      */
     public int search(int[] nums, int target) {
         if (nums == null || nums.length == 0) return -1;
-        return binarySearchRotatedArray(nums, target, 0, nums.length - 1);
-    }
 
-    public int binarySearchRotatedArray(int[] nums, int target, int start, int end) {
-        if (start > end) return -1;
-        int startNum = nums[start];
-        int endNum = nums[end];
-        if (startNum == target) return start;
-        else if (endNum == target) return end;
-        int middle = (start + end) / 2;
-        int middleNum = nums[middle];
-        if (middleNum == target) return middle;
-        else if (target < middleNum && target > startNum)
-            return binarySearchRotatedArray(nums, target, start + 1, middle - 1);
-        else if (target < endNum && target < middleNum || target > middleNum && target < endNum)
-            return binarySearchRotatedArray(nums, target, middle + 1, end - 1);
-        else {
-            int index = binarySearchRotatedArray(nums, target, middle + 1, end - 1);
-            if (index == -1) index = binarySearchRotatedArray(nums, target, start + 1, middle - 1);
-            return index;
+        int n = nums.length;
+        if (nums[0] < nums[n - 1] || n == 1) {
+            int index = Arrays.binarySearch(nums, target);
+            return (index < 0)? -1 : index;
+        } else {
+            int end = n;
+            int start = 0;
+            if (target == nums[0]) return 0;
+            else if (target == nums[n - 1]) return n - 1;
+            while (start < end) {
+                int mid = (start + end) / 2;
+                if (mid == start) break;
+                if (nums[mid] > nums[start]) start = mid;
+                else end = mid;
+            }
+            int index;
+            if (target <= nums[start] && target > nums[0])
+                index = Arrays.binarySearch(nums, 0, start + 1, target);
+            else if (target >= nums[start + 1] && target < nums[n - 1])
+                index = Arrays.binarySearch(nums, start + 1, n, target);
+            else
+                index = -1;
+            return (index < 0)? -1 : index;
         }
     }
 
