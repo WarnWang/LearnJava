@@ -159,8 +159,9 @@ public class BinarySearch {
             else if (target == nums[n - 1]) return n - 1;
             while (start < end) {
                 int mid = (start + end) / 2;
-                if (mid == start) break;
-                if (nums[mid] > nums[start]) start = mid;
+                if (nums[mid] == target) return mid;
+                else if (mid == start) break;
+                else if (nums[mid] > nums[start]) start = mid;
                 else end = mid;
             }
             int index;
