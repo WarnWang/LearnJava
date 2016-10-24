@@ -258,7 +258,7 @@ public class Solution2 {
      * Output: index1=1, index2=2
      *
      * @param numbers an array of integers
-     * @param target target value
+     * @param target  target value
      * @return result index
      */
     public int[] twoSum(int[] numbers, int target) {
@@ -318,5 +318,42 @@ public class Solution2 {
         }
         sum += count * (count + 1) / 2;
         return sum;
+    }
+
+    /**
+     * Follow up for "Remove Duplicates":
+     * What if duplicates are allowed at most twice?
+     * <p>
+     * For example,
+     * Given sorted array nums = [1,1,1,2,2,3],
+     * <p>
+     * Your function should return length = 5, with the first five elements of nums being 1, 1, 2, 2 and 3. It doesn't
+     * matter what you leave beyond the new length.
+     *
+     * @param nums an sorted array
+     * @return the length of removed duplicated
+     */
+    public int removeDuplicatesII(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        else if (nums.length < 3) return nums.length;
+
+        int count = (nums[1] == nums[0]) ? 0 : 1;
+
+        for (int i = 1; i < nums.length; ) {
+            if (nums[i] != nums[i - 1]) {
+                count++;
+                i++;
+            } else {
+                int j = i + 1;
+                for (; j < nums.length; j++) {
+                    if (nums[j] != nums[i]) break;
+                }
+
+                System.arraycopy(nums, j, nums, i + 1, nums.length - j + 1);
+                count += 2;
+                i = j;
+            }
+        }
+        return count;
     }
 }
