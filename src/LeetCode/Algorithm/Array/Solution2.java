@@ -337,22 +337,23 @@ public class Solution2 {
         if (nums == null || nums.length == 0) return 0;
         else if (nums.length < 3) return nums.length;
 
-        int count = (nums[1] == nums[0]) ? 0 : 1;
+        int count = 1;
 
-        for (int i = 1; i < nums.length; ) {
+        for (int i = 1, n = nums.length; i < n; i++) {
             if (nums[i] != nums[i - 1]) {
                 count++;
-                i++;
             } else {
                 int j = i + 1;
-                for (; j < nums.length; j++) {
+                for (; j < n; j++) {
                     if (nums[j] != nums[i]) break;
                 }
 
-                System.arraycopy(nums, j, nums, i + 1, nums.length - j + 1);
-                count += 2;
-                i = j;
+                if (j < n && j > i + 1)
+                    System.arraycopy(nums, j, nums, i + 1, n - j);
+                count++;
+                n -= j - i - 1;
             }
+            System.out.println(n);
         }
         return count;
     }
