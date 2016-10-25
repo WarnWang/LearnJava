@@ -189,4 +189,37 @@ public class Solution2 {
         result[i] = remain.get(0);
         return new String(result);
     }
+
+    /**
+     * There is a list of sorted integers from 1 to n. Starting from left to right, remove the first number and every
+     * other number afterward until you reach the end of the list.
+     * <p>
+     * Repeat the previous step again, but this time from right to left, remove the right most number and every other
+     * number from the remaining numbers.
+     * <p>
+     * We keep repeating the steps again, alternating left to right and right to left, until a single number remains.
+     * <p>
+     * Find the last number that remains starting with a list of length n.
+     *
+     * @param n initial number
+     * @return the last number that remains starting with a list of length n.
+     */
+    public int lastRemaining(int n) {
+        boolean fromStart = true;
+        int min = 1, max = n, step = 2;
+
+        while (min != max) {
+            System.out.println(min + ", " + max + ", " + step);
+            if (fromStart) {
+                if ((max - min) % step == 0) max -= step;
+                min += step;
+            } else {
+                if ((max - min) % step == 0) min += step;
+                max -= step;
+            }
+            fromStart = !fromStart;
+            step *= 2;
+        }
+        return min;
+    }
 }
