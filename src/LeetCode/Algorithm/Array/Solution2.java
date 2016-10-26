@@ -357,4 +357,54 @@ public class Solution2 {
         }
         return count;
     }
+
+    /**
+     * Given a non-empty array of integers, return the third maximum number in this array. If it does not exist, return
+     * the maximum number. The time complexity must be in O(n).
+     * <p>
+     * Example 1:
+     * Input: [3, 2, 1]
+     * <p>
+     * Output: 1
+     * <p>
+     * Explanation: The third maximum is 1.
+     * Example 2:
+     * Input: [1, 2]
+     * <p>
+     * Output: 2
+     * <p>
+     * Explanation: The third maximum does not exist, so the maximum (2) is returned instead.
+     * Example 3:
+     * Input: [2, 2, 3, 1]
+     * <p>
+     * Output: 1
+     * <p>
+     * Explanation: Note that the third maximum here means the third maximum distinct number.
+     * Both numbers with value 2 are both considered as second maximum.
+     *
+     * @param nums a non-empty array
+     * @return if there are three distinct number return the third max number else return maximum
+     */
+    public int thirdMax(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        Integer[] max = new Integer[3];
+
+        for (int num: nums) {
+            if (max[0] == null || num > max[0]) {
+                max[2] = max[1];
+                max[1] = max[0];
+                max[0] = num;
+            } else if (num < max[0]) {
+                if (max[1] == null || max[1] < num) {
+                    max[2] = max[1];
+                    max[1] = num;
+                } else if (num < max[1]) {
+                    if (max[2] == null || max[2] < num) {
+                        max[2] = num;
+                    }
+                }
+            }
+        }
+        return (max[2] == null) ? max[0] : max[2];
+    }
 }
