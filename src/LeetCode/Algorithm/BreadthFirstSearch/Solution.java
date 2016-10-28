@@ -213,7 +213,7 @@ public class Solution {
                         String value = (forward) ? newString : word;
                         if (wordMap.containsKey(key)) wordMap.get(key).add(value);
                         else wordMap.put(key, new ArrayList<>(Collections.singletonList(value)));
-                    } else if (wordList.contains(newString)){
+                    } else if (wordList.contains(newString)) {
                         thirdSet.add(newString);
                         String key = (forward) ? word : newString;
                         String value = (forward) ? newString : word;
@@ -233,12 +233,83 @@ public class Solution {
     private void getShortestPath(List<String> path, HashMap<String, List<String>> wordMap,
                                  List<List<String>> ladderList, String start, String end) {
         if (start.equals(end)) ladderList.add(new ArrayList<>(path));
-        else if (wordMap.containsKey(start)){
+        else if (wordMap.containsKey(start)) {
             for (String nextWord : wordMap.get(start)) {
                 path.add(nextWord);
                 getShortestPath(path, wordMap, ladderList, nextWord, end);
                 path.remove(path.size() - 1);
             }
         }
+    }
+
+    /**
+     * Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+     * <p>
+     * For example, this binary tree [1,2,2,3,4,4,3] is symmetric:
+     * <p>
+     * 1
+     * / \
+     * 2   2
+     * / \ / \
+     * 3  4 4  3
+     * But the following [1,2,2,null,3,null,3] is not:
+     * 1
+     * / \
+     * 2   2
+     * \   \
+     * 3    3
+     *
+     * @param root a binary tree
+     * @return whether this is a symmetric tree
+     */
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null || (root.left == null && root.right == null)) return true;
+        else if (root.left == null || root.right == null) return false;
+        else if (root.left.val != root.right.val) return false;
+
+        ArrayList<TreeNode> levelNode = new ArrayList<>();
+        levelNode.add(root.right);
+        levelNode.add(root.left);
+
+        while (levelNode.isEmpty()) {
+            int nodeLength = levelNode.size();
+
+            ArrayList<TreeNode> nextLevelNode = new ArrayList<>();
+
+            boolean[] hasNode = new boolean[nodeLength];
+
+            for (int i = 0; i < nodeLength / 2; i++) {
+                TreeNode tmp = levelNode.get(i);
+                if (tmp.right != null) {
+                    hasNode[2 * i] = true;
+                    nextLevelNode.add(tmp.right);
+                } else hasNode[2 * i] = false;
+
+                if (tmp.left != null) {
+                    hasNode[2 * i + 1] = true;
+                    nextLevelNode.add(tmp.left);
+                } else hasNode[2 * i + 1] = false;
+            }
+
+            int levelIndex = nextLevelNode.size() - 1;
+            for (int i = nodeLength / 2; i < nodeLength; i++) {
+                TreeNode tmp = levelNode.get(i);
+                if (tmp.right != null) {
+                    nextLevelNode.add(tmp.right);
+                    if (!hasNode[2 * nodeLength - 1 - 2 * i] || tmp.right.val != nextLevelNode.get(levelIndex--).val)
+                        return false;
+                } else if (hasNode[2 * nodeLength - 1 - 2 * i]) return false;
+
+                if (tmp.left != null) {
+                    nextLevelNode.add(tmp.left);
+                    if (!hasNode[2 * nodeLength - 2 - 2 * i] || tmp.left.val != nextLevelNode.get(levelIndex--).val)
+                        return false;
+                } else if (hasNode[2 * nodeLength - 2 - 2 * i]) return false;
+            }
+            for (TreeNode node: nextLevelNode) System.out.print(node.val + ", ");
+            System.out.println();
+            levelNode = nextLevelNode;
+        }
+        return true;
     }
 }
